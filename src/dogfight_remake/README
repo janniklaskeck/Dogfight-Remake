@@ -1,0 +1,41 @@
+This is the beginning of a Dogfight Remake from
+http://dogfight.kuto.de
+
+It is currently playable, but very basic.
+Everything is WIP.
+
+Current Features:
+
+-Two Player Game
+-Windowed Fullscreen
+-Only one plane type
+-Four different Weapons (gun & (homing)missiles & bombs)
+-Blank World (basic background and ground)
+
+NYI Features:
+
+High Priority
+  -Game menu
+    -Refine menus(background images, options etc)
+  -Sound
+    -Get better sounds
+  -Better movement
+    -Gravity effects
+
+Mid Priority
+  -Code cleanup
+  -Comment everything
+  -Background aka Tile Based Levels
+
+Low Priority
+  -A.I.
+  -Ground structures
+  -Many different planes
+  -Many different weapons, depending on plane
+    -Bombs (no rotation currently)
+    -GroundToAir missiles
+    -AirToGround missiles
+    -Different gun types
+    
+    
+Currently using Slick (http://slick.cokeandcode.com/) and LWJGL (http://www.lwjgl.org/)
