@@ -1,4 +1,4 @@
-package dogfight_remake.entities.planes.modern;
+package dogfight_remake.entities.planes.cw;
 
 import java.util.Random;
 
@@ -12,7 +12,7 @@ import dogfight_remake.entities.weapons.WeaponTypes;
 import dogfight_remake.entities.weapons.Weapons;
 import dogfight_remake.main.GamePlayState;
 
-public class ModernTestPlane extends Entity {
+public class ColdWar extends Entity {
 
 	private Random random;
 	// constants
@@ -35,7 +35,7 @@ public class ModernTestPlane extends Entity {
 	private WeaponTypes wpn2;
 	private WeaponTypes wpn3;
 
-	public ModernTestPlane(int id, float xpos, float ypos, float angle, Image image,
+	public ColdWar(int id, float xpos, float ypos, float angle, Image image,
 			int hitpoints, WeaponTypes wpn1, WeaponTypes wpn2, WeaponTypes wpn3) {
 		super(xpos, ypos, angle);
 		this.id = id;

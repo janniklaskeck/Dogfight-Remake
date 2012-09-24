@@ -1,61 +1,58 @@
 package dogfight_remake.entities.planes.modern;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.Point;
-import java.awt.Polygon;
-import java.awt.Toolkit;
-import java.awt.geom.Rectangle2D;
 import java.util.Random;
 
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
+import org.newdawn.slick.geom.Rectangle;
+
+import dogfight_remake.entities.Entity;
 import dogfight_remake.entities.weapons.WeaponTypes;
 import dogfight_remake.entities.weapons.Weapons;
-import dogfight_remake.entities.planes.modern.Modern;
-import dogfight_remake.rendering.Render;
+import dogfight_remake.main.GamePlayState;
 
-public class ModernTestPlane2 extends Modern {
+public class ModernTestPlane2 extends Entity {
 
 	private Random random;
-	private Toolkit toolkit = Toolkit.getDefaultToolkit();
-	private Dimension dim = toolkit.getScreenSize();
 	// constants
 	// default values
-	protected final int XSIZE = (int) dim.getWidth();
-	protected final int YSIZE = (int) dim.getHeight();
-	protected double GRAVITY = 6;
-	protected final static double MAX_SPEED = 6;
+	public final static float MAX_SPEED = 7;
 
 	private Image image;
-	// maximum rate of fire (in milliseconds)
-	private final static int MIN_SHOOT_DELAY_GUN = 50;
-	private final static int RELOAD_DELAY_GUN = 3000;
-	private final static int MIN_SHOOT_DELAY_ROCKET = 100;
-	private final static int RELOAD_DELAY_ROCKET = 4000;
-	private Rectangle2D plane;
 
-	private int id;
+	private Rectangle plane;
+	protected int id;
 	private int hitpoints;
-	private double angle;
-	private long lastshot_gun, lastshot_rocket;
-	private final int PRIM_AMMO = 50;
-	private final int SEC_AMMO = 32;
-	private int counter_rocket = SEC_AMMO;
-	private int counter_gun = PRIM_AMMO;
+	private float angle;
+	private long lastshot_prim, lastshot_sec_1, lastshot_sec_2;
+	private int counter_prim;
+	private int counter_sec_1;
+	private int counter_sec_2;
 	private boolean broken;
-	private double hspeed, vspeed;
+	public float hspeed, vspeed;
+	private WeaponTypes wpn1;
+	private WeaponTypes wpn2;
+	private WeaponTypes wpn3;
 
-	public ModernTestPlane2(int id, double xpos, double ypos, double angle,
-			Image image, int hitpoints) {
-		super(id, xpos, ypos, angle, image, hitpoints);
+	public ModernTestPlane2(int id, float xpos, float ypos, float angle, Image image,
+			int hitpoints, WeaponTypes wpn1, WeaponTypes wpn2, WeaponTypes wpn3) {
+		super(xpos, ypos, angle);
+		this.id = id;
 		this.hitpoints = hitpoints;
 		this.image = image;
 		this.angle = angle;
-		this.lastshot_gun = 0;
-		this.lastshot_rocket = 0;
+		this.lastshot_prim = 0;
+		this.lastshot_sec_1 = 0;
+		this.lastshot_sec_2 = 0;
 		this.broken = false;
+		this.wpn1 = wpn1;
+		this.wpn2 = wpn2;
+		this.wpn3 = wpn3;
+		counter_prim = wpn1.getAmmoCount();
+		counter_sec_1 = wpn2.getAmmoCount();
+		counter_sec_2 = wpn3.getAmmoCount();
+
 	}
 
 	/**
@@ -65,16 +62,19 @@ public class ModernTestPlane2 extends Modern {
 	 * @param delta
 	 */
 	public void move(double delta) {
+
 		if (id == 1) {
-			hspeed = Math.abs(speed) * Math.cos(Math.toRadians(angle)) * delta;
-			vspeed = Math.abs(speed) * Math.sin(Math.toRadians(angle)) * delta;
+			hspeed = (float) (Math.abs(speed) * Math.cos(Math.toRadians(angle)));
+			vspeed = (float) (Math.abs(speed) * Math.sin(Math.toRadians(angle)));
 		} else {
-			hspeed = Math.abs(speed) * Math.cos(Math.toRadians(angle)) * delta;
-			vspeed = Math.abs(speed) * Math.sin(Math.toRadians(angle)) * delta;
+			hspeed = (float) (Math.abs(speed) * Math.cos(Math.toRadians(angle)));
+			vspeed = (float) (Math.abs(speed) * Math.sin(Math.toRadians(angle)));
 		}
-		if ((Math.abs(hspeed) + Math.abs(vspeed)) < 1.5) {
+
+		if (Math.abs(hspeed) + Math.abs(vspeed) < 1.3) {
+
 			xpos += hspeed;
-			ypos += vspeed + GRAVITY;
+			ypos += vspeed + GamePlayState.GRAVITY;
 		} else {
 			xpos += hspeed;
 			ypos += vspeed;
@@ -87,32 +87,38 @@ public class ModernTestPlane2 extends Modern {
 	 * @param type
 	 * @return new Weapons object
 	 */
-	public Weapons shoot_gun() {
-		if (broken) {
+	public Weapons shoot_primary() {
+		float angle = this.angle;
+		if (broken || counter_prim == 0) {
 			return null;
 		}
 		random = new Random();
-		double rnd = random.nextDouble() * 10;
+		double rnd = random.nextDouble() * 2;
+		double rnd1 = random.nextInt();
+		if (rnd1 % 2 == 0) {
+			angle += rnd;
+		} else if (rnd % 2 != 0) {
+			angle -= rnd;
+		}
 
-		int delay_gun = 0;
+		int delay_prim = 0;
 		long time = System.currentTimeMillis();
-		if (counter_gun % PRIM_AMMO == 0) {
-			delay_gun = RELOAD_DELAY_GUN;
+		if (counter_prim % wpn1.getAmmoCount() == 0) {
+			delay_prim = wpn1.getReload_delay();
 		}
-		if (counter_gun % PRIM_AMMO != 0) {
-			delay_gun = MIN_SHOOT_DELAY_GUN;
+		if (counter_prim % wpn1.getAmmoCount() != 0) {
+			delay_prim = wpn1.getShoot_delay();
 		}
-		if (Math.abs(lastshot_gun - time) < delay_gun) {
+
+		if (Math.abs(lastshot_prim - time) < delay_prim) {
 			return null;
 		}
-		lastshot_gun = time;
-		double x = (plane.getCenterX() + Math.cos(Math.toRadians(angle + rnd)) * 15);
-		double y = (plane.getCenterY() + Math.sin(Math.toRadians(angle - rnd)) * 15);
-		counter_gun--;
-		if (counter_gun == 0) {
-			counter_gun = PRIM_AMMO;
-		}
-		return new Weapons(x, y, angle, 3, WeaponTypes.GUN, Render.img_bullet1, id);
+		lastshot_prim = time;
+		float x = (float) (plane.getCenterX() + Math.cos(Math.toRadians(angle)));
+		float y = (float) (plane.getCenterY() + Math.sin(Math.toRadians(angle)) + 5);
+		counter_prim--;
+		return new Weapons(x, y, angle, wpn1.getDamage(), wpn1,
+				wpn1.getImage(), id);
 	}
 
 	/**
@@ -121,62 +127,70 @@ public class ModernTestPlane2 extends Modern {
 	 * @param type
 	 * @return new Weapons object
 	 */
-	public Weapons shoot_missile() {
+	public Weapons shoot_secondary_1() {
 		if (broken) {
 			return null;
 		}
-		int delay_rocket = 0;
+		int delay_sec_1 = 0;
 		long time = System.currentTimeMillis();
-		if (counter_rocket % SEC_AMMO == 0) {
-			delay_rocket = RELOAD_DELAY_ROCKET;
+		if (counter_sec_1 % wpn2.getAmmoCount() == 0) {
+			delay_sec_1 = wpn2.getReload_delay();
 		}
-		if (counter_rocket % SEC_AMMO != 0) {
-			delay_rocket = MIN_SHOOT_DELAY_ROCKET;
+		if (counter_sec_1 % wpn2.getAmmoCount() != 0) {
+			delay_sec_1 = wpn2.getShoot_delay();
 		}
-		if (Math.abs(lastshot_rocket - time) < delay_rocket) {
+
+		if (Math.abs(lastshot_sec_1 - time) < delay_sec_1) {
 			return null;
 		}
-		lastshot_rocket = time;
-		double x = (plane.getCenterX() + Math.cos(Math.toRadians(angle)) + 7 * Math
-				.sin(Math.toRadians(Math.abs(angle))));
-		double y = (plane.getCenterY()
-				+ Math.sin(Math.toRadians(Math.abs(angle))) + 7 * Math.cos(Math
-				.toRadians(angle - 180)));
-		counter_rocket--;
-		if (counter_rocket == 0) {
-			counter_rocket = SEC_AMMO;
+		lastshot_sec_1 = time;
+		float x = (float) (plane.getCenterX() + Math.cos(Math.toRadians(angle)));
+		float y = (float) (plane.getCenterY() + Math.sin(Math.toRadians(angle)) + 5);
+		counter_sec_1--;
+		return new Weapons(x, y, angle, wpn2.getDamage(), wpn2,
+				wpn2.getImage(), id);
+	}
+
+	/**
+	 * Shoot Weapon depending on type
+	 * 
+	 * @param type
+	 * @return new Weapons object
+	 */
+	public Weapons shoot_secondary_2() {
+		if (broken) {
+			return null;
 		}
-		return new Weapons(x, y, angle, 10, WeaponTypes.UNGUIDED, Render.img_bullet1, id);
+		int delay_sec_2 = 0;
+		long time = System.currentTimeMillis();
+		if (counter_sec_2 % wpn3.getAmmoCount() == 0) {
+			delay_sec_2 = wpn3.getReload_delay();
+		}
+		if (counter_sec_2 % wpn3.getAmmoCount() != 0) {
+			delay_sec_2 = wpn3.getShoot_delay();
+		}
+		if (Math.abs(lastshot_sec_2 - time) < delay_sec_2) {
+			return null;
+		}
+		lastshot_sec_2 = time;
+		float x = (float) (plane.getCenterX() + Math.cos(Math.toRadians(angle)));
+		float y = (float) (plane.getCenterY() + Math.sin(Math.toRadians(angle)) + 5);
+		counter_sec_2--;
+		return new Weapons(x, y, angle, wpn3.getDamage(), wpn3,
+				wpn3.getImage(), id);
 	}
 
 	/**
 	 * Paint method
 	 */
-	public void paintComponent(Graphics g) {
-		Graphics2D g2d = (Graphics2D) g.create();
+	@Override
+	public void render(GameContainer container, Graphics g) {
 		if (broken) {
 			return;
 		}
-		plane = new Rectangle2D.Double(xpos, ypos, image.getWidth(null),
-				image.getHeight(null));
-		g2d.rotate(Math.toRadians(angle), plane.getCenterX(),
-				plane.getCenterY());
-		g2d.drawImage(image, (int) xpos, (int) ypos, null);
-		// Flame
-		g2d.setColor(Color.RED);
-		Point p1 = new Point((int) xpos, (int) ypos + 2 * image.getHeight(null)
-				/ 8); // mitte
-		Point p2 = new Point((int) xpos, (int) ypos + 6 * image.getHeight(null)
-				/ 8); // unten
-		Point p3 = new Point((int) xpos - (int) speed * 2,
-				(int) (ypos + 4 * image.getHeight(null) / 8)); // oben
-		int[] xs = { p1.x, p2.x, p3.x };
-		int[] ys = { p1.y, p2.y, p3.y };
-		Polygon flame = new Polygon(xs, ys, 3);
-
-		g2d.draw(flame);
-		g2d.fill(flame);
-		g2d.dispose();
+		plane = new Rectangle(xpos, ypos, image.getWidth(), image.getHeight());
+		image.setRotation(angle);
+		image.draw(xpos, ypos);
 	}
 
 	/**
@@ -184,11 +198,16 @@ public class ModernTestPlane2 extends Modern {
 	 * 
 	 * @param amount
 	 */
-	public void rotateDirection(int amount) {
-		if (speed > MAX_SPEED * 1) {
-			angle += amount * 1;
+	public void increaseAngle(int amount) {
+		if (speed > MAX_SPEED) {
+			angle += amount * 0.8;
 		} else {
 			angle += amount;
+		}
+		if (angle + amount < 0) {
+			angle = angle + amount + 360;
+		} else if (angle + amount > 360) {
+			angle = angle + amount - 360;
 		}
 		if (angle >= 360 || angle <= -360) {
 			angle = 0;
@@ -200,7 +219,10 @@ public class ModernTestPlane2 extends Modern {
 	 * 
 	 * @return
 	 */
-	public double getAngle() {
+	public float getAngle() {
+		if (angle == 360 || angle == -360) {
+			// angle = 0;
+		}
 		return angle;
 	}
 
@@ -242,11 +264,21 @@ public class ModernTestPlane2 extends Modern {
 			broken = true;
 	}
 
-	public Rectangle2D getPlane() {
+	/**
+	 * Returns plane rectangle
+	 * 
+	 * @return
+	 */
+	public Rectangle getPlane() {
 		return plane;
 	}
 
-	public double getCenterX() {
+	/**
+	 * Returns Center xpos of plane
+	 * 
+	 * @return
+	 */
+	public float getCenterX() {
 		if (plane != null) {
 			return plane.getCenterX();
 		} else {
@@ -254,7 +286,12 @@ public class ModernTestPlane2 extends Modern {
 		}
 	}
 
-	public double getCenterY() {
+	/**
+	 * Returns Center ypos of plane
+	 * 
+	 * @return
+	 */
+	public float getCenterY() {
 		if (plane != null) {
 			return plane.getCenterY();
 		} else {
@@ -268,38 +305,102 @@ public class ModernTestPlane2 extends Modern {
 	 * @param type
 	 * @return
 	 */
-	public int getAmmo(WeaponTypes type) {
-		if (type == WeaponTypes.UNGUIDED) {
-			return counter_rocket;
-		} else if (type == WeaponTypes.GUN) {
-			return counter_gun;
+	public int getAmmo(int id) {
+		if (id == 2) {
+			return counter_sec_1;
+		} else if (id == 1) {
+			return counter_prim;
+		} else if (id == 3) {
+			return counter_sec_2;
 		} else {
 			return -1;
 		}
 	}
 
+	/**
+	 * Adds ammount of ammo to given weaponstype
+	 * 
+	 * @param type
+	 * @param ammount
+	 */
+	public void addAmmo(int id, WeaponTypes type, int ammount) {
+		if (id == 2) {
+			if (counter_sec_1 < type.getAmmoCount()) {
+				counter_sec_1 += ammount;
+			}
+		} else if (id == 1) {
+			if (counter_prim < type.getAmmoCount()) {
+				counter_prim += ammount;
+			}
+		} else if (id == 3) {
+			if (counter_sec_2 < type.getAmmoCount()) {
+				counter_sec_2 += ammount;
+			}
+		}
+	}
+
+	/**
+	 * Returns wether this plane is broken or not
+	 * 
+	 * @return
+	 */
 	public boolean getBroken() {
 		return broken;
 	}
 
+	/**
+	 * Sets this plane broken state
+	 * 
+	 * @param broken
+	 */
 	public void setBroken(boolean broken) {
 		this.broken = broken;
 	}
 
-	public double getSpeedTotal() {
+	/**
+	 * Gets total absolute Speed (vertical + horizontal)
+	 * 
+	 * @return
+	 */
+	public float getSpeedTotal() {
 		return Math.abs(hspeed) + Math.abs(vspeed);
 	}
 
-	public double getSpeedTotal1() {
+	/**
+	 * Gets total Speed (vertical + horizontal)
+	 * 
+	 * @return
+	 */
+	public float getSpeedTotalAbs() {
 		return hspeed + vspeed;
 	}
 
-	public double getHspeed() {
+	/**
+	 * Gets horizontal Speed
+	 * 
+	 * @return
+	 */
+	public float getHspeed() {
 		return hspeed;
 	}
 
-	public double getVspeed() {
+	/**
+	 * Gets vertical Speed
+	 * 
+	 * @return
+	 */
+	public float getVspeed() {
 		return vspeed;
+	}
+
+	public WeaponTypes getWeapon(int id) {
+		if (id == 1) {
+			return wpn1;
+		} else if (id == 2) {
+			return wpn2;
+		} else {
+			return wpn3;
+		}
 	}
 
 }

@@ -1,19 +1,19 @@
 package dogfight_remake.entities.weapons;
 
-import dogfight_remake.entities.Planes;
+import dogfight_remake.entities.planes.Planes;
 
 public class Homing_Missiles {
 
 	public static Weapons moveMissile(Weapons weapon, Planes pln1, Planes pln2,
 			double delta) {
 		Weapons wmp = weapon;
-		double speed = Weapons.DEFAULT_SPEED_GUIDED;
-		double wmpx = wmp.getXpos();
-		double wmpy = wmp.getYpos();
-		double plnx = pln2.getCenterX();
-		double plny = pln2.getCenterY();
-		double deltaX = plnx - wmpx;
-		double deltaY = plny - wmpy;
+		float speed = Weapons.DEFAULT_SPEED_GUIDED;
+		float wmpx = wmp.getXpos();
+		float wmpy = wmp.getYpos();
+		float plnx = pln2.getCenterX();
+		float plny = pln2.getCenterY();
+		float deltaX = plnx - wmpx;
+		float deltaY = plny - wmpy;
 
 		double atan2 = Math.atan2(deltaY, deltaX);
 
@@ -23,7 +23,7 @@ public class Homing_Missiles {
 		} else {
 			atan2 = 2 * Math.PI - atan2;
 		}
-		double angle = Math.round(Math.toDegrees(atan2));
+		float angle = Math.round(Math.toDegrees(atan2));
 		if (angle == 360) {
 			angle = 0;
 		}
@@ -37,7 +37,7 @@ public class Homing_Missiles {
 			angle += 360;
 
 		// Find the difference in the angle.
-		double angleDifference = angle - wmp.getAngle();
+		float angleDifference = angle - wmp.getAngle();
 
 		// Turn the actual direction towards the target direction.
 		if (((angleDifference < 180) && (angleDifference > 0))
@@ -50,10 +50,8 @@ public class Homing_Missiles {
 		}
 
 		// speed calculation
-		double hspeed = speed * Math.cos(Math.toRadians(wmp.getAngle()))
-				* delta;
-		double vspeed = speed * Math.sin(Math.toRadians(wmp.getAngle()))
-				* delta;
+		float hspeed = (float) (speed * Math.cos(Math.toRadians(wmp.getAngle())));
+		float vspeed = (float) (speed * Math.sin(Math.toRadians(wmp.getAngle())));
 		wmp.setXpos(wmp.getXpos() + hspeed);
 		wmp.setYpos(wmp.getYpos() + vspeed);
 

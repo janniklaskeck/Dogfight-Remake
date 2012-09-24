@@ -1,42 +1,41 @@
-package dogfight_remake.entities;
+package dogfight_remake.entities.planes.ww;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.Point;
-import java.awt.Polygon;
-import java.awt.geom.Rectangle2D;
 import java.util.Random;
 
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
+import org.newdawn.slick.geom.Rectangle;
+
+import dogfight_remake.entities.Entity;
 import dogfight_remake.entities.weapons.WeaponTypes;
 import dogfight_remake.entities.weapons.Weapons;
-import dogfight_remake.main.GamePanel;
+import dogfight_remake.main.GamePlayState;
 
-public class Planes extends Entity {
+public class WW1 extends Entity {
 
 	private Random random;
 	// constants
 	// default values
-	protected final static double MAX_SPEED = 7;
+	public final static float MAX_SPEED = 7;
 
 	private Image image;
 
-	private Rectangle2D plane;
+	private Rectangle plane;
 	protected int id;
 	private int hitpoints;
-	private double angle;
+	private float angle;
 	private long lastshot_prim, lastshot_sec_1, lastshot_sec_2;
 	private int counter_prim;
 	private int counter_sec_1;
 	private int counter_sec_2;
 	private boolean broken;
-	public double hspeed, vspeed;
+	public float hspeed, vspeed;
 	private WeaponTypes wpn1;
 	private WeaponTypes wpn2;
 	private WeaponTypes wpn3;
 
-	public Planes(int id, double xpos, double ypos, double angle, Image image,
+	public WW1(int id, float xpos, float ypos, float angle, Image image,
 			int hitpoints, WeaponTypes wpn1, WeaponTypes wpn2, WeaponTypes wpn3) {
 		super(xpos, ypos, angle);
 		this.id = id;
@@ -65,17 +64,17 @@ public class Planes extends Entity {
 	public void move(double delta) {
 
 		if (id == 1) {
-			hspeed = Math.abs(speed) * Math.cos(Math.toRadians(angle)) * delta;
-			vspeed = Math.abs(speed) * Math.sin(Math.toRadians(angle)) * delta;
+			hspeed = (float) (Math.abs(speed) * Math.cos(Math.toRadians(angle)));
+			vspeed = (float) (Math.abs(speed) * Math.sin(Math.toRadians(angle)));
 		} else {
-			hspeed = Math.abs(speed) * Math.cos(Math.toRadians(angle)) * delta;
-			vspeed = Math.abs(speed) * Math.sin(Math.toRadians(angle)) * delta;
+			hspeed = (float) (Math.abs(speed) * Math.cos(Math.toRadians(angle)));
+			vspeed = (float) (Math.abs(speed) * Math.sin(Math.toRadians(angle)));
 		}
 
 		if (Math.abs(hspeed) + Math.abs(vspeed) < 1.3) {
 
 			xpos += hspeed;
-			ypos += vspeed + GamePanel.GRAVITY;
+			ypos += vspeed + GamePlayState.GRAVITY;
 		} else {
 			xpos += hspeed;
 			ypos += vspeed;
@@ -89,7 +88,7 @@ public class Planes extends Entity {
 	 * @return new Weapons object
 	 */
 	public Weapons shoot_primary() {
-		double angle = this.angle;
+		float angle = this.angle;
 		if (broken || counter_prim == 0) {
 			return null;
 		}
@@ -115,8 +114,8 @@ public class Planes extends Entity {
 			return null;
 		}
 		lastshot_prim = time;
-		double x = (plane.getCenterX() + Math.cos(Math.toRadians(this.angle)));
-		double y = (plane.getCenterY() + Math.sin(Math.toRadians(this.angle)));
+		float x = (float) (plane.getCenterX() + Math.cos(Math.toRadians(angle)));
+		float y = (float) (plane.getCenterY() + Math.sin(Math.toRadians(angle)) + 5);
 		counter_prim--;
 		return new Weapons(x, y, angle, wpn1.getDamage(), wpn1,
 				wpn1.getImage(), id);
@@ -145,8 +144,8 @@ public class Planes extends Entity {
 			return null;
 		}
 		lastshot_sec_1 = time;
-		double x = plane.getCenterX();
-		double y = plane.getCenterY();
+		float x = (float) (plane.getCenterX() + Math.cos(Math.toRadians(angle)));
+		float y = (float) (plane.getCenterY() + Math.sin(Math.toRadians(angle)) + 5);
 		counter_sec_1--;
 		return new Weapons(x, y, angle, wpn2.getDamage(), wpn2,
 				wpn2.getImage(), id);
@@ -174,8 +173,8 @@ public class Planes extends Entity {
 			return null;
 		}
 		lastshot_sec_2 = time;
-		double x = (plane.getCenterX() + Math.cos(Math.toRadians(angle)));
-		double y = (plane.getCenterY() + Math.sin(Math.toRadians(angle)) + 5);
+		float x = (float) (plane.getCenterX() + Math.cos(Math.toRadians(angle)));
+		float y = (float) (plane.getCenterY() + Math.sin(Math.toRadians(angle)) + 5);
 		counter_sec_2--;
 		return new Weapons(x, y, angle, wpn3.getDamage(), wpn3,
 				wpn3.getImage(), id);
@@ -184,29 +183,14 @@ public class Planes extends Entity {
 	/**
 	 * Paint method
 	 */
-	public void paintComponent(Graphics g) {
-		Graphics2D g2d = (Graphics2D) g.create();
+	@Override
+	public void render(GameContainer container, Graphics g) {
 		if (broken) {
 			return;
 		}
-		plane = new Rectangle2D.Double(xpos, ypos, image.getWidth(null),
-				image.getHeight(null));
-		g2d.rotate(Math.toRadians(angle), plane.getCenterX(),
-				plane.getCenterY());
-		g2d.drawImage(image, (int) xpos, (int) ypos, null);
-		// Flame
-		g2d.setColor(Color.RED);
-		Point p1 = new Point((int) xpos, (int) ypos + image.getHeight(null) / 2); // mitte
-		Point p2 = new Point((int) xpos, (int) ypos + image.getHeight(null) - 2); // unten
-		Point p3 = new Point((int) xpos - (int) speed * 5,
-				(int) (ypos + 2 * image.getHeight(null) / 3)); // oben
-		int[] xs = { p1.x, p2.x, p3.x };
-		int[] ys = { p1.y, p2.y, p3.y };
-		Polygon flame = new Polygon(xs, ys, 3);
-
-		g2d.draw(flame);
-		g2d.fill(flame);
-		g2d.dispose();
+		plane = new Rectangle(xpos, ypos, image.getWidth(), image.getHeight());
+		image.setRotation(angle);
+		image.draw(xpos, ypos);
 	}
 
 	/**
@@ -235,9 +219,9 @@ public class Planes extends Entity {
 	 * 
 	 * @return
 	 */
-	public double getAngle() {
+	public float getAngle() {
 		if (angle == 360 || angle == -360) {
-			angle = 0;
+			// angle = 0;
 		}
 		return angle;
 	}
@@ -285,7 +269,7 @@ public class Planes extends Entity {
 	 * 
 	 * @return
 	 */
-	public Rectangle2D getPlane() {
+	public Rectangle getPlane() {
 		return plane;
 	}
 
@@ -294,7 +278,7 @@ public class Planes extends Entity {
 	 * 
 	 * @return
 	 */
-	public double getCenterX() {
+	public float getCenterX() {
 		if (plane != null) {
 			return plane.getCenterX();
 		} else {
@@ -307,7 +291,7 @@ public class Planes extends Entity {
 	 * 
 	 * @return
 	 */
-	public double getCenterY() {
+	public float getCenterY() {
 		if (plane != null) {
 			return plane.getCenterY();
 		} else {
@@ -378,7 +362,7 @@ public class Planes extends Entity {
 	 * 
 	 * @return
 	 */
-	public double getSpeedTotal() {
+	public float getSpeedTotal() {
 		return Math.abs(hspeed) + Math.abs(vspeed);
 	}
 
@@ -387,7 +371,7 @@ public class Planes extends Entity {
 	 * 
 	 * @return
 	 */
-	public double getSpeedTotalAbs() {
+	public float getSpeedTotalAbs() {
 		return hspeed + vspeed;
 	}
 
@@ -396,7 +380,7 @@ public class Planes extends Entity {
 	 * 
 	 * @return
 	 */
-	public double getHspeed() {
+	public float getHspeed() {
 		return hspeed;
 	}
 
@@ -405,7 +389,7 @@ public class Planes extends Entity {
 	 * 
 	 * @return
 	 */
-	public double getVspeed() {
+	public float getVspeed() {
 		return vspeed;
 	}
 
@@ -418,4 +402,5 @@ public class Planes extends Entity {
 			return wpn3;
 		}
 	}
+
 }

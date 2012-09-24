@@ -1,20 +1,16 @@
 package dogfight_remake.rendering;
 
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Toolkit;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
-import javax.imageio.ImageIO;
 
-import dogfight_remake.entities.Planes;
+import org.newdawn.slick.Color;
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
+
+import dogfight_remake.entities.planes.Planes;
 import dogfight_remake.entities.weapons.WeaponTypes;
-import dogfight_remake.main.GamePanel;
-import dogfight_remake.map.Map;
+import dogfight_remake.main.GamePlayState;
 import dogfight_remake.main.GlbVar;
 
 public class Render {
@@ -22,12 +18,12 @@ public class Render {
 	public Planes player2;
 	public Planes player1_respawn;
 	public Planes player2_respawn;
-	public BufferedImage img_player1;
-	public BufferedImage img_player2;
-	public static BufferedImage img_missile1;
-	public static BufferedImage img_bullet1;
-	public static BufferedImage img_bomb1;
-	private BufferedImage img_bg;
+	public static Image img_player1;
+	public static Image img_player2;
+	public static Image img_missile1;
+	public static Image img_bullet1;
+	public static Image img_bomb1;
+	private Image img_bg;
 
 	protected static Dimension dim = GlbVar.dim_chosen;
 
@@ -36,30 +32,17 @@ public class Render {
 	private long currentFrame;
 	public int fps = 0;
 
-	public static Map map = new Map(dim.getWidth(), dim.getHeight());
+	// public static Map map = new Map(dim.getWidth(), dim.getHeight());
 
-	public void init() {
-
+	public void init() throws SlickException {
 		try {
-			InputStream inputstream_player1 = this.getClass().getClassLoader()
-					.getResourceAsStream("dogfight_remake/images/plane1.png");
-			img_player1 = ImageIO.read(inputstream_player1);
-			InputStream inputstream_player2 = this.getClass().getClassLoader()
-					.getResourceAsStream("dogfight_remake/images/plane2.png");
-			img_player2 = ImageIO.read(inputstream_player2);
-			InputStream inputstream_bg = this.getClass().getClassLoader()
-					.getResourceAsStream("dogfight_remake/images/l_bg.jpg");
-			img_bg = ImageIO.read(inputstream_bg);
-			InputStream inputstream_missile1 = this.getClass().getClassLoader()
-					.getResourceAsStream("dogfight_remake/images/missile1.png");
-			img_missile1 = ImageIO.read(inputstream_missile1);
-			InputStream inputstream_bullet1 = this.getClass().getClassLoader()
-					.getResourceAsStream("dogfight_remake/images/bullet1.png");
-			img_bullet1 = ImageIO.read(inputstream_bullet1);
-			InputStream inputstream_bomb1 = this.getClass().getClassLoader()
-					.getResourceAsStream("dogfight_remake/images/bomb1.png");
-			img_bomb1 = ImageIO.read(inputstream_bomb1);
-		} catch (IOException e) {
+			img_player1 = new Image("dogfight_remake/images/plane1.png");
+			img_player2 = new Image("dogfight_remake/images/plane2.png");
+			img_bg = new Image("dogfight_remake/images/img_bg.jpg");
+			img_missile1 = new Image("dogfight_remake/images/missile1.png");
+			img_bullet1 = new Image("dogfight_remake/images/bullet1.png");
+			img_bomb1 = new Image("dogfight_remake/images/bomb1.png");
+		} catch (SlickException e) {
 			System.out.println("Error Images 01");
 			e.printStackTrace();
 		}
@@ -131,15 +114,14 @@ public class Render {
 				GlbVar.wpn3_p2);
 		player1_respawn = player1;
 		player2_respawn = player2;
-		map = new Map(dim.getWidth(), dim.getHeight());
+		// map = new Map(dim.getWidth(), dim.getHeight());
 	}
 
 	/**
 	 * PaintComponent override
 	 */
 
-	public void paintComponent(Graphics g) {
-
+	public void render(GameContainer container, Graphics g) {
 		frames++;
 		currentFrame = System.currentTimeMillis();
 		if (currentFrame > firstFrame + 1000) {
@@ -148,85 +130,76 @@ public class Render {
 			frames = 0;
 		}
 		// Background and Entities
-		Graphics2D g2d = (Graphics2D) g.create();
 
-		g2d.drawImage(img_bg, 0, 0, null);
+		// g.drawImage(img_bg, 0, 0, null);
+		img_bg.draw(0, 0);
 
 		if (player1 != null) {
-			player1.paintComponent(g2d);
+			player1.render(container, g);
 		}
 		if (player2 != null) {
-			player2.paintComponent(g2d);
+			player2.render(container, g);
 		}
 
-		if (GamePanel.weapons != null) {
-			for (int i = 0; i < GamePanel.weapons.size(); i++) {
-				GamePanel.weapons.get(i).paintComponent(g2d);
+		if (GamePlayState.weapons != null) {
+			for (int i = 0; i < GamePlayState.weapons.size(); i++) {
+				GamePlayState.weapons.get(i).render(container, g);
 			}
 		}
-		if (GamePanel.explosions != null) {
-			for (int i = 0; i < GamePanel.explosions.size(); i++) {
-				if (!GamePanel.explosions.get(i).isMaxRadius()) {
-					GamePanel.explosions.get(i).paintComponent(g2d);
+		if (GamePlayState.explosions != null) {
+			for (int i = 0; i < GamePlayState.explosions.size(); i++) {
+				if (!GamePlayState.explosions.get(i).isMaxRadius()) {
+					GamePlayState.explosions.get(i).render(container, g);
 				} else {
-					GamePanel.explosions.remove(i);
+					GamePlayState.explosions.remove(i);
 				}
-
 			}
 		}
 		// Hitpoints
 		if (player1 != null && player2 != null) {
-			Font font = new Font("Arial", Font.PLAIN, dim.width / 85);
-
-			g2d.setColor(Color.BLACK);
-			g2d.setFont(font);
+			g.setColor(Color.black);
 			// Player 1
-			g2d.drawString("Player1: " + player1.getHitpoints(),
-					dim.width / 20, dim.height / 20);
-			g2d.drawString(
+			g.drawString("Player1: " + player1.getHitpoints(), dim.width / 20,
+					dim.height / 20);
+			g.drawString(
 					player1.getWeapon(1).getName() + ": " + player1.getAmmo(1),
 					dim.width / 20, dim.height / 20 + dim.height / 30);
-			g2d.drawString(
+			g.drawString(
 					player1.getWeapon(2).getName() + ": " + player1.getAmmo(2),
 					dim.width / 20, dim.height / 20 + dim.height / 15);
-			g2d.drawString(
+			g.drawString(
 					player1.getWeapon(3).getName() + ": " + player1.getAmmo(3),
 					dim.width / 20, (dim.height / 20) + (dim.height / 30)
 							+ (dim.height / 15));
-			if (GamePanel.respawntimer_p1 < GamePanel.RESPAWNTIME_PLAYER) {
-				g2d.drawString("Respawn Player1: " + GamePanel.respawntimer_p1
-						/ 100, dim.width / 5, dim.height / 20);
+			if (GamePlayState.respawntimer_p1 < GamePlayState.RESPAWNTIME_PLAYER) {
+				g.drawString("Respawn Player1: "
+						+ GamePlayState.respawntimer_p1 / 100, dim.width / 5,
+						dim.height / 20);
 			}
-			//g2d.drawString("" + dim.height, 400, 400);
+			g.drawString("" + GamePlayState.weapons.size(), 400, 400);
 			// Player 2
-			g2d.drawString("Player2: " + player2.getHitpoints(), dim.width
+			g.drawString("Player2: " + player2.getHitpoints(), dim.width
 					- dim.width / 7, dim.height / 20);
-			g2d.drawString(
+			g.drawString(
 					player2.getWeapon(1).getName() + ": " + player2.getAmmo(1),
 					dim.width - dim.width / 7, dim.height / 20 + dim.height
 							/ 30);
-			g2d.drawString(
+			g.drawString(
 					player2.getWeapon(2).getName() + ": " + player2.getAmmo(2),
 					dim.width - dim.width / 7, dim.height / 20 + dim.height
 							/ 15);
-			g2d.drawString(
+			g.drawString(
 					player2.getWeapon(3).getName() + ": " + player2.getAmmo(3),
 					dim.width - dim.width / 7, (dim.height / 20)
 							+ (dim.height / 30) + (dim.height / 15));
-			if (GamePanel.respawntimer_p2 < GamePanel.RESPAWNTIME_PLAYER) {
-				g2d.drawString("Respawn Player2: " + GamePanel.respawntimer_p2
-						/ 100, dim.width - dim.width / 3, dim.height / 20);
+			if (GamePlayState.respawntimer_p2 < GamePlayState.RESPAWNTIME_PLAYER) {
+				g.drawString("Respawn Player2: "
+						+ GamePlayState.respawntimer_p2 / 100, dim.width
+						- dim.width / 3, dim.height / 20);
 			}
 			// FPS and score
-			g2d.drawString("FPS: " + fps, dim.width / 2, dim.height / 20);
-			g2d.drawString(GamePanel.score_p1 + " : " + GamePanel.score_p2,
-					dim.width / 2, dim.height / 10);
+			g.drawString(GamePlayState.score_p1 + " : "
+					+ GamePlayState.score_p2, dim.width / 2, dim.height / 10);
 		}
-		if (map.getMap() != null) {
-			map.paintComponent(g2d);
-		}
-		Toolkit.getDefaultToolkit().sync();
-		g2d.dispose();
-
 	}
 }

@@ -1,10 +1,11 @@
-package dogfight_remake.entities.planes.modern;
+package dogfight_remake.entities.planes;
 
 import java.util.Random;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.geom.Ellipse;
 import org.newdawn.slick.geom.Rectangle;
 
 import dogfight_remake.entities.Entity;
@@ -12,7 +13,7 @@ import dogfight_remake.entities.weapons.WeaponTypes;
 import dogfight_remake.entities.weapons.Weapons;
 import dogfight_remake.main.GamePlayState;
 
-public class ModernTestPlane extends Entity {
+public class Planes extends Entity {
 
 	private Random random;
 	// constants
@@ -22,6 +23,7 @@ public class ModernTestPlane extends Entity {
 	private Image image;
 
 	private Rectangle plane;
+	private Ellipse aim;
 	protected int id;
 	private int hitpoints;
 	private float angle;
@@ -35,7 +37,7 @@ public class ModernTestPlane extends Entity {
 	private WeaponTypes wpn2;
 	private WeaponTypes wpn3;
 
-	public ModernTestPlane(int id, float xpos, float ypos, float angle, Image image,
+	public Planes(int id, float xpos, float ypos, float angle, Image image,
 			int hitpoints, WeaponTypes wpn1, WeaponTypes wpn2, WeaponTypes wpn3) {
 		super(xpos, ypos, angle);
 		this.id = id;
@@ -189,6 +191,10 @@ public class ModernTestPlane extends Entity {
 			return;
 		}
 		plane = new Rectangle(xpos, ypos, image.getWidth(), image.getHeight());
+		float x = (float) (plane.getCenterX() + Math.cos(Math.toRadians(angle)) * 100);
+		float y = (float) (plane.getCenterY() + Math.sin(Math.toRadians(angle)) * 100);
+		aim = new Ellipse(x, y, 10, 10);
+		//g.draw(aim);
 		image.setRotation(angle);
 		image.draw(xpos, ypos);
 	}
@@ -271,6 +277,10 @@ public class ModernTestPlane extends Entity {
 	 */
 	public Rectangle getPlane() {
 		return plane;
+	}
+
+	public Ellipse getAim() {
+		return aim;
 	}
 
 	/**

@@ -1,6 +1,6 @@
 package dogfight_remake.entities.weapons;
 
-import dogfight_remake.entities.Planes;
+import dogfight_remake.entities.planes.Planes;
 
 public class Reload {
 

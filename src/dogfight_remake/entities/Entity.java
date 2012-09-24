@@ -1,25 +1,29 @@
 package dogfight_remake.entities;
 
-import java.awt.Graphics;
+
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
+
+import dogfight_remake.entities.planes.Planes;
 
 public abstract class Entity {
 	// constants
-	protected static final double DEFAULT_SPEED = 2;
+	protected static final float DEFAULT_SPEED = 2;
 
 	// instance variables
-	protected double xpos, ypos;
-	protected double speed;
+	protected float xpos, ypos;
+	protected float speed;
 
-	protected double angle;
+	protected float angle;
 	protected int hitpoints;
 
-	public Entity(double xpos, double ypos) {
+	public Entity(float xpos, float ypos) {
 		this.xpos = xpos;
 		this.ypos = ypos;
 		this.speed = DEFAULT_SPEED;
 	}
 
-	public Entity(double xpos, double ypos, double angle) {
+	public Entity(float xpos, float ypos, float angle) {
 		this.angle = angle;
 		this.xpos = xpos;
 		this.ypos = ypos;
@@ -29,38 +33,38 @@ public abstract class Entity {
 	public void move() {
 	}
 
-	public abstract void paintComponent(Graphics g);
+	public abstract void render(GameContainer container, Graphics g);
 
-	public void setPosition(double xpos, double ypos) {
+	public void setPosition(float xpos, float ypos) {
 		this.xpos = xpos;
 		this.ypos = ypos;
 	}
 
-	public void setSpeed(double speed) {
+	public void setSpeed(float speed) {
 		this.speed = speed;
 	}
 
-	public double getXpos() {
+	public float getXpos() {
 		return xpos;
 	}
 
-	public double getYpos() {
+	public float getYpos() {
 		return ypos;
 	}
 
-	public void setXpos(double xpos) {
+	public void setXpos(float xpos) {
 		this.xpos = xpos;
 	}
 
-	public void setYpos(double ypos) {
+	public void setYpos(float ypos) {
 		this.ypos = ypos;
 	}
 
-	public double getSpeed() {
+	public float getSpeed() {
 		return speed;
 	}
 
-	public void incSpeed(double speed) {
+	public void incSpeed(float speed) {
 		if (this.speed + speed > Planes.MAX_SPEED) {
 			this.speed = Planes.MAX_SPEED;
 		} else {
@@ -68,11 +72,11 @@ public abstract class Entity {
 		}
 	}
 
-	public void decSpeed(double speed, boolean base) {
+	public void decSpeed(float speed, boolean base) {
 		if (base && this.speed < 2) {
 			this.speed = 2;
 		} else if (!base && this.speed < 0.5) {
-			this.speed = 0.5;
+			this.speed = (float) 0.5;
 		} else {
 			this.speed -= speed;
 		}
