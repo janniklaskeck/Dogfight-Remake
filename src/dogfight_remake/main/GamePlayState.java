@@ -25,7 +25,6 @@ import dogfight_remake.entities.weapons.Weapons;
 import dogfight_remake.map.Block;
 import dogfight_remake.map.BlockMap;
 import dogfight_remake.rendering.Render;
-import dogfight_remake.sound.Sounds;
 
 public class GamePlayState extends BasicGameState {
 
@@ -38,12 +37,12 @@ public class GamePlayState extends BasicGameState {
 
 	public static Rectangle p1;
 	public static Rectangle p2;
+	Rectangle wep;
 	public Polygon p1A;
 	public Polygon p2A;
 	public Polygon a;
 	public Polygon b;
 	public static Render r;
-	public static Sounds snd;
 	public Random rnd;
 	public GlbVar gv;
 	public static int score_p1 = 0, score_p2 = 0;
@@ -58,7 +57,6 @@ public class GamePlayState extends BasicGameState {
 	final long OPTIMAL_TIME = 1000000000 / OPTIMAL_FPS;
 	public static double delta;
 	public static Image plane;
-	public BlockMap map;
 
 	int stateID = -1;
 
@@ -75,7 +73,8 @@ public class GamePlayState extends BasicGameState {
 	public void render(GameContainer container, StateBasedGame game, Graphics g)
 			throws SlickException {
 		r.render(container, g);
-		BlockMap.tmap.render(0, 0);
+		GlbVar.tmap.render(0, 0);
+
 	}
 
 	@Override
@@ -84,12 +83,11 @@ public class GamePlayState extends BasicGameState {
 		container.setVSync(true);
 		r = new Render();
 		r.init();
-		snd = new Sounds();
 		weapons = new ArrayList<Weapons>();
 		explosions = new ArrayList<Explosion>();
-		map = new BlockMap("/src/dogfight_remake/map/map_test/map1.tmx");
+
 		rnd = new Random();
-		// snd.music1.loop(1, GlbVar.music_volume);
+		// GlbVar.music1.loop(1, GlbVar.music_volume);
 		score_p1 = 0;
 		score_p2 = 0;
 
@@ -108,6 +106,7 @@ public class GamePlayState extends BasicGameState {
 			Reload.reload_secondary_1(r.player2);
 			Reload.reload_secondary_2(r.player1);
 			Reload.reload_secondary_2(r.player2);
+			checkCollision(container);
 			for (int i = 0; i < weapons.size(); i++) {
 				if (!weapons.get(i).isHit() && weapons.get(i).isAlive()) {
 					if (weapons.get(i).getType() == WeaponTypes.GUN
@@ -170,10 +169,10 @@ public class GamePlayState extends BasicGameState {
 						}
 					}
 				} else {
-					// weapons.remove(i);
+					weapons.remove(i);
 				}
 			}
-			checkCollision(container);
+
 			if (r.player1.getHitpoints() <= 0 || r.player2.getHitpoints() <= 0) {
 				respawn();
 			}
@@ -197,13 +196,13 @@ public class GamePlayState extends BasicGameState {
 	private void respawn() {
 		if (respawntimer_p1 <= 0) {
 			r.player1 = new Planes(1, 100, dim.height / 2, 0,
-					Render.img_player1, 100, GlbVar.wpn1_p1, GlbVar.wpn2_p1,
+					GlbVar.img_player1, 100, GlbVar.wpn1_p1, GlbVar.wpn2_p1,
 					GlbVar.wpn3_p1);
 			respawntimer_p1 = RESPAWNTIME_PLAYER;
 		}
 		if (respawntimer_p2 <= 0) {
 			r.player2 = new Planes(2, dim.width - 150, dim.height / 2, 180,
-					Render.img_player2, 100, GlbVar.wpn1_p2, GlbVar.wpn2_p2,
+					GlbVar.img_player2, 100, GlbVar.wpn1_p2, GlbVar.wpn2_p2,
 					GlbVar.wpn3_p2);
 			respawntimer_p2 = RESPAWNTIME_PLAYER;
 		}
@@ -220,11 +219,11 @@ public class GamePlayState extends BasicGameState {
 		 */
 
 		p1 = new Rectangle((int) r.player1.getXpos(),
-				(int) r.player1.getYpos(), r.player1.getImage().getWidth(),
-				r.player1.getImage().getHeight());
+				(int) r.player1.getYpos(), GlbVar.img_player1.getWidth(),
+				GlbVar.img_player1.getHeight());
 		p2 = new Rectangle((int) r.player2.getXpos(),
-				(int) r.player2.getYpos(), r.player2.getImage().getWidth(),
-				r.player2.getImage().getHeight());
+				(int) r.player2.getYpos(), GlbVar.img_player2.getWidth(),
+				GlbVar.img_player2.getHeight());
 		a = new Polygon(new float[] { p1.getX(), p1.getY(),
 				p1.getX() + p1.getWidth(), p1.getY(),
 				p1.getX() + p1.getWidth(), p1.getY() + p1.getHeight(),
@@ -259,9 +258,8 @@ public class GamePlayState extends BasicGameState {
 
 		for (int i = 0; i < weapons.size(); i++) {
 			Weapons tmp = weapons.get(i);
-			Rectangle wep = new Rectangle((int) tmp.getXpos(),
-					(int) tmp.getYpos(), (int) tmp.getWidth(),
-					(int) tmp.getHeight());
+			wep = new Rectangle((int) tmp.getXpos(), (int) tmp.getYpos(),
+					(int) tmp.getWidth(), (int) tmp.getHeight());
 			if (weapons.size() > 0) {
 				for (int o = 0; o < BlockMap.entities.size(); o++) {
 					Block entity1 = (Block) BlockMap.entities.get(o);
@@ -269,7 +267,6 @@ public class GamePlayState extends BasicGameState {
 						explosions.add(new Explosion(tmp.getXpos(), tmp
 								.getYpos(), tmp.getType().getExploSize()));
 						tmp.setHit();
-						weapons.remove(i);
 					}
 				}
 				if (p2A != null) {
@@ -277,9 +274,8 @@ public class GamePlayState extends BasicGameState {
 						if (p2A.intersects(wep) && r.player2.getHitpoints() > 0) {
 							explosions.add(new Explosion(tmp.getXpos(), tmp
 									.getYpos(), tmp.getType().getExploSize()));
-							snd.hit.play(1, GlbVar.sounds_volume);
+							GlbVar.hit.play(1, GlbVar.sounds_volume);
 							tmp.setHit();
-							weapons.remove(i);
 							r.player2.decreaseHitpoints(tmp.getDamage());
 						}
 					}
@@ -288,9 +284,8 @@ public class GamePlayState extends BasicGameState {
 						if (p1A.intersects(wep) && r.player1.getHitpoints() > 0) {
 							explosions.add(new Explosion(tmp.getXpos(), tmp
 									.getYpos(), tmp.getType().getExploSize()));
-							snd.hit.play(1, GlbVar.sounds_volume);
+							GlbVar.hit.play(1, GlbVar.sounds_volume);
 							tmp.setHit();
-							weapons.remove(i);
 							r.player1.decreaseHitpoints(tmp.getDamage());
 						}
 					}
@@ -305,7 +300,7 @@ public class GamePlayState extends BasicGameState {
 						.getYpos(), 4));
 				p1A = null;
 				score_p2++;
-				snd.explode.play(1, GlbVar.sounds_volume);
+				GlbVar.explode.play(1, GlbVar.sounds_volume);
 			}
 		}
 		if (p2A != null) {
@@ -315,18 +310,18 @@ public class GamePlayState extends BasicGameState {
 						.getYpos(), 4));
 				p2A = null;
 				score_p1++;
-				snd.explode.play(1, GlbVar.sounds_volume);
+				GlbVar.explode.play(1, GlbVar.sounds_volume);
 			}
 		}
 		if (p1A != null && p2A != null && GlbVar.getPlayerCollision()) {
-			if (p1A.intersects(p2A) && respawntimer_p1 >= RESPAWNTIME_PLAYER) {
+			if (p1A.intersects(p2A) && respawntimer_p1 >= RESPAWNTIME_PLAYER && respawntimer_p2 >= RESPAWNTIME_PLAYER) {
 				explosions.add(new Explosion(r.player1.getXpos(), r.player1
 						.getYpos(), 4));
 				explosions.add(new Explosion(r.player2.getXpos(), r.player2
 						.getYpos(), 4));
 				p1A = null;
 				p2A = null;
-				snd.explode.play(1, GlbVar.sounds_volume);
+				GlbVar.explode.play(1, GlbVar.sounds_volume);
 				r.player1.setHitpoints(0);
 				r.player2.setHitpoints(0);
 			}
@@ -334,10 +329,18 @@ public class GamePlayState extends BasicGameState {
 		if (r.player1.getPlane() != null && r.player2.getPlane() != null) {
 			for (int i = 0; i < BlockMap.entities.size(); i++) {
 				Block entity1 = (Block) BlockMap.entities.get(i);
-				if (r.player1.getPlane().intersects(entity1.poly)) {
+				if (r.player1.getPlane().intersects(entity1.poly) && respawntimer_p1 >= RESPAWNTIME_PLAYER) {
+					explosions.add(new Explosion(r.player1.getXpos(), r.player1
+							.getYpos(), 4));
+					p1A = null;
+					GlbVar.explode.play(1, GlbVar.sounds_volume);
 					r.player1.setHitpoints(0);
 				}
-				if (r.player2.getPlane().intersects(entity1.poly)) {
+				if (r.player2.getPlane().intersects(entity1.poly) && respawntimer_p2 >= RESPAWNTIME_PLAYER) {
+					explosions.add(new Explosion(r.player2.getXpos(), r.player2
+							.getYpos(), 4));
+					p2A = null;
+					GlbVar.explode.play(1, GlbVar.sounds_volume);
 					r.player2.setHitpoints(0);
 				}
 			}
@@ -352,7 +355,7 @@ public class GamePlayState extends BasicGameState {
 			if (p1A.intersects(bounds_left) || p1A.intersects(bounds_right)
 					|| p1A.intersects(bounds_up)) {
 				r.player1.setHitpoints(0);
-				snd.explode.play(1, GlbVar.sounds_volume);
+				GlbVar.explode.play(1, GlbVar.sounds_volume);
 				explosions.add(new Explosion(r.player1.getXpos(), r.player1
 						.getYpos(), 2));
 
@@ -362,7 +365,7 @@ public class GamePlayState extends BasicGameState {
 			if (p2A.intersects(bounds_left) || p2A.intersects(bounds_right)
 					|| p2A.intersects(bounds_up)) {
 				r.player2.setHitpoints(0);
-				snd.explode.play(1, GlbVar.sounds_volume);
+				GlbVar.explode.play(1, GlbVar.sounds_volume);
 				explosions.add(new Explosion(r.player2.getXpos(), r.player2
 						.getYpos(), 2));
 

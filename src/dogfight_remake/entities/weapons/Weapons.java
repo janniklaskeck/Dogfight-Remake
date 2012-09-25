@@ -3,9 +3,10 @@ package dogfight_remake.entities.weapons;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
-
 import dogfight_remake.entities.Entity;
-import dogfight_remake.main.GamePlayState;;
+import dogfight_remake.main.GamePlayState;
+
+;
 
 public class Weapons extends Entity {
 	public final static float DEFAULT_SPEED_BULLET = 15;
@@ -15,12 +16,13 @@ public class Weapons extends Entity {
 	public final static int MAX_LIFETIME_GUN = 50;
 	public final static int MAX_LIFETIME_GUIDED_AIR = 230;
 	public final static int MAX_LIFETIME_UNGUIDED = 150;
+	public final static int MAX_LIFETIME_BOMB = 1000;
 	public final static int BOMB_DAMAGE = 50;
 	public final static int BOMB_SPLIT_DAMAGE = 30;
 	public final static int BOMB_SPLIT_SMALL_DAMAGE = 15;
 	private float angle;
 	private boolean broken;
-	private int height = 2, width = 5;
+	private int height, width;
 	private WeaponTypes type;
 	private double speed_mod = 0;
 	private double speed_mod_bomb = 0.3;
@@ -53,13 +55,14 @@ public class Weapons extends Entity {
 		this.type = type;
 		this.id = id;
 		this.firstHeight = ypos;
+		this.height = image.getHeight();
+		this.width = image.getWidth();
 	}
 
 	/**
 	 * Paints weapons
 	 */
 	public void render(GameContainer container, Graphics g) {
-		// g.setColor(Color.BLACK);
 		lifetime++;
 		if (broken) {
 			return;
@@ -101,7 +104,6 @@ public class Weapons extends Entity {
 			} else {
 				broken = true;
 			}
-
 		}
 
 	}
@@ -140,11 +142,10 @@ public class Weapons extends Entity {
 			xpos += hspeed;
 			ypos += vspeed;
 		} else if (type == WeaponTypes.BOMB) {
-
-			// angle = angleCheck(angle);
+			angleCheck();
 			if (angle <= 90 && angle >= 0) {
 				angle += (90 - angle) / 75;
-			} else if (angle >= 270 && angle <= 360) {
+			} else if (angle >= 270 && angle < 360) {
 				angle += (angle - 270) / 75;
 			} else if (angle < 270 && angle > 180) {
 				angle += (angle - 270) / 75;
@@ -159,13 +160,12 @@ public class Weapons extends Entity {
 			xpos += hspeed;
 			ypos += GamePlayState.GRAVITY * 4 * speed_mod_bomb;
 		} else if (type == WeaponTypes.BOMB_SPLIT) {
-
+			angleCheck();
 			if (ypos - firstHeight > 300 && !isSplit) {
 				split = true;
 			} else {
 				split = false;
 			}
-			// angle = angleCheck(angle);
 			if (angle <= 90 && angle >= 0) {
 				angle += (90 - angle) / 75;
 			} else if (angle >= 270 && angle <= 360) {
@@ -183,7 +183,6 @@ public class Weapons extends Entity {
 			xpos += hspeed;
 			ypos += GamePlayState.GRAVITY * 4 * speed_mod_bomb;
 		} else if (type == WeaponTypes.BOMB_SPLIT_SMALL) {
-			// angle = angleCheck(angle);
 			if (angle <= 90 && angle >= 0) {
 				angle += (90 - angle) / 75;
 			} else if (angle >= 270 && angle <= 360) {
@@ -203,14 +202,12 @@ public class Weapons extends Entity {
 		}
 	}
 
-	public double angleCheck(double angle) {
-		if (Math.round(angle) == 360) {
-			return 0;
-		} else {
-			return angle;
+	private void angleCheck() {
+		if (angle >= 360) {
+			angle = 0;
 		}
 	}
-
+	
 	/**
 	 * Rotates weapon adds amount to angle
 	 * 
@@ -401,6 +398,10 @@ public class Weapons extends Entity {
 			}
 		} else if (type == WeaponTypes.GUIDED_GROUND) {
 
+		} else if (type == WeaponTypes.BOMB || type == WeaponTypes.BOMB_SPLIT) {
+			if (lifetime > MAX_LIFETIME_BOMB) {
+				return false;
+			}
 		}
 		return true;
 	}

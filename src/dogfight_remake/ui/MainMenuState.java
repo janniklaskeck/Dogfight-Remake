@@ -2,13 +2,13 @@ package dogfight_remake.ui;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 import dogfight_remake.main.Dogfight_Remake;
+import dogfight_remake.main.GlbVar;
 
 public class MainMenuState extends BasicGameState {
 
@@ -18,27 +18,19 @@ public class MainMenuState extends BasicGameState {
 		this.stateID = stateID;
 	}
 
-	Image background = null;
-	Image startGameOption = null;
-	Image exitOption = null;
-
 	float startGameScale = 1;
 	float exitScale = 1;
-	float menuX = 100;
-	float menuY = 100;
+	float menuX = 300;
+	float menuY = 300;
 	float scaleStep = 0.0001f;
 
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg)
 			throws SlickException {
-		background = new Image("dogfight_remake/images/mig29_2.jpg");
 
 		// load the menu images
-		Image menuOptions = new Image("dogfight_remake/images/menu.png");
-
-		startGameOption = menuOptions.getSubImage(0, 0, 377, 71);
-
-		exitOption = menuOptions.getSubImage(0, 71, 377, 71);
+		GlbVar.startGameOption = GlbVar.menuOptions.getSubImage(0, 0, 377, 71);
+		GlbVar.exitOption = GlbVar.menuOptions.getSubImage(0, 71, 377, 71);
 
 	}
 
@@ -46,12 +38,10 @@ public class MainMenuState extends BasicGameState {
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g)
 			throws SlickException {
 		// render the background
-		background.draw(0, 0, 2.0f);
-
+		GlbVar.background.draw(0, 0, 1680, 1050);
 		// Draw menu
-		startGameOption.draw(menuX, menuY, startGameScale);
-
-		exitOption.draw(menuX, menuY + 80, exitScale);
+		GlbVar.startGameOption.draw(menuX, menuY, startGameScale);
+		GlbVar.exitOption.draw(menuX, menuY + 80, exitScale);
 	}
 
 	@Override
@@ -65,13 +55,15 @@ public class MainMenuState extends BasicGameState {
 		boolean insideStartGame = false;
 		boolean insideExit = false;
 
-		if ((mouseX >= menuX && mouseX <= menuX + startGameOption.getWidth())
+		if ((mouseX >= menuX && mouseX <= menuX
+				+ GlbVar.startGameOption.getWidth())
 				&& (mouseY >= menuY && mouseY <= menuY
-						+ startGameOption.getHeight())) {
+						+ GlbVar.startGameOption.getHeight())) {
 			insideStartGame = true;
-		} else if ((mouseX >= menuX && mouseX <= menuX + exitOption.getWidth())
+		} else if ((mouseX >= menuX && mouseX <= menuX
+				+ GlbVar.exitOption.getWidth())
 				&& (mouseY >= menuY + 80 && mouseY <= menuY + 80
-						+ exitOption.getHeight())) {
+						+ GlbVar.exitOption.getHeight())) {
 			insideExit = true;
 		}
 
@@ -81,6 +73,7 @@ public class MainMenuState extends BasicGameState {
 
 			if (input.isMouseButtonDown(Input.MOUSE_LEFT_BUTTON)) {
 				sbg.enterState(Dogfight_Remake.GAMEPLAYSTATE);
+
 			}
 		} else {
 			if (startGameScale > 1.0f)

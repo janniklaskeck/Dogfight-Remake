@@ -194,7 +194,7 @@ public class Planes extends Entity {
 		float x = (float) (plane.getCenterX() + Math.cos(Math.toRadians(angle)) * 100);
 		float y = (float) (plane.getCenterY() + Math.sin(Math.toRadians(angle)) * 100);
 		aim = new Ellipse(x, y, 10, 10);
-		//g.draw(aim);
+		// g.draw(aim);
 		image.setRotation(angle);
 		image.draw(xpos, ypos);
 	}
@@ -226,8 +226,8 @@ public class Planes extends Entity {
 	 * @return
 	 */
 	public float getAngle() {
-		if (angle == 360 || angle == -360) {
-			// angle = 0;
+		if (angle >= 360) {
+			angle = 0;
 		}
 		return angle;
 	}
@@ -249,7 +249,12 @@ public class Planes extends Entity {
 	 * @return
 	 */
 	public int getHitpoints() {
-		return hitpoints;
+		if (hitpoints < 0) {
+			return 0;
+		} else {
+			return hitpoints;
+		}
+
 	}
 
 	/**

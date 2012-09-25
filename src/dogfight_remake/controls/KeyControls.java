@@ -55,10 +55,10 @@ public class KeyControls {
 				Weapons tmp = GamePlayState.r.player1.shoot_primary();
 				if (tmp != null) {
 					if (tmp.getType() == WeaponTypes.GUN) {
-						GamePlayState.snd.prim_gun_heavy.play(1,
+						GlbVar.prim_gun_heavy.play(1,
 								GlbVar.sounds_volume);
 					} else {
-						GamePlayState.snd.prim_gun_light.play(1,
+						GlbVar.prim_gun_light.play(1,
 								GlbVar.sounds_volume);
 					}
 					GamePlayState.weapons.add(tmp);
@@ -72,10 +72,10 @@ public class KeyControls {
 				if (tmp != null) {
 					if (tmp.getType() == WeaponTypes.GUIDED_AIR
 							|| tmp.getType() == WeaponTypes.UNGUIDED) {
-						GamePlayState.snd.sec_missile1.play(1,
+						GlbVar.sec_missile1.play(1,
 								GlbVar.sounds_volume);
 					} else {
-						GamePlayState.snd.sec_bomb_drop.play(1,
+						GlbVar.sec_bomb_drop.play(1,
 								GlbVar.sounds_volume);
 					}
 					GamePlayState.weapons.add(tmp);
@@ -89,10 +89,10 @@ public class KeyControls {
 				if (tmp != null) {
 					if (tmp.getType() == WeaponTypes.GUIDED_AIR
 							|| tmp.getType() == WeaponTypes.UNGUIDED) {
-						GamePlayState.snd.sec_missile1.play(1,
+						GlbVar.sec_missile1.play(1,
 								GlbVar.sounds_volume);
 					} else {
-						GamePlayState.snd.sec_bomb_drop.play(1,
+						GlbVar.sec_bomb_drop.play(1,
 								GlbVar.sounds_volume);
 					}
 					GamePlayState.weapons.add(tmp);
@@ -142,10 +142,10 @@ public class KeyControls {
 				Weapons tmp = GamePlayState.r.player2.shoot_primary();
 				if (tmp != null) {
 					if (tmp.getType() == WeaponTypes.GUN) {
-						GamePlayState.snd.prim_gun_heavy.play(1,
+						GlbVar.prim_gun_heavy.play(1,
 								GlbVar.sounds_volume);
 					} else {
-						GamePlayState.snd.prim_gun_light.play(1,
+						GlbVar.prim_gun_light.play(1,
 								GlbVar.sounds_volume);
 					}
 					GamePlayState.weapons.add(tmp);
@@ -159,10 +159,10 @@ public class KeyControls {
 				if (tmp != null) {
 					if (tmp.getType() == WeaponTypes.GUIDED_AIR
 							|| tmp.getType() == WeaponTypes.UNGUIDED) {
-						GamePlayState.snd.sec_missile1.play(1,
+						GlbVar.sec_missile1.play(1,
 								GlbVar.sounds_volume);
 					} else {
-						GamePlayState.snd.sec_bomb_drop.play(1,
+						GlbVar.sec_bomb_drop.play(1,
 								GlbVar.sounds_volume);
 					}
 					GamePlayState.weapons.add(tmp);
@@ -176,10 +176,10 @@ public class KeyControls {
 				if (tmp != null) {
 					if (tmp.getType() == WeaponTypes.GUIDED_AIR
 							|| tmp.getType() == WeaponTypes.UNGUIDED) {
-						GamePlayState.snd.sec_missile1.play(1,
+						GlbVar.sec_missile1.play(1,
 								GlbVar.sounds_volume);
 					} else {
-						GamePlayState.snd.sec_bomb_drop.play(1,
+						GlbVar.sec_bomb_drop.play(1,
 								GlbVar.sounds_volume);
 					}
 					GamePlayState.weapons.add(tmp);

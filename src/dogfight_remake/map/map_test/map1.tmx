@@ -4,16 +4,16 @@
   <image source="collision.png" width="48" height="15"/>
  </tileset>
  <tileset firstgid="4" name="Ground" tilewidth="16" tileheight="15">
-  <image source="ground.png" width="48" height="15"/>
+  <image source="ground.png" width="64" height="15"/>
  </tileset>
  <layer name="Collision" width="105" height="70">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC+3ROQrAMAxFQcW5/53TpElhsgkswQyofx9FAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJnGedvqEKZG1P7THtfGyq1ZZpsrbu/UmuVuc5XtTzur9Gbpsvtt5+reLF12f+3s/qcuu/92dv1Tl91Znd3+lL3brbsDfYFJFthyAAA=
+   H4sIAAAAAAAAC+3YywrCQBBEUR///8+6UBCUKJhJ1/ScA71PcbOa0wkAAAAAAAAAAAAAAAAAAADgf9f7XR53Lv4W3r320SnPpz465djqo1OGb32eRx2N8mmUT6N8GuXTKJ9G+TTKp1G+VRrN/FaySqOZ37RWajRrp26Nur0R/7Jnpl0r75lhmz3Zu+zJ39Vpz159knbtual6z959EnaN2FS1Z1Sf6l1d9ozu03XXEXuOalPRqcN/V9HnqE6V2zrdqE76OOfc9t0AdNXVx9hyAAA=
   </data>
  </layer>
  <layer name="Ground" width="105" height="70">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC+3ROQrAMAxFQRVx7n/kNGlSmGwCSzAD6t9HEQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAECmcd62OoSpEbX/tMe1sXJrltnmits7tWa521xl+9POKr1Zuux+27m6N0uX3V87u/+py+6/nV3/1GV3Vme3P2XvduvuAMTJjfvYcgAA
+   H4sIAAAAAAAAC+3ZywrCMBRF0Q58/P8fq2ChaFHBNDlJ1oI797A7sV0WAAAAAAAAAAAAAAAAAAAAgP9d73d+3qnxb+Hdo8/l5XTKsddHpxyf+uiU4Vuf9WhHo3wa5dMon0b5NMqnUT6N8mmUb5ZGPb8rmaVRz++0ZmrUa6fRGm2/gW1vu6WnTr+88+5p18x71kv+PmtP9jNoT/6ukfaU6pO0q+Sm1ntK90nYdcSmVnuO6tN61yh7ju4z6q4ae9b/cjX61O40wnNXa0OLTrW37b2zKHGt+hzdqeWzN+KN+Ow5N/vdAA3Llh3YcgAA
   </data>
  </layer>
 </map>

@@ -1,22 +1,21 @@
 package dogfight_remake.entities.weapons;
 
-
 import org.newdawn.slick.Image;
 
-import dogfight_remake.rendering.Render;
+import dogfight_remake.main.GlbVar;
 
 public enum WeaponTypes {
 	// Type, Name, Damage, Ammo Count, Reload Delay, Shoot Delay, Image
-	MINIGUN("MiniGun", 2, 100, 2500, 50, 1, Render.img_bullet1),
-	GUN("Gun", 3, 50, 3000, 75, 1, Render.img_bullet1),
-	BOMB("Bomb", 40, 2, 8000, 300, 5, Render.img_bomb1),
-	BOMB_SPLIT("Split Bomb", 30, 2, 8000, 300, 4, Render.img_bomb1),
-	BOMB_SPLIT_SMALL("Split Bomb(small)", 10, 5, 8000, 300, 3, Render.img_bomb1),
-	UNGUIDED("Unguided Missile", 25, 8, 4000, 350, 3, Render.img_missile1),
-	GUIDED_AIR("Guided Air Missile", 20, 2, 5000, 500, 3, Render.img_missile1), 
-	GUIDED_GROUND("Guided Ground Missile", 2, 35, 5000, 500, 3, Render.img_missile1), 
-	RADAR_AIR("Radar Air Missile", 35, 4, 5000, 500, 3, Render.img_missile1), 
-	RADAR_GROUND("Radar Ground Missile", 40, 4, 5000, 500, 3, Render.img_missile1);
+	MINIGUN("MiniGun", 2, 100, 2500, 50, 1, GlbVar.img_bullet1),
+	GUN("Gun", 3, 50, 3000, 75, 1, GlbVar.img_bullet1),
+	BOMB("Bomb", 40, 2, 8000, 300, 5, GlbVar.img_bomb1),
+	BOMB_SPLIT("Split Bomb", 30, 2, 8000, 300, 4, GlbVar.img_bomb1),
+	BOMB_SPLIT_SMALL("Split Bomb(small)", 10, 5, 8000, 300, 3, GlbVar.img_bomb1),
+	UNGUIDED("Unguided Missile", 25, 8, 4000, 350, 3, GlbVar.img_missile1),
+	GUIDED_AIR("Guided Air Missile", 20, 2, 5000, 500, 3, GlbVar.img_missile1), 
+	GUIDED_GROUND("Guided Ground Missile", 2, 35, 5000, 500, 3, GlbVar.img_missile1), 
+	RADAR_AIR("Radar Air Missile", 35, 4, 5000, 500, 3, GlbVar.img_missile1), 
+	RADAR_GROUND("Radar Ground Missile", 40, 4, 5000, 500, 3, GlbVar.img_missile1);
 
 	private int damage;
 	private int ammoCount;
