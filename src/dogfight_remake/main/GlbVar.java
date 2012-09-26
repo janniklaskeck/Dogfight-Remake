@@ -19,6 +19,7 @@ public class GlbVar {
 	public static Image img_bullet1;
 	public static Image img_bomb1;
 	public static Image img_bg;
+	public static Image img_pause_bg;
 	// Tiled Map
 	public static BlockMap map;
 	public static TiledMap tmap;
@@ -27,6 +28,13 @@ public class GlbVar {
 	public static Image startGameOption;
 	public static Image exitOption;
 	public static Image menuOptions;
+	// Images Pause Menu
+	public static Image pauseMenuText;
+	public static Image pauseMenu;
+	public static Image continueGame;
+	public static Image mainMenu;
+	public static Image exit;
+	public static Image options;
 	// Sounds and Music
 	public static Music music1;
 	public static Music music2;
@@ -41,6 +49,7 @@ public class GlbVar {
 
 	private static boolean player_collision = false;
 	private static int multisample = 2;
+	public static boolean paused = false;
 
 	public static float music_volume = 0.1f;
 	public static float sounds_volume = 0.1f;

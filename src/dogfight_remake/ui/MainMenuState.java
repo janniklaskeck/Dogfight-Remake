@@ -75,7 +75,7 @@ public class MainMenuState extends BasicGameState {
 				sbg.enterState(Dogfight_Remake.GAMEPLAYSTATE);
 
 			}
-		} else {
+		} else if (insideExit) {
 			if (startGameScale > 1.0f)
 				startGameScale -= scaleStep * delta;
 

@@ -7,6 +7,7 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import dogfight_remake.ui.LoadingState;
 import dogfight_remake.ui.MainMenuState;
+import dogfight_remake.ui.PausedState;
 
 public class Dogfight_Remake extends StateBasedGame {
 
@@ -16,6 +17,7 @@ public class Dogfight_Remake extends StateBasedGame {
 
 	public static final int MAINMENUSTATE = 1;
 	public static final int GAMEPLAYSTATE = 2;
+	public static final int PAUSEDSTATE = 3;
 	public static final int LOADINGSTATE = 0;
 
 	public static void main(String[] args) throws SlickException {
@@ -31,6 +33,7 @@ public class Dogfight_Remake extends StateBasedGame {
 		this.addState(new LoadingState(LOADINGSTATE));
 		this.addState(new MainMenuState(MAINMENUSTATE));
 		this.addState(new GamePlayState(GAMEPLAYSTATE));
+		this.addState(new PausedState(PAUSEDSTATE));
 
 	}
 

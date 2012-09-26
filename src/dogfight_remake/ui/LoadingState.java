@@ -36,12 +36,17 @@ public class LoadingState extends BasicGameState {
 		GlbVar.img_bullet1 = new Image("dogfight_remake/images/bullet1.png");
 		GlbVar.img_bomb1 = new Image("dogfight_remake/images/bomb1.png");
 		// Tiled Map
-		GlbVar.tmap = new TiledMap("/src/dogfight_remake/map/map_test/map1.tmx",
+		GlbVar.tmap = new TiledMap(
+				"/src/dogfight_remake/map/map_test/map1.tmx",
 				"src/dogfight_remake/map/map_test");
 		GlbVar.map = new BlockMap("dogfight_remake/map/map_test/map1.tmx");
-		// Images Menu
+		// Images Main Menu
 		GlbVar.background = new Image("dogfight_remake/images/mig29_2.jpg");
-		GlbVar.menuOptions = new Image("dogfight_remake/images/menu.png");
+		GlbVar.menuOptions = new Image("dogfight_remake/images/mainMenu.png");
+		// Images Pause Menu
+		GlbVar.pauseMenuText = new Image(
+				"dogfight_remake/images/pauseMenuText.png");
+		GlbVar.pauseMenu = new Image("dogfight_remake/images/pauseMenu.png");
 		// Sounds and Music
 		GlbVar.music1 = new Music("dogfight_remake/sound/sounds/fight07.ogg");
 		GlbVar.music2 = new Music("dogfight_remake/sound/sounds/fight08.ogg");
@@ -72,7 +77,6 @@ public class LoadingState extends BasicGameState {
 		int total = LoadingList.get().getTotalResources();
 		int loaded = LoadingList.get().getTotalResources()
 				- LoadingList.get().getRemainingResources();
-		// float bar = loaded / (float) total;
 		g.fillRect((float) GlbVar.dim_chosen.getWidth() / 3,
 				(float) GlbVar.dim_chosen.getHeight() / 4, loaded * 40, 20);
 		g.drawRect((float) GlbVar.dim_chosen.getWidth() / 3,
@@ -89,16 +93,10 @@ public class LoadingState extends BasicGameState {
 		if (nextResource != null) {
 			try {
 				nextResource.load();
-				// slow down loading for example purposes
-				try {
-					Thread.sleep(10);
-				} catch (Exception e) {
-				}
 			} catch (IOException e) {
 				throw new SlickException("Failed to load: "
 						+ nextResource.getDescription(), e);
 			}
-
 			nextResource = null;
 		}
 

@@ -44,7 +44,6 @@ public class GamePlayState extends BasicGameState {
 	public Polygon b;
 	public static Render r;
 	public Random rnd;
-	public GlbVar gv;
 	public static int score_p1 = 0, score_p2 = 0;
 	public static long respawntimer_p1 = RESPAWNTIME_PLAYER;
 	public static long respawntimer_p2 = RESPAWNTIME_PLAYER;
@@ -57,6 +56,7 @@ public class GamePlayState extends BasicGameState {
 	final long OPTIMAL_TIME = 1000000000 / OPTIMAL_FPS;
 	public static double delta;
 	public static Image plane;
+	
 
 	int stateID = -1;
 
@@ -74,7 +74,13 @@ public class GamePlayState extends BasicGameState {
 			throws SlickException {
 		r.render(container, g);
 		GlbVar.tmap.render(0, 0);
-
+		
+		if (GlbVar.paused) {
+			GlbVar.img_pause_bg = new Image(1680, 1050);
+			g.copyArea(GlbVar.img_pause_bg, 0, 0);
+			game.enterState(Dogfight_Remake.PAUSEDSTATE);
+		}
+		
 	}
 
 	@Override
@@ -94,10 +100,10 @@ public class GamePlayState extends BasicGameState {
 	}
 
 	@Override
-	public void update(GameContainer container, StateBasedGame game, int delta)
+	public void update(GameContainer gc, StateBasedGame sbg, int delta)
 			throws SlickException {
-		KeyControls.update(container, game, delta);
-		if (r.player1 != null && r.player2 != null) {
+		KeyControls.update(gc, sbg, delta);
+		if (r.player1 != null && r.player2 != null && !GlbVar.paused) {
 			r.player1.move(delta);
 			r.player2.move(delta);
 			Reload.reload_primary(r.player1);
@@ -106,7 +112,7 @@ public class GamePlayState extends BasicGameState {
 			Reload.reload_secondary_1(r.player2);
 			Reload.reload_secondary_2(r.player1);
 			Reload.reload_secondary_2(r.player2);
-			checkCollision(container);
+			checkCollision(gc);
 			for (int i = 0; i < weapons.size(); i++) {
 				if (!weapons.get(i).isHit() && weapons.get(i).isAlive()) {
 					if (weapons.get(i).getType() == WeaponTypes.GUN
