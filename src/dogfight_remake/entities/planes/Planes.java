@@ -12,6 +12,7 @@ import dogfight_remake.entities.Entity;
 import dogfight_remake.entities.weapons.WeaponTypes;
 import dogfight_remake.entities.weapons.Weapons;
 import dogfight_remake.main.GamePlayState;
+import dogfight_remake.main.GlbVar;
 
 public class Planes extends Entity {
 
@@ -36,6 +37,7 @@ public class Planes extends Entity {
 	private WeaponTypes wpn1;
 	private WeaponTypes wpn2;
 	private WeaponTypes wpn3;
+	private boolean stall;
 
 	public Planes(int id, float xpos, float ypos, float angle, Image image,
 			int hitpoints, WeaponTypes wpn1, WeaponTypes wpn2, WeaponTypes wpn3) {
@@ -63,7 +65,7 @@ public class Planes extends Entity {
 	 * 
 	 * @param delta
 	 */
-	public void move(double delta) {
+	public void move(int delta) {
 
 		if (id == 1) {
 			hspeed = (float) (Math.abs(speed) * Math.cos(Math.toRadians(angle)));
@@ -73,13 +75,20 @@ public class Planes extends Entity {
 			vspeed = (float) (Math.abs(speed) * Math.sin(Math.toRadians(angle)));
 		}
 
-		if (Math.abs(hspeed) + Math.abs(vspeed) < 1.3) {
-
+		if (Math.abs(hspeed) + Math.abs(vspeed) < 1.3 || stall) {
+			stall = true;
 			xpos += hspeed;
 			ypos += vspeed + GamePlayState.GRAVITY;
+			if (stall && vspeed > 3) {
+				stall = false;
+			} else if (vspeed + GamePlayState.GRAVITY < 0) {
+				stall = false;
+			}
 		} else {
 			xpos += hspeed;
+			GlbVar.cx += hspeed;
 			ypos += vspeed;
+			GlbVar.cy += vspeed;
 		}
 	}
 
@@ -190,6 +199,8 @@ public class Planes extends Entity {
 		if (broken) {
 			return;
 		}
+		if (id == 1)
+			g.drawString("" + Math.round(vspeed + GamePlayState.GRAVITY), 600, 600);
 		plane = new Rectangle(xpos, ypos, image.getWidth(), image.getHeight());
 		float x = (float) (plane.getCenterX() + Math.cos(Math.toRadians(angle)) * 100);
 		float y = (float) (plane.getCenterY() + Math.sin(Math.toRadians(angle)) * 100);
@@ -416,6 +427,10 @@ public class Planes extends Entity {
 		} else {
 			return wpn3;
 		}
+	}
+	
+	public boolean isInStall() {
+		return stall;
 	}
 
 }

@@ -48,15 +48,8 @@ public class GamePlayState extends BasicGameState {
 	public static long respawntimer_p1 = RESPAWNTIME_PLAYER;
 	public static long respawntimer_p2 = RESPAWNTIME_PLAYER;
 
-	public static boolean[] key_state_up = new boolean[256]; // true if pressed
-	public static boolean[] key_state_down = new boolean[256]; // true if not
-																// pressed
-	long lastLoopTime = System.nanoTime();
-	final long OPTIMAL_FPS = 59;
-	final long OPTIMAL_TIME = 1000000000 / OPTIMAL_FPS;
-	public static double delta;
 	public static Image plane;
-	
+	public Camera camera;
 
 	int stateID = -1;
 
@@ -72,26 +65,31 @@ public class GamePlayState extends BasicGameState {
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g)
 			throws SlickException {
-		r.render(container, g);
-		GlbVar.tmap.render(0, 0);
+		GlbVar.img_bg.draw(0, 0, 1680, 1050);
+		camera.drawMap();
+		camera.translateGraphics();
 		
+		r.render(container, g);
+		
+		//GlbVar.tmap.render(0, 0);
+
 		if (GlbVar.paused) {
 			GlbVar.img_pause_bg = new Image(1680, 1050);
 			g.copyArea(GlbVar.img_pause_bg, 0, 0);
 			game.enterState(Dogfight_Remake.PAUSEDSTATE);
 		}
-		
+
 	}
 
 	@Override
-	public void init(GameContainer container, StateBasedGame game)
+	public void init(GameContainer gc, StateBasedGame game)
 			throws SlickException {
-		container.setVSync(true);
+		gc.setVSync(true);
 		r = new Render();
 		r.init();
 		weapons = new ArrayList<Weapons>();
 		explosions = new ArrayList<Explosion>();
-
+		camera = new Camera(gc, GlbVar.tmap);
 		rnd = new Random();
 		// GlbVar.music1.loop(1, GlbVar.music_volume);
 		score_p1 = 0;
@@ -104,6 +102,7 @@ public class GamePlayState extends BasicGameState {
 			throws SlickException {
 		KeyControls.update(gc, sbg, delta);
 		if (r.player1 != null && r.player2 != null && !GlbVar.paused) {
+
 			r.player1.move(delta);
 			r.player2.move(delta);
 			Reload.reload_primary(r.player1);
@@ -194,6 +193,7 @@ public class GamePlayState extends BasicGameState {
 					respawntimer_p2 -= 18;
 				}
 		}
+		camera.centerOn(r.player1.getXpos(), r.player1.getYpos());
 	}
 
 	/**
@@ -320,7 +320,8 @@ public class GamePlayState extends BasicGameState {
 			}
 		}
 		if (p1A != null && p2A != null && GlbVar.getPlayerCollision()) {
-			if (p1A.intersects(p2A) && respawntimer_p1 >= RESPAWNTIME_PLAYER && respawntimer_p2 >= RESPAWNTIME_PLAYER) {
+			if (p1A.intersects(p2A) && respawntimer_p1 >= RESPAWNTIME_PLAYER
+					&& respawntimer_p2 >= RESPAWNTIME_PLAYER) {
 				explosions.add(new Explosion(r.player1.getXpos(), r.player1
 						.getYpos(), 4));
 				explosions.add(new Explosion(r.player2.getXpos(), r.player2
@@ -335,14 +336,16 @@ public class GamePlayState extends BasicGameState {
 		if (r.player1.getPlane() != null && r.player2.getPlane() != null) {
 			for (int i = 0; i < BlockMap.entities.size(); i++) {
 				Block entity1 = (Block) BlockMap.entities.get(i);
-				if (r.player1.getPlane().intersects(entity1.poly) && respawntimer_p1 >= RESPAWNTIME_PLAYER) {
+				if (r.player1.getPlane().intersects(entity1.poly)
+						&& respawntimer_p1 >= RESPAWNTIME_PLAYER) {
 					explosions.add(new Explosion(r.player1.getXpos(), r.player1
 							.getYpos(), 4));
 					p1A = null;
 					GlbVar.explode.play(1, GlbVar.sounds_volume);
 					r.player1.setHitpoints(0);
 				}
-				if (r.player2.getPlane().intersects(entity1.poly) && respawntimer_p2 >= RESPAWNTIME_PLAYER) {
+				if (r.player2.getPlane().intersects(entity1.poly)
+						&& respawntimer_p2 >= RESPAWNTIME_PLAYER) {
 					explosions.add(new Explosion(r.player2.getXpos(), r.player2
 							.getYpos(), 4));
 					p2A = null;
@@ -360,8 +363,8 @@ public class GamePlayState extends BasicGameState {
 		if (r.player1.getHitpoints() > 0 && p1A != null) {
 			if (p1A.intersects(bounds_left) || p1A.intersects(bounds_right)
 					|| p1A.intersects(bounds_up)) {
-				r.player1.setHitpoints(0);
-				GlbVar.explode.play(1, GlbVar.sounds_volume);
+				// r.player1.setHitpoints(0);
+				// GlbVar.explode.play(1, GlbVar.sounds_volume);
 				explosions.add(new Explosion(r.player1.getXpos(), r.player1
 						.getYpos(), 2));
 

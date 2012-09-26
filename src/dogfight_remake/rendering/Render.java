@@ -113,7 +113,7 @@ public class Render {
 		// Background and Entities
 
 		// g.drawImage(img_bg, 0, 0, null);
-		GlbVar.img_bg.draw(0, 0);
+		//GlbVar.img_bg.draw(0, 0, 3000, 2240);
 
 		if (player1 != null) {
 			player1.render(container, g);

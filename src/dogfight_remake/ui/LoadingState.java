@@ -41,15 +41,16 @@ public class LoadingState extends BasicGameState {
 				"src/dogfight_remake/map/map_test");
 		GlbVar.map = new BlockMap("dogfight_remake/map/map_test/map1.tmx");
 		// Images Main Menu
-		GlbVar.background = new Image("dogfight_remake/images/mig29_2.jpg");
+		GlbVar.background = new Image("dogfight_remake/images/f4u.jpg");
 		GlbVar.menuOptions = new Image("dogfight_remake/images/mainMenu.png");
 		// Images Pause Menu
 		GlbVar.pauseMenuText = new Image(
 				"dogfight_remake/images/pauseMenuText.png");
 		GlbVar.pauseMenu = new Image("dogfight_remake/images/pauseMenu.png");
 		// Sounds and Music
-		GlbVar.music1 = new Music("dogfight_remake/sound/sounds/fight07.ogg");
-		GlbVar.music2 = new Music("dogfight_remake/sound/sounds/fight08.ogg");
+		
+		//GlbVar.music1 = new Music("dogfight_remake/sound/sounds/fight07.ogg");
+		//GlbVar.music2 = new Music("dogfight_remake/sound/sounds/fight08.ogg");
 		GlbVar.prim_gun_heavy = new Sound(
 				"dogfight_remake/sound/sounds/prim_gun_heavy.wav");
 		GlbVar.prim_gun_middle = new Sound(

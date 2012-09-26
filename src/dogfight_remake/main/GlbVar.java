@@ -46,6 +46,10 @@ public class GlbVar {
 	public static Sound sec_bomb_drop;
 	public static Sound explode;
 	public static Sound hit;
+	
+	
+	public static float cx;
+	public static float cy;
 
 	private static boolean player_collision = false;
 	private static int multisample = 2;

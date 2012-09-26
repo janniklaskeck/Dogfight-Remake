@@ -25,11 +25,17 @@ public class KeyControls {
 			}
 
 			if (input.isKeyDown(Input.KEY_UP)) {
-				if (GamePlayState.r.player1.getHspeed() < 1
-						|| GamePlayState.r.player1.getHspeed() > -1) {
+				if (GamePlayState.r.player1.getVspeed() < 0
+						&& !GamePlayState.r.player1.isInStall()) {
+					GamePlayState.r.player1.incSpeed(0.1f);
+				} else if (GamePlayState.r.player1.getVspeed() >= 0
+						&& !GamePlayState.r.player1.isInStall()) {
+					GamePlayState.r.player1.incSpeed(0.2f);
+				} else if (GamePlayState.r.player1.getVspeed() >= 0
+						&& GamePlayState.r.player1.isInStall()) {
 					GamePlayState.r.player1.incSpeed(0.1f);
 				} else {
-					GamePlayState.r.player1.incSpeed(0.2f);
+					GamePlayState.r.player1.incSpeed(0.01f);
 				}
 			}
 
@@ -42,16 +48,13 @@ public class KeyControls {
 			}
 			if (!input.isKeyDown(Input.KEY_DOWN)
 					&& !input.isKeyDown(Input.KEY_UP)) {
-				if (GamePlayState.r.player1.getHspeed() < 1
-						|| GamePlayState.r.player1.getHspeed() > -1) {
-					if (GamePlayState.r.player1.getVspeed() < 0) {
-						GamePlayState.r.player1.decSpeed(0.1f, true);
-					} else {
-						GamePlayState.r.player1.decSpeed(0.06f, true);
-					}
-				} else {
+
+				if (GamePlayState.r.player1.getVspeed() < 0) {
 					GamePlayState.r.player1.decSpeed(0.1f, true);
+				} else {
+					GamePlayState.r.player1.decSpeed(0.06f, true);
 				}
+
 			}
 			if (input.isKeyDown(Input.KEY_COMMA)) {
 				if (GamePlayState.r.player1 != null) {
@@ -107,8 +110,7 @@ public class KeyControls {
 			}
 
 			if (input.isKeyDown(Input.KEY_R)) {
-				if (GamePlayState.r.player2.getHspeed() < 1
-						|| GamePlayState.r.player2.getHspeed() > -1) {
+				if (GamePlayState.r.player2.getVspeed() < 0) {
 					GamePlayState.r.player2.incSpeed(0.1f);
 				} else {
 					GamePlayState.r.player2.incSpeed(0.2f);
@@ -123,15 +125,10 @@ public class KeyControls {
 				}
 			}
 			if (!input.isKeyDown(Input.KEY_F) && !input.isKeyDown(Input.KEY_R)) {
-				if (GamePlayState.r.player2.getHspeed() < 1
-						|| GamePlayState.r.player2.getHspeed() > -1) {
-					if (GamePlayState.r.player2.getVspeed() < 0) {
-						GamePlayState.r.player2.decSpeed(0.1f, true);
-					} else {
-						GamePlayState.r.player2.decSpeed(0.06f, true);
-					}
-				} else {
+				if (GamePlayState.r.player2.getVspeed() < 0) {
 					GamePlayState.r.player2.decSpeed(0.1f, true);
+				} else {
+					GamePlayState.r.player2.decSpeed(0.06f, true);
 				}
 			}
 			if (input.isKeyDown(Input.KEY_1)) {
