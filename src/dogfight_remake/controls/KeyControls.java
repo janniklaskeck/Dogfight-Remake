@@ -17,25 +17,25 @@ public class KeyControls {
 
 			// Player 1
 			if (input.isKeyDown(Input.KEY_LEFT)) {
-				GamePlayState.r.player1.increaseAngle(-2);
+				GamePlayState.r.player1.increaseAngle(-0.12f * delta);
 			}
 
 			if (input.isKeyDown(Input.KEY_RIGHT)) {
-				GamePlayState.r.player1.increaseAngle(2);
+				GamePlayState.r.player1.increaseAngle(0.12f * delta);
 			}
 
 			if (input.isKeyDown(Input.KEY_UP)) {
 				if (GamePlayState.r.player1.getVspeed() < 0
 						&& !GamePlayState.r.player1.isInStall()) {
-					GamePlayState.r.player1.incSpeed(0.1f);
+					GamePlayState.r.player1.incSpeed(0.005f * delta);
 				} else if (GamePlayState.r.player1.getVspeed() >= 0
 						&& !GamePlayState.r.player1.isInStall()) {
-					GamePlayState.r.player1.incSpeed(0.2f);
+					GamePlayState.r.player1.incSpeed(0.01f * delta);
 				} else if (GamePlayState.r.player1.getVspeed() >= 0
 						&& GamePlayState.r.player1.isInStall()) {
-					GamePlayState.r.player1.incSpeed(0.1f);
+					GamePlayState.r.player1.incSpeed(0.005f * delta);
 				} else {
-					GamePlayState.r.player1.incSpeed(0.01f);
+					GamePlayState.r.player1.incSpeed(0.0005f * delta);
 				}
 			}
 
@@ -102,18 +102,25 @@ public class KeyControls {
 
 			// Player 2
 			if (input.isKeyDown(Input.KEY_D)) {
-				GamePlayState.r.player2.increaseAngle(-2);
+				GamePlayState.r.player2.increaseAngle(-0.12f * delta);
 			}
 
 			if (input.isKeyDown(Input.KEY_G)) {
-				GamePlayState.r.player2.increaseAngle(2);
+				GamePlayState.r.player2.increaseAngle(0.12f * delta);
 			}
 
 			if (input.isKeyDown(Input.KEY_R)) {
-				if (GamePlayState.r.player2.getVspeed() < 0) {
+				if (GamePlayState.r.player2.getVspeed() < 0
+						&& !GamePlayState.r.player2.isInStall()) {
+					GamePlayState.r.player2.incSpeed(0.1f);
+				} else if (GamePlayState.r.player2.getVspeed() >= 0
+						&& !GamePlayState.r.player2.isInStall()) {
+					GamePlayState.r.player2.incSpeed(0.2f);
+				} else if (GamePlayState.r.player2.getVspeed() >= 0
+						&& GamePlayState.r.player2.isInStall()) {
 					GamePlayState.r.player2.incSpeed(0.1f);
 				} else {
-					GamePlayState.r.player2.incSpeed(0.2f);
+					GamePlayState.r.player2.incSpeed(0.01f);
 				}
 			}
 
@@ -182,5 +189,7 @@ public class KeyControls {
 		if (input.isKeyPressed(Input.KEY_P)) {
 			GlbVar.paused = true;
 		}
+
+
 	}
 }

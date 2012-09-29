@@ -1,6 +1,5 @@
 package dogfight_remake.entities;
 
-
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 
@@ -11,11 +10,13 @@ public abstract class Entity {
 	protected static final float DEFAULT_SPEED = 2;
 
 	// instance variables
-	protected float xpos, ypos;
+	protected float xpos;
+
+	protected float ypos;
 	protected float speed;
 
-	protected float angle;
-	protected int hitpoints;
+	private float angle;
+	private int hitpoints;
 
 	public Entity(float xpos, float ypos) {
 		this.xpos = xpos;
@@ -24,16 +25,16 @@ public abstract class Entity {
 	}
 
 	public Entity(float xpos, float ypos, float angle) {
-		this.angle = angle;
+		this.setAngle(angle);
 		this.xpos = xpos;
 		this.ypos = ypos;
 		this.speed = DEFAULT_SPEED;
 	}
 
-	public void move() {
+	public void move(float delta) {
 	}
 
-	public abstract void render(GameContainer container, Graphics g);
+	public abstract void render(GameContainer container, Graphics g, int delta);
 
 	public void setPosition(float xpos, float ypos) {
 		this.xpos = xpos;
@@ -80,5 +81,21 @@ public abstract class Entity {
 		} else {
 			this.speed -= speed;
 		}
+	}
+
+	public int getHitpoints() {
+		return hitpoints;
+	}
+
+	public void setHitpoints(int hitpoints) {
+		this.hitpoints = hitpoints;
+	}
+
+	public float getAngle() {
+		return angle;
+	}
+
+	public void setAngle(float angle) {
+		this.angle = angle;
 	}
 }

@@ -5,9 +5,9 @@ import dogfight_remake.entities.planes.Planes;
 public class Homing_Missiles {
 
 	public static Weapons moveMissile(Weapons weapon, Planes pln1, Planes pln2,
-			double delta) {
+			float delta) {
 		Weapons wmp = weapon;
-		float speed = Weapons.DEFAULT_SPEED_GUIDED;
+		float speed = wmp.getType().getSpeed();
 		float wmpx = wmp.getXpos();
 		float wmpy = wmp.getYpos();
 		float plnx = pln2.getCenterX();
@@ -24,7 +24,7 @@ public class Homing_Missiles {
 			atan2 = 2 * Math.PI - atan2;
 		}
 		float angle = Math.round(Math.toDegrees(atan2));
-		if (angle == 360) {
+		if (angle >= 360) {
 			angle = 0;
 		}
 		// with help from http://krinstudio.com/?p=523
@@ -42,16 +42,15 @@ public class Homing_Missiles {
 		// Turn the actual direction towards the target direction.
 		if (((angleDifference < 180) && (angleDifference > 0))
 				|| ((angleDifference < -180))) {
-			wmp.increaseAngle(3);
+			wmp.increaseAngle(1.5f);
 		} else if (angleDifference == 0) {
 			wmp.increaseAngle(0);
 		} else {
-			wmp.increaseAngle(-3);
+			wmp.increaseAngle(-1.5f);
 		}
-
 		// speed calculation
-		float hspeed = (float) (speed * Math.cos(Math.toRadians(wmp.getAngle())));
-		float vspeed = (float) (speed * Math.sin(Math.toRadians(wmp.getAngle())));
+		float hspeed = (float) (speed * Math.cos(Math.toRadians(wmp.getAngle())) * (float) delta / 17);
+		float vspeed = (float) (speed * Math.sin(Math.toRadians(wmp.getAngle())) * (float) delta / 17);
 		wmp.setXpos(wmp.getXpos() + hspeed);
 		wmp.setYpos(wmp.getYpos() + vspeed);
 

@@ -21,10 +21,11 @@ public class Dogfight_Remake extends StateBasedGame {
 	public static final int LOADINGSTATE = 0;
 
 	public static void main(String[] args) throws SlickException {
-		AppGameContainer app = new AppGameContainer(new Dogfight_Remake());
-		app.setMultiSample(GlbVar.getMultiSample());
-		app.setDisplayMode(1680, 1050, true);
-		app.start();
+		GlbVar.app = new AppGameContainer(new Dogfight_Remake());
+		GlbVar.app.setMultiSample(GlbVar.getMultiSample());
+		GlbVar.app.setDisplayMode(1680, 1050, GlbVar.fullscreen);
+		GlbVar.app.start();
+		GlbVar.app.setVSync(true);
 	}
 
 	@Override

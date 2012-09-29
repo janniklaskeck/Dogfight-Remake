@@ -7,6 +7,7 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 
+import dogfight_remake.entities.ai.TurretAi;
 import dogfight_remake.entities.planes.Planes;
 import dogfight_remake.entities.weapons.WeaponTypes;
 import dogfight_remake.main.GamePlayState;
@@ -17,13 +18,11 @@ public class Render {
 	public Planes player2;
 	public Planes player1_respawn;
 	public Planes player2_respawn;
+	public TurretAi turret;
 
 	protected static Dimension dim = GlbVar.dim_chosen;
 
-	private long firstFrame = 0;
-	private int frames = 0;
-	private long currentFrame;
-	public int fps = 0;
+
 
 	// public static Map map = new Map(dim.getWidth(), dim.getHeight());
 	public void init() throws SlickException {
@@ -87,50 +86,50 @@ public class Render {
 		} else if (GlbVar.wpn3_p2 == WeaponTypes.BOMB_SPLIT) {
 			GlbVar.wpn3_p2.setImage(GlbVar.img_bomb1);
 		}
-
+		GlbVar.img_turret_base = GlbVar.img_turret1.getSubImage(0, 0, 25, 15);
+		GlbVar.img_turret_barrel = GlbVar.img_turret1.getSubImage(25, 0, 25, 15);
 		player1 = new Planes(1, 100, dim.height / 2, 0, GlbVar.img_player1,
-				100, GlbVar.wpn1_p1, GlbVar.wpn2_p1, GlbVar.wpn3_p1);
+				10000, GlbVar.wpn1_p1, GlbVar.wpn2_p1, GlbVar.wpn3_p1);
 		player2 = new Planes(2, dim.width - 150, dim.height / 2, 180,
 				GlbVar.img_player2, 100, GlbVar.wpn1_p2, GlbVar.wpn2_p2,
 				GlbVar.wpn3_p2);
+		turret = new TurretAi(3, 815, 1623, 270, player1, WeaponTypes.MINIGUN,
+				GlbVar.img_bullet1);
 		player1_respawn = player1;
 		player2_respawn = player2;
-		// map = new Map(dim.getWidth(), dim.getHeight());
+
 	}
 
 	/**
 	 * PaintComponent override
 	 */
 
-	public void render(GameContainer container, Graphics g) {
-		frames++;
-		currentFrame = System.currentTimeMillis();
-		if (currentFrame > firstFrame + 1000) {
-			firstFrame = currentFrame;
-			fps = frames;
-			frames = 0;
-		}
+	public void render(GameContainer gc, Graphics g, int delta) {
 		// Background and Entities
 
 		// g.drawImage(img_bg, 0, 0, null);
-		//GlbVar.img_bg.draw(0, 0, 3000, 2240);
+		// GlbVar.img_bg.draw(0, 0, 3000, 2240);
+
+		if (turret != null) {
+			turret.render(gc, g, delta);
+		}
 
 		if (player1 != null) {
-			player1.render(container, g);
+			player1.render(gc, g, delta);
 		}
 		if (player2 != null) {
-			player2.render(container, g);
+			player2.render(gc, g, delta);
 		}
 
 		if (GamePlayState.weapons != null) {
 			for (int i = 0; i < GamePlayState.weapons.size(); i++) {
-				GamePlayState.weapons.get(i).render(container, g);
+				GamePlayState.weapons.get(i).render(gc, g, delta);
 			}
 		}
 		if (GamePlayState.explosions != null) {
 			for (int i = 0; i < GamePlayState.explosions.size(); i++) {
 				if (!GamePlayState.explosions.get(i).isMaxRadius()) {
-					GamePlayState.explosions.get(i).render(container, g);
+					GamePlayState.explosions.get(i).render(gc, g, delta);
 				} else {
 					GamePlayState.explosions.remove(i);
 				}
@@ -138,6 +137,7 @@ public class Render {
 		}
 		// Hitpoints
 		if (player1 != null && player2 != null) {
+			GamePlayState.camera.untranslateGraphics();
 			g.setColor(Color.black);
 			// Player 1
 			g.drawString("Player1: " + player1.getHitpoints(), dim.width / 20,
@@ -157,7 +157,7 @@ public class Render {
 						+ GamePlayState.respawntimer_p1 / 100, dim.width / 5,
 						dim.height / 20);
 			}
-			//g.drawString("" + GamePlayState.weapons.size(), 400, 400);
+			// g.drawString("" + GamePlayState.weapons.size(), 400, 500);
 			// Player 2
 			g.drawString("Player2: " + player2.getHitpoints(), dim.width
 					- dim.width / 7, dim.height / 20);
@@ -181,6 +181,8 @@ public class Render {
 			// FPS and score
 			g.drawString(GamePlayState.score_p1 + " : "
 					+ GamePlayState.score_p2, dim.width / 2, dim.height / 10);
+			g.drawString(GlbVar.timePassed + "", dim.width / 2, dim.height / 13);
+			GamePlayState.camera.translateGraphics();
 		}
 	}
 }

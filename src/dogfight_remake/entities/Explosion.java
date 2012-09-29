@@ -21,7 +21,7 @@ public class Explosion extends Entity {
 		this.size = size;
 	}
 
-	public void render(GameContainer container, Graphics g) {
+	public void render(GameContainer container, Graphics g, int delta) {
 
 		explosion1 = new Ellipse(xpos - radius / 2, ypos - radius / 2, radius,
 				radius);

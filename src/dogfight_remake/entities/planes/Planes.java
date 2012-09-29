@@ -22,7 +22,6 @@ public class Planes extends Entity {
 	public final static float MAX_SPEED = 7;
 
 	private Image image;
-
 	private Rectangle plane;
 	private Ellipse aim;
 	protected int id;
@@ -66,15 +65,10 @@ public class Planes extends Entity {
 	 * @param delta
 	 */
 	public void move(int delta) {
-
-		if (id == 1) {
-			hspeed = (float) (Math.abs(speed) * Math.cos(Math.toRadians(angle)));
-			vspeed = (float) (Math.abs(speed) * Math.sin(Math.toRadians(angle)));
-		} else {
-			hspeed = (float) (Math.abs(speed) * Math.cos(Math.toRadians(angle)));
-			vspeed = (float) (Math.abs(speed) * Math.sin(Math.toRadians(angle)));
-		}
-
+		hspeed = Math.abs(speed)
+				* (float) Math.cos(Math.toRadians(angle) * (float) delta / 17);
+		vspeed = Math.abs(speed)
+				* (float) Math.sin(Math.toRadians(angle) * (float) delta / 17);
 		if (Math.abs(hspeed) + Math.abs(vspeed) < 1.3 || stall) {
 			stall = true;
 			xpos += hspeed;
@@ -128,7 +122,7 @@ public class Planes extends Entity {
 		float x = (float) (plane.getCenterX() + Math.cos(Math.toRadians(angle)));
 		float y = (float) (plane.getCenterY() + Math.sin(Math.toRadians(angle)) + 5);
 		counter_prim--;
-		return new Weapons(x, y, angle, wpn1.getDamage(), wpn1,
+		return new Weapons(x, y, angle, wpn1.getDamage(), wpn1, 0,
 				wpn1.getImage(), id);
 	}
 
@@ -158,7 +152,7 @@ public class Planes extends Entity {
 		float x = (float) (plane.getCenterX() + Math.cos(Math.toRadians(angle)));
 		float y = (float) (plane.getCenterY() + Math.sin(Math.toRadians(angle)) + 5);
 		counter_sec_1--;
-		return new Weapons(x, y, angle, wpn2.getDamage(), wpn2,
+		return new Weapons(x, y, angle, wpn2.getDamage(), wpn2, 0,
 				wpn2.getImage(), id);
 	}
 
@@ -187,7 +181,7 @@ public class Planes extends Entity {
 		float x = (float) (plane.getCenterX() + Math.cos(Math.toRadians(angle)));
 		float y = (float) (plane.getCenterY() + Math.sin(Math.toRadians(angle)) + 5);
 		counter_sec_2--;
-		return new Weapons(x, y, angle, wpn3.getDamage(), wpn3,
+		return new Weapons(x, y, angle, wpn3.getDamage(), wpn3, 0,
 				wpn3.getImage(), id);
 	}
 
@@ -195,12 +189,10 @@ public class Planes extends Entity {
 	 * Paint method
 	 */
 	@Override
-	public void render(GameContainer container, Graphics g) {
+	public void render(GameContainer container, Graphics g, int delta) {
 		if (broken) {
 			return;
 		}
-		if (id == 1)
-			g.drawString("" + Math.round(vspeed + GamePlayState.GRAVITY), 600, 600);
 		plane = new Rectangle(xpos, ypos, image.getWidth(), image.getHeight());
 		float x = (float) (plane.getCenterX() + Math.cos(Math.toRadians(angle)) * 100);
 		float y = (float) (plane.getCenterY() + Math.sin(Math.toRadians(angle)) * 100);
@@ -213,34 +205,22 @@ public class Planes extends Entity {
 	/**
 	 * Rotates plane
 	 * 
-	 * @param amount
+	 * @param angle
 	 */
-	public void increaseAngle(int amount) {
+	public void increaseAngle(float f) {
 		if (speed > MAX_SPEED) {
-			angle += amount * 0.8;
+			angle += f * 0.8;
 		} else {
-			angle += amount;
+			angle += f;
 		}
-		if (angle + amount < 0) {
-			angle = angle + amount + 360;
-		} else if (angle + amount > 360) {
-			angle = angle + amount - 360;
+		if (angle + f < 0) {
+			angle += f + 360;
+		} else if (angle + f > 360) {
+			angle += f - 360;
 		}
 		if (angle >= 360 || angle <= -360) {
 			angle = 0;
 		}
-	}
-
-	/**
-	 * Returns angle of plane
-	 * 
-	 * @return
-	 */
-	public float getAngle() {
-		if (angle >= 360) {
-			angle = 0;
-		}
-		return angle;
 	}
 
 	/**
@@ -428,7 +408,7 @@ public class Planes extends Entity {
 			return wpn3;
 		}
 	}
-	
+
 	public boolean isInStall() {
 		return stall;
 	}

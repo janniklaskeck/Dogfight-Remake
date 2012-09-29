@@ -28,6 +28,11 @@ public class LoadingState extends BasicGameState {
 	public void init(GameContainer arg0, StateBasedGame arg1)
 			throws SlickException {
 		LoadingList.setDeferredLoading(true);
+		// Images Main Menu
+		GlbVar.background = new Image("dogfight_remake/images/f4u.jpg");
+		GlbVar.menuOptions = new Image("dogfight_remake/images/mainMenu.png");
+		GlbVar.gameOptionsMenu = new Image("dogfight_remake/images/GameOptionsMenu.png");
+		GlbVar.buttons = new Image("dogfight_remake/images/buttons.png");
 		// Images Game
 		GlbVar.img_player1 = new Image("dogfight_remake/images/plane1.png");
 		GlbVar.img_player2 = new Image("dogfight_remake/images/plane2.png");
@@ -35,14 +40,12 @@ public class LoadingState extends BasicGameState {
 		GlbVar.img_missile1 = new Image("dogfight_remake/images/missile1.png");
 		GlbVar.img_bullet1 = new Image("dogfight_remake/images/bullet1.png");
 		GlbVar.img_bomb1 = new Image("dogfight_remake/images/bomb1.png");
+		GlbVar.img_turret1 = new Image("dogfight_remake/images/turret.png");
 		// Tiled Map
 		GlbVar.tmap = new TiledMap(
 				"/src/dogfight_remake/map/map_test/map1.tmx",
 				"src/dogfight_remake/map/map_test");
 		GlbVar.map = new BlockMap("dogfight_remake/map/map_test/map1.tmx");
-		// Images Main Menu
-		GlbVar.background = new Image("dogfight_remake/images/f4u.jpg");
-		GlbVar.menuOptions = new Image("dogfight_remake/images/mainMenu.png");
 		// Images Pause Menu
 		GlbVar.pauseMenuText = new Image(
 				"dogfight_remake/images/pauseMenuText.png");

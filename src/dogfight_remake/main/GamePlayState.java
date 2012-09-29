@@ -49,9 +49,10 @@ public class GamePlayState extends BasicGameState {
 	public static long respawntimer_p2 = RESPAWNTIME_PLAYER;
 
 	public static Image plane;
-	public Camera camera;
+	public static Camera camera;
 
 	int stateID = -1;
+	private int delta = 0;
 
 	GamePlayState(int stateID) {
 		this.stateID = stateID;
@@ -63,15 +64,37 @@ public class GamePlayState extends BasicGameState {
 	}
 
 	@Override
+	public void enter(GameContainer gc, StateBasedGame sbg) {
+		gc.setVSync(true);
+		if (GlbVar.paused) {
+			r = new Render();
+			try {
+				r.init();
+			} catch (SlickException e) {
+				e.printStackTrace();
+			}
+			weapons = new ArrayList<Weapons>();
+			explosions = new ArrayList<Explosion>();
+			camera = new Camera(gc, GlbVar.tmap);
+			rnd = new Random();
+			// GlbVar.music1.loop(1, GlbVar.music_volume);
+			score_p1 = 0;
+			score_p2 = 0;
+			GlbVar.paused = false;
+		}
+
+	}
+
+	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g)
 			throws SlickException {
 		GlbVar.img_bg.draw(0, 0, 1680, 1050);
+		g.drawString("Time : " + time / 1000, 100, 100);
 		camera.drawMap();
 		camera.translateGraphics();
-		
-		r.render(container, g);
-		
-		//GlbVar.tmap.render(0, 0);
+		r.render(container, g, delta);
+
+		// GlbVar.tmap.render(0, 0);
 
 		if (GlbVar.paused) {
 			GlbVar.img_pause_bg = new Image(1680, 1050);
@@ -84,25 +107,29 @@ public class GamePlayState extends BasicGameState {
 	@Override
 	public void init(GameContainer gc, StateBasedGame game)
 			throws SlickException {
-		gc.setVSync(true);
-		r = new Render();
-		r.init();
-		weapons = new ArrayList<Weapons>();
-		explosions = new ArrayList<Explosion>();
-		camera = new Camera(gc, GlbVar.tmap);
-		rnd = new Random();
-		// GlbVar.music1.loop(1, GlbVar.music_volume);
-		score_p1 = 0;
-		score_p2 = 0;
 
 	}
+
+	int time;
 
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta)
 			throws SlickException {
+		this.delta = delta;
 		KeyControls.update(gc, sbg, delta);
 		if (r.player1 != null && r.player2 != null && !GlbVar.paused) {
+			time += delta;
 
+			if (time / 1000 % 3 == 0) {
+				Weapons wmp = GamePlayState.r.turret.shoot();
+				if (wmp != null) {
+					GlbVar.prim_gun_light.play(1, GlbVar.sounds_volume);
+					weapons.add(wmp);
+				}
+				if (r.turret.getTarget() != r.player1) {
+					r.turret.setTarget(r.player2);
+				}
+			}
 			r.player1.move(delta);
 			r.player2.move(delta);
 			Reload.reload_primary(r.player1);
@@ -111,6 +138,7 @@ public class GamePlayState extends BasicGameState {
 			Reload.reload_secondary_1(r.player2);
 			Reload.reload_secondary_2(r.player1);
 			Reload.reload_secondary_2(r.player2);
+			r.turret.update(gc, delta);
 			checkCollision(gc);
 			for (int i = 0; i < weapons.size(); i++) {
 				if (!weapons.get(i).isHit() && weapons.get(i).isAlive()) {
@@ -124,23 +152,23 @@ public class GamePlayState extends BasicGameState {
 						if (weapons.get(i).canSplit()) {
 							Weapons split1 = new Weapons(weapons.get(i)
 									.getXpos(), weapons.get(i).getYpos(),
-									rnd.nextFloat() * 180,
-									Weapons.BOMB_SPLIT_SMALL_DAMAGE,
-									WeaponTypes.BOMB_SPLIT_SMALL, weapons
+									rnd.nextFloat() * 180, weapons.get(i)
+											.getDamage(),
+									WeaponTypes.BOMB_SPLIT_SMALL, 0, weapons
 											.get(i).getImage(), weapons.get(i)
 											.getID());
 							Weapons split2 = new Weapons(weapons.get(i)
 									.getXpos(), weapons.get(i).getYpos(),
-									rnd.nextFloat() * 180,
-									Weapons.BOMB_SPLIT_SMALL_DAMAGE,
-									WeaponTypes.BOMB_SPLIT_SMALL, weapons
+									rnd.nextFloat() * 180, weapons.get(i)
+											.getDamage(),
+									WeaponTypes.BOMB_SPLIT_SMALL, 0, weapons
 											.get(i).getImage(), weapons.get(i)
 											.getID());
 							Weapons split3 = new Weapons(weapons.get(i)
 									.getXpos(), weapons.get(i).getYpos(),
-									rnd.nextFloat() * 180,
-									Weapons.BOMB_SPLIT_SMALL_DAMAGE,
-									WeaponTypes.BOMB_SPLIT_SMALL, weapons
+									rnd.nextFloat() * 180, weapons.get(i)
+											.getDamage(),
+									WeaponTypes.BOMB_SPLIT_SMALL, 0, weapons
 											.get(i).getImage(), weapons.get(i)
 											.getID());
 							weapons.add(split1);
@@ -166,7 +194,7 @@ public class GamePlayState extends BasicGameState {
 									&& weapons.get(i).hasTarget()) {
 								Weapons temp = weapons.get(i);
 								weapons.set(i, Homing_Missiles.moveMissile(
-										temp, r.player1, r.player1, delta));
+										temp, r.player2, r.player1, delta));
 							} else {
 								weapons.get(i).setTarget(false);
 								weapons.get(i).move(delta);
@@ -275,8 +303,9 @@ public class GamePlayState extends BasicGameState {
 						tmp.setHit();
 					}
 				}
+
 				if (p2A != null) {
-					if (tmp.getID() == 1) {
+					if (tmp.getID() == 1 || tmp.getID() == 3) {
 						if (p2A.intersects(wep) && r.player2.getHitpoints() > 0) {
 							explosions.add(new Explosion(tmp.getXpos(), tmp
 									.getYpos(), tmp.getType().getExploSize()));
@@ -285,8 +314,9 @@ public class GamePlayState extends BasicGameState {
 							r.player2.decreaseHitpoints(tmp.getDamage());
 						}
 					}
-				} else if (p1A != null) {
-					if (tmp.getID() == 2) {
+				}
+				if (p1A != null) {
+					if (tmp.getID() == 2 || tmp.getID() == 3) {
 						if (p1A.intersects(wep) && r.player1.getHitpoints() > 0) {
 							explosions.add(new Explosion(tmp.getXpos(), tmp
 									.getYpos(), tmp.getType().getExploSize()));
@@ -297,6 +327,7 @@ public class GamePlayState extends BasicGameState {
 					}
 				}
 			}
+
 		}
 
 		if (p1A != null) {
