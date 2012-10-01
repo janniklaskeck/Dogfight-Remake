@@ -9,6 +9,7 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.geom.Ellipse;
 import org.newdawn.slick.geom.Polygon;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Transform;
@@ -19,7 +20,6 @@ import dogfight_remake.controls.KeyControls;
 import dogfight_remake.entities.Explosion;
 import dogfight_remake.entities.ai.TurretAi;
 import dogfight_remake.entities.planes.Planes;
-import dogfight_remake.entities.weapons.Homing_Missiles;
 import dogfight_remake.entities.weapons.Reload;
 import dogfight_remake.entities.weapons.WeaponTypes;
 import dogfight_remake.entities.weapons.Weapons;
@@ -41,6 +41,7 @@ public class GamePlayState extends BasicGameState {
 	private static Rectangle p2;
 	Rectangle turret;
 	private Rectangle wep;
+	private Ellipse wep_ellipse;
 	private Polygon p1A;
 	private Polygon p2A;
 	private Polygon a;
@@ -181,9 +182,8 @@ public class GamePlayState extends BasicGameState {
 						if (weapons.get(i).getID() == 1) {
 							if (r.player2.getHitpoints() > 0
 									&& weapons.get(i).hasTarget()) {
-								Weapons temp = weapons.get(i);
-								weapons.set(i, Homing_Missiles.moveMissile(
-										temp, r.player1, r.player2, delta));
+								weapons.get(i).update(r.player1, r.player2,
+										delta);
 							} else {
 								weapons.get(i).setTarget(false);
 								weapons.get(i).update(delta);
@@ -191,9 +191,8 @@ public class GamePlayState extends BasicGameState {
 						} else {
 							if (r.player1.getHitpoints() > 0
 									&& weapons.get(i).hasTarget()) {
-								Weapons temp = weapons.get(i);
-								weapons.set(i, Homing_Missiles.moveMissile(
-										temp, r.player2, r.player1, delta));
+								weapons.get(i).update(r.player2, r.player1,
+										delta);
 							} else {
 								weapons.get(i).setTarget(false);
 								weapons.get(i).update(delta);
@@ -202,9 +201,7 @@ public class GamePlayState extends BasicGameState {
 					} else if (weapons.get(i).getType() == WeaponTypes.GUIDED_GROUND) {
 						if (r.turret.getHitpoints() > 0
 								&& weapons.get(i).hasTarget()) {
-							Weapons temp = weapons.get(i);
-							weapons.set(i, Homing_Missiles.moveMissile(temp,
-									r.player1, r.turret, delta));
+							weapons.get(i).update(r.player1, r.turret, delta);
 						} else {
 							weapons.get(i).setTarget(false);
 							weapons.get(i).update(delta);
@@ -212,7 +209,6 @@ public class GamePlayState extends BasicGameState {
 					}
 				} else {
 					weapons.remove(i);
-
 				}
 			}
 
@@ -318,8 +314,12 @@ public class GamePlayState extends BasicGameState {
 
 		for (int i = 0; i < weapons.size(); i++) {
 			Weapons tmp = weapons.get(i);
+
 			wep = new Rectangle((int) tmp.getXpos(), (int) tmp.getYpos(),
 					(int) tmp.getWidth(), (int) tmp.getHeight());
+			wep_ellipse = new Ellipse(wep.getCenterX(), wep.getCenterY(),
+					Explosion.MAX_RADIUS * tmp.getType().getExploSize(),
+					Explosion.MAX_RADIUS * tmp.getType().getExploSize());
 			if (weapons.size() > 0) {
 				for (int o = 0; o < BlockMap.entities.size(); o++) {
 					Block entity1 = (Block) BlockMap.entities.get(o);
@@ -332,42 +332,62 @@ public class GamePlayState extends BasicGameState {
 
 				if (p2A != null) {
 					if (tmp.getID() == 1 || tmp.getID() == 3) {
-						if (p2A.intersects(wep) && r.player2.getHitpoints() > 0) {
+						if (p2A.intersects(wep) && r.player2.getHitpoints() > 0
+								&& !tmp.isHit()) {
 							explosions.add(new Explosion(tmp.getXpos(), tmp
 									.getYpos(), tmp.getType().getExploSize()));
 							GlbVar.hit.play(1, GlbVar.sounds_volume);
 							tmp.setHit();
 							r.player2.decreaseHitpoints(tmp.getDamage());
 						}
+						if (p2A.intersects(wep_ellipse)
+								&& r.player2.getHitpoints() > 0 && tmp.isHit()) {
+							explosions.add(new Explosion(tmp.getXpos(), tmp
+									.getYpos(), tmp.getType().getExploSize()));
+							GlbVar.hit.play(1, GlbVar.sounds_volume);
+							r.player2.decreaseHitpoints(tmp.getDamage() / 3);
+						}
 					}
 				}
 				if (p1A != null) {
 					if (tmp.getID() == 2 || tmp.getID() == 3) {
-						if (p1A.intersects(wep) && r.player1.getHitpoints() > 0) {
+						if (p1A.intersects(wep) && r.player1.getHitpoints() > 0
+								&& !tmp.isHit()) {
 							explosions.add(new Explosion(tmp.getXpos(), tmp
 									.getYpos(), tmp.getType().getExploSize()));
 							GlbVar.hit.play(1, GlbVar.sounds_volume);
 							tmp.setHit();
 							r.player1.decreaseHitpoints(tmp.getDamage());
 						}
+						if (p1A.intersects(wep_ellipse)
+								&& r.player1.getHitpoints() > 0 && tmp.isHit()) {
+							explosions.add(new Explosion(tmp.getXpos(), tmp
+									.getYpos(), tmp.getType().getExploSize()));
+							GlbVar.hit.play(1, GlbVar.sounds_volume);
+							r.player1.decreaseHitpoints(tmp.getDamage() / 3);
+						}
 					}
 				}
-
 				if (turret != null) {
 					if (tmp.getID() == 1 || tmp.getID() == 2) {
 						if (turret.intersects(wep)
-								&& r.turret.getHitpoints() > 0) {
+								&& r.turret.getHitpoints() > 0 && !tmp.isHit()) {
 							explosions.add(new Explosion(tmp.getXpos(), tmp
 									.getYpos(), tmp.getType().getExploSize()));
 							GlbVar.hit.play(1, GlbVar.sounds_volume);
 							tmp.setHit();
 							r.turret.decreaseHitpoints(tmp.getDamage());
 						}
+						if (turret.intersects(wep_ellipse)
+								&& r.turret.getHitpoints() > 0 && tmp.isHit()) {
+							explosions.add(new Explosion(tmp.getXpos(), tmp
+									.getYpos(), tmp.getType().getExploSize()));
+							GlbVar.hit.play(1, GlbVar.sounds_volume);
+							r.turret.decreaseHitpoints(tmp.getDamage() / 3);
+						}
 					}
 				}
-
 			}
-
 		}
 
 		if (p1A != null) {
@@ -393,7 +413,6 @@ public class GamePlayState extends BasicGameState {
 		if (turret != null) {
 			if (r.turret.getHitpoints() <= 0
 					&& respawntimer_turret >= RESPAWNTIME_TURRET) {
-				System.out.println(2);
 				explosions.add(new Explosion(r.turret.getXpos(), r.turret
 						.getYpos(), 4));
 				r.turret.setHit();
@@ -437,19 +456,18 @@ public class GamePlayState extends BasicGameState {
 			}
 		}
 
-		Rectangle bounds_left = new Rectangle(0, 0, 1, gc.getHeight());
-		Rectangle bounds_right = new Rectangle(gc.getWidth() - 1, 0, 1,
-				gc.getHeight());
-		Rectangle bounds_up = new Rectangle(0, 0, gc.getWidth(), 1);
+		Rectangle bounds_left = new Rectangle(0, 0, 1, GlbVar.tmap.getHeight());
+		Rectangle bounds_right = new Rectangle(GlbVar.tmap.getWidth() - 1, 0,
+				1, GlbVar.tmap.getHeight());
+		Rectangle bounds_up = new Rectangle(0, 0, GlbVar.tmap.getWidth(), 1);
 		// Collision of planes with frame bounds
 		if (r.player1.getHitpoints() > 0 && p1A != null) {
 			if (p1A.intersects(bounds_left) || p1A.intersects(bounds_right)
 					|| p1A.intersects(bounds_up)) {
-				// r.player1.setHitpoints(0);
-				// GlbVar.explode.play(1, GlbVar.sounds_volume);
+				r.player1.setHitpoints(0);
+				GlbVar.explode.play(1, GlbVar.sounds_volume);
 				explosions.add(new Explosion(r.player1.getXpos(), r.player1
 						.getYpos(), 2));
-
 			}
 		}
 		if (r.player2.getHitpoints() > 0 && p2A != null) {
@@ -459,7 +477,6 @@ public class GamePlayState extends BasicGameState {
 				GlbVar.explode.play(1, GlbVar.sounds_volume);
 				explosions.add(new Explosion(r.player2.getXpos(), r.player2
 						.getYpos(), 2));
-
 			}
 		}
 	}

@@ -4,6 +4,8 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import dogfight_remake.entities.Entity;
+import dogfight_remake.entities.ai.TurretAi;
+import dogfight_remake.entities.planes.Planes;
 import dogfight_remake.main.GamePlayState;
 
 public class Weapons extends Entity {
@@ -47,7 +49,7 @@ public class Weapons extends Entity {
 	/**
 	 * Paints weapons
 	 */
-	
+
 	public void render(GameContainer container, Graphics g, float delta) {
 		time += delta;
 		if (broken) {
@@ -86,7 +88,8 @@ public class Weapons extends Entity {
 		} else if (type == WeaponTypes.BOMB_SPLIT_SMALL) {
 			image.setRotation(angle);
 			image.draw(xpos, ypos);
-		} else if (type == WeaponTypes.TURRET_MIDDLE && time <= MAX_LIFETIME_TURRET_MIDDLE) {
+		} else if (type == WeaponTypes.TURRET_MIDDLE
+				&& time <= MAX_LIFETIME_TURRET_MIDDLE) {
 			image.setRotation(angle);
 			image.draw(xpos, ypos);
 		} else {
@@ -100,9 +103,10 @@ public class Weapons extends Entity {
 	 * 
 	 * @param delta
 	 */
-	
+
 	public void update(float delta) {
-		if (type == WeaponTypes.GUN || type == WeaponTypes.MINIGUN || type == WeaponTypes.TURRET_MIDDLE) {
+		if (type == WeaponTypes.GUN || type == WeaponTypes.MINIGUN
+				|| type == WeaponTypes.TURRET_MIDDLE) {
 
 			float hspeed = speed * (float) Math.cos(Math.toRadians(angle))
 					* delta / 17;
@@ -202,6 +206,105 @@ public class Weapons extends Entity {
 			xpos += hspeed;
 			ypos += GamePlayState.GRAVITY * 4 * speed_mod_bomb;
 		}
+	}
+
+	public void update(Planes pln1, Planes pln2, float delta) {
+		float speed = getType().getSpeed();
+		float plnx = pln2.getCenterX();
+		float plny = pln2.getCenterY();
+		float deltaX = plnx - xpos;
+		float deltaY = plny - ypos;
+
+		double atan2 = Math.atan2(deltaY, deltaX);
+
+		// change atan2 to 0-360 degrees
+		if (atan2 < 0) {
+			atan2 = Math.abs(atan2);
+		} else {
+			atan2 = 2 * Math.PI - atan2;
+		}
+		float angle = Math.round(Math.toDegrees(atan2));
+		if (angle >= 360) {
+			angle = 0;
+		}
+		// with help from http://krinstudio.com/?p=523
+		angle = (360 - (int) angle) % 360;
+
+		// Keep them on the right side. (Direction is in degrees, not radians)
+		if (getAngle() < 0)
+			increaseAngle(360);
+		if (angle < getAngle())
+			angle += 360;
+
+		// Find the difference in the angle.
+		float angleDifference = angle - getAngle();
+
+		// Turn the actual direction towards the target direction.
+		if (((angleDifference < 180) && (angleDifference > 0))
+				|| ((angleDifference < -180))) {
+			increaseAngle(1.5f);
+		} else if (angleDifference == 0) {
+			increaseAngle(0);
+		} else {
+			increaseAngle(-1.5f);
+		}
+		// speed calculation
+		float hspeed = (float) (speed * Math.cos(Math.toRadians(getAngle()))
+				* (float) delta / 17);
+		float vspeed = (float) (speed * Math.sin(Math.toRadians(getAngle()))
+				* (float) delta / 17);
+		setXpos(getXpos() + hspeed);
+		setYpos(getYpos() + vspeed);
+	}
+
+	public void update(Planes pln1, TurretAi ta, float delta) {
+		float speed = getType().getSpeed();
+		float plnx = ta.getCenterX();
+		float plny = ta.getCenterY();
+		float deltaX = plnx - xpos;
+		float deltaY = plny - ypos;
+
+		double atan2 = Math.atan2(deltaY, deltaX);
+
+		// change atan2 to 0-360 degrees
+		if (atan2 < 0) {
+			atan2 = Math.abs(atan2);
+		} else {
+			atan2 = 2 * Math.PI - atan2;
+		}
+		float angle = Math.round(Math.toDegrees(atan2));
+		if (angle >= 360) {
+			angle = 0;
+		}
+		// with help from http://krinstudio.com/?p=523
+		angle = (360 - (int) angle) % 360;
+
+		// Keep them on the right side. (Direction is in degrees, not radians)
+		if (getAngle() < 0)
+			increaseAngle(360);
+		if (angle < getAngle())
+			angle += 360;
+
+		// Find the difference in the angle.
+		float angleDifference = angle - getAngle();
+
+		// Turn the actual direction towards the target direction.
+		if (((angleDifference < 180) && (angleDifference > 0))
+				|| ((angleDifference < -180))) {
+			increaseAngle(1.5f);
+		} else if (angleDifference == 0) {
+			increaseAngle(0);
+		} else {
+			increaseAngle(-1.5f);
+		}
+		// speed calculation
+		float hspeed = (float) (speed * Math.cos(Math.toRadians(getAngle()))
+				* (float) delta / 17);
+		float vspeed = (float) (speed * Math.sin(Math.toRadians(getAngle()))
+				* (float) delta / 17);
+		setXpos(getXpos() + hspeed);
+		setYpos(getYpos() + vspeed);
+
 	}
 
 	private void angleCheck() {

@@ -7,7 +7,7 @@ import org.newdawn.slick.geom.Ellipse;
 
 public class Explosion extends Entity {
 
-	private final int MAX_RADIUS = 15;
+	public final static int MAX_RADIUS = 15;
 	private float xpos, ypos, size;
 	private Ellipse explosion1, explosion2;
 	private float radius = 0;
@@ -21,31 +21,23 @@ public class Explosion extends Entity {
 		this.size = size;
 	}
 
-	
 	public void render(GameContainer container, Graphics g, float delta) {
-
 		explosion1 = new Ellipse(xpos - radius / 2, ypos - radius / 2, radius,
 				radius);
 		g.setColor(Color.red);
 		g.fill(explosion1);
 		if (size > 1) {
 			radius_small = radius / 2;
-
 			explosion2 = new Ellipse(xpos - radius_small / 2, ypos
 					- radius_small / 2, radius_small, radius_small);
 			g.setColor(Color.yellow);
 			g.fill(explosion2);
 		}
-		
 	}
 
-	
 	public void update(float delta) {
-		if (radius < (MAX_RADIUS * size)) {
+		if (radius < (MAX_RADIUS * size))
 			radius += 2;
-		} else {
-			//broken = true;
-		}
 	}
 
 	public boolean isMaxRadius() {
@@ -56,8 +48,11 @@ public class Explosion extends Entity {
 		}
 	}
 
+	public int getMaxRadius() {
+		return MAX_RADIUS;
+	}
+
 	public boolean isBroken() {
 		return broken;
 	}
-
 }

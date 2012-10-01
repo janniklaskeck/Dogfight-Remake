@@ -78,9 +78,10 @@ public class TurretAi extends Entity {
 		}
 		target = getNearestTarget();
 	}
-	
+
 	/**
 	 * Shoots this turrets weapon
+	 * 
 	 * @return
 	 */
 	public Weapons shoot() {
@@ -106,9 +107,10 @@ public class TurretAi extends Entity {
 		return new Weapons(x, y, angle, wmp.getDamage(), wmp, 0, image, id);
 
 	}
-	
+
 	/**
 	 * Returns nearest target (Player 1 or Player 2)
+	 * 
 	 * @return
 	 */
 	public Planes getNearestTarget() {

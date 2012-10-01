@@ -6,6 +6,7 @@ import java.awt.Toolkit;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Music;
+import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
 import org.newdawn.slick.tiled.TiledMap;
 
@@ -14,7 +15,6 @@ import dogfight_remake.map.BlockMap;
 
 public class GlbVar {
 	public static AppGameContainer app;
-	
 	// Images Game
 	public static Image img_player1;
 	public static Image img_player2;
@@ -57,11 +57,11 @@ public class GlbVar {
 	public static Sound sec_bomb_drop;
 	public static Sound explode;
 	public static Sound hit;
-	
-	
+	// Camera x and y
 	public static float cx;
 	public static float cy;
-
+	
+	// Game options
 	private static boolean player_collision = false;
 	private static int multisample = 2;
 	public static boolean fullscreen = true;;
@@ -85,12 +85,12 @@ public class GlbVar {
 		return player_collision;
 	}
 
-	public static void setResolution() {
-
+	public static void setResolution(int x, int y) throws SlickException {
+		app.setDisplayMode(x, y, fullscreen);
 	}
 
 	public static WeaponTypes wpn1_p1 = WeaponTypes.GUN;
-	public static WeaponTypes wpn2_p1 = WeaponTypes.GUIDED_GROUND;
+	public static WeaponTypes wpn2_p1 = WeaponTypes.GUIDED_AIR;
 	public static WeaponTypes wpn3_p1 = WeaponTypes.BOMB;
 	public static WeaponTypes wpn1_p2 = WeaponTypes.GUN;
 	public static WeaponTypes wpn2_p2 = WeaponTypes.GUIDED_AIR;
