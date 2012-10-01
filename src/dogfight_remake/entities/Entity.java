@@ -31,10 +31,10 @@ public abstract class Entity {
 		this.speed = DEFAULT_SPEED;
 	}
 
-	public void move(float delta) {
+	public void update(float delta) {
 	}
 
-	public abstract void render(GameContainer container, Graphics g, int delta);
+	public abstract void render(GameContainer container, Graphics g, float delta);
 
 	public void setPosition(float xpos, float ypos) {
 		this.xpos = xpos;

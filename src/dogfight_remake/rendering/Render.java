@@ -22,8 +22,6 @@ public class Render {
 
 	protected static Dimension dim = GlbVar.dim_chosen;
 
-
-
 	// public static Map map = new Map(dim.getWidth(), dim.getHeight());
 	public void init() throws SlickException {
 		// Weapon 1 p1
@@ -87,14 +85,15 @@ public class Render {
 			GlbVar.wpn3_p2.setImage(GlbVar.img_bomb1);
 		}
 		GlbVar.img_turret_base = GlbVar.img_turret1.getSubImage(0, 0, 25, 15);
-		GlbVar.img_turret_barrel = GlbVar.img_turret1.getSubImage(25, 0, 25, 15);
+		GlbVar.img_turret_barrel = GlbVar.img_turret1
+				.getSubImage(25, 0, 25, 15);
 		player1 = new Planes(1, 100, dim.height / 2, 0, GlbVar.img_player1,
 				10000, GlbVar.wpn1_p1, GlbVar.wpn2_p1, GlbVar.wpn3_p1);
 		player2 = new Planes(2, dim.width - 150, dim.height / 2, 180,
 				GlbVar.img_player2, 100, GlbVar.wpn1_p2, GlbVar.wpn2_p2,
 				GlbVar.wpn3_p2);
-		turret = new TurretAi(3, 815, 1623, 270, player1, WeaponTypes.MINIGUN,
-				GlbVar.img_bullet1);
+		turret = new TurretAi(3, 815, 1623, 270, 100, player1,
+				WeaponTypes.TURRET_MIDDLE, GlbVar.img_bullet1);
 		player1_respawn = player1;
 		player2_respawn = player2;
 
@@ -157,7 +156,7 @@ public class Render {
 						+ GamePlayState.respawntimer_p1 / 100, dim.width / 5,
 						dim.height / 20);
 			}
-			// g.drawString("" + GamePlayState.weapons.size(), 400, 500);
+			// g.drawString("" + turret.getHitpoints(), 400, 500);
 			// Player 2
 			g.drawString("Player2: " + player2.getHitpoints(), dim.width
 					- dim.width / 7, dim.height / 20);

@@ -90,7 +90,7 @@ public class GlbVar {
 	}
 
 	public static WeaponTypes wpn1_p1 = WeaponTypes.GUN;
-	public static WeaponTypes wpn2_p1 = WeaponTypes.GUIDED_AIR;
+	public static WeaponTypes wpn2_p1 = WeaponTypes.GUIDED_GROUND;
 	public static WeaponTypes wpn3_p1 = WeaponTypes.BOMB;
 	public static WeaponTypes wpn1_p2 = WeaponTypes.GUN;
 	public static WeaponTypes wpn2_p2 = WeaponTypes.GUIDED_AIR;

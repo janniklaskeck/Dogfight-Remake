@@ -9,8 +9,10 @@ import dogfight_remake.main.GamePlayState;
 public class Weapons extends Entity {
 	public final static int MAX_LIFETIME_GUN = 1000;
 	public final static int MAX_LIFETIME_GUIDED_AIR = 35000;
+	public final static int MAX_LIFETIME_GUIDED_GROUND = 35000;
 	public final static int MAX_LIFETIME_UNGUIDED = 2000;
 	public final static int MAX_LIFETIME_BOMB = 10000;
+	public final static int MAX_LIFETIME_TURRET_MIDDLE = 1500;
 	private float angle;
 	private boolean broken;
 	private int height, width;
@@ -45,7 +47,8 @@ public class Weapons extends Entity {
 	/**
 	 * Paints weapons
 	 */
-	public void render(GameContainer container, Graphics g, int delta) {
+	
+	public void render(GameContainer container, Graphics g, float delta) {
 		time += delta;
 		if (broken) {
 			return;
@@ -60,12 +63,12 @@ public class Weapons extends Entity {
 				&& time <= MAX_LIFETIME_UNGUIDED) {
 			image.setRotation(angle);
 			image.draw(xpos, ypos);
-		} else if (type == WeaponTypes.GUIDED_GROUND) {
+		} else if (type == WeaponTypes.GUIDED_GROUND
+				&& time <= MAX_LIFETIME_GUIDED_GROUND) {
 			image.setRotation(angle);
 			image.draw(xpos, ypos);
 		} else if (type == WeaponTypes.GUIDED_AIR
 				&& time <= MAX_LIFETIME_GUIDED_AIR) {
-			
 			image.setRotation(angle);
 			image.draw(xpos, ypos);
 		} else if (type == WeaponTypes.RADAR_AIR) {
@@ -83,6 +86,9 @@ public class Weapons extends Entity {
 		} else if (type == WeaponTypes.BOMB_SPLIT_SMALL) {
 			image.setRotation(angle);
 			image.draw(xpos, ypos);
+		} else if (type == WeaponTypes.TURRET_MIDDLE && time <= MAX_LIFETIME_TURRET_MIDDLE) {
+			image.setRotation(angle);
+			image.draw(xpos, ypos);
 		} else {
 			broken = true;
 		}
@@ -94,13 +100,14 @@ public class Weapons extends Entity {
 	 * 
 	 * @param delta
 	 */
-	public void move(int delta) {
-		if (type == WeaponTypes.GUN || type == WeaponTypes.MINIGUN) {
+	
+	public void update(float delta) {
+		if (type == WeaponTypes.GUN || type == WeaponTypes.MINIGUN || type == WeaponTypes.TURRET_MIDDLE) {
 
 			float hspeed = speed * (float) Math.cos(Math.toRadians(angle))
-					* (float) delta / 17;
+					* delta / 17;
 			float vspeed = speed * (float) Math.sin(Math.toRadians(angle))
-					* (float) delta / 17;
+					* delta / 17;
 			xpos += hspeed;
 			ypos += vspeed;
 		} else if (type == WeaponTypes.UNGUIDED) {
@@ -109,11 +116,9 @@ public class Weapons extends Entity {
 				speed_mod = speed_mod + 0.05f;
 			}
 			float hspeed = (speed * speed_mod)
-					* (float) Math.cos(Math.toRadians(angle)) * (float) delta
-					/ 17;
+					* (float) Math.cos(Math.toRadians(angle)) * delta / 17;
 			float vspeed = (speed * speed_mod)
-					* (float) Math.sin(Math.toRadians(angle)) * (float) delta
-					/ 17;
+					* (float) Math.sin(Math.toRadians(angle)) * delta / 17;
 			xpos += hspeed;
 			ypos += vspeed;
 		} else if (type == WeaponTypes.GUIDED_AIR) {
@@ -121,11 +126,20 @@ public class Weapons extends Entity {
 				speed_mod = speed_mod + 0.05f;
 			}
 			float hspeed = (speed * speed_mod)
-					* (float) Math.cos(Math.toRadians(angle)) * (float) delta
-					/ 17;
+					* (float) Math.cos(Math.toRadians(angle)) * delta / 17;
 			float vspeed = (speed * speed_mod)
-					* (float) Math.sin(Math.toRadians(angle)) * (float) delta
-					/ 17;
+					* (float) Math.sin(Math.toRadians(angle)) * delta / 17;
+
+			xpos += hspeed;
+			ypos += vspeed;
+		} else if (type == WeaponTypes.GUIDED_GROUND) {
+			if (speed_mod <= 1) {
+				speed_mod = speed_mod + 0.05f;
+			}
+			float hspeed = (speed * speed_mod)
+					* (float) Math.cos(Math.toRadians(angle)) * delta / 17;
+			float vspeed = (speed * speed_mod)
+					* (float) Math.sin(Math.toRadians(angle)) * delta / 17;
 
 			xpos += hspeed;
 			ypos += vspeed;
@@ -144,8 +158,7 @@ public class Weapons extends Entity {
 				speed_mod_bomb = speed_mod_bomb - 0.01f;
 			}
 			float hspeed = (speed * speed_mod_bomb)
-					* (float) Math.cos(Math.toRadians(angle)) * (float) delta
-					/ 17;
+					* (float) Math.cos(Math.toRadians(angle)) * delta / 17;
 			xpos += hspeed;
 			ypos += GamePlayState.GRAVITY * 4 * speed_mod_bomb;
 		} else if (type == WeaponTypes.BOMB_SPLIT) {
@@ -168,8 +181,7 @@ public class Weapons extends Entity {
 				speed_mod_bomb = speed_mod_bomb - 0.01f;
 			}
 			float hspeed = (speed * speed_mod_bomb)
-					* (float) Math.cos(Math.toRadians(angle)) * (float) delta
-					/ 17;
+					* (float) Math.cos(Math.toRadians(angle)) * delta / 17;
 			xpos += hspeed;
 			ypos += GamePlayState.GRAVITY * 4 * speed_mod_bomb;
 		} else if (type == WeaponTypes.BOMB_SPLIT_SMALL) {
@@ -186,8 +198,7 @@ public class Weapons extends Entity {
 				speed_mod_bomb = speed_mod_bomb - 0.01f;
 			}
 			float hspeed = (speed * speed_mod_bomb)
-					* (float) Math.cos(Math.toRadians(angle)) * (float) delta
-					/ 17;
+					* (float) Math.cos(Math.toRadians(angle)) * delta / 17;
 			xpos += hspeed;
 			ypos += GamePlayState.GRAVITY * 4 * speed_mod_bomb;
 		}
@@ -362,9 +373,15 @@ public class Weapons extends Entity {
 				return false;
 			}
 		} else if (type == WeaponTypes.GUIDED_GROUND) {
-
+			if (time > MAX_LIFETIME_GUIDED_GROUND) {
+				return false;
+			}
 		} else if (type == WeaponTypes.BOMB || type == WeaponTypes.BOMB_SPLIT) {
 			if (time > MAX_LIFETIME_BOMB) {
+				return false;
+			}
+		} else if (type == WeaponTypes.TURRET_MIDDLE) {
+			if (time > MAX_LIFETIME_TURRET_MIDDLE) {
 				return false;
 			}
 		}

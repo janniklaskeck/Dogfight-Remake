@@ -1,6 +1,5 @@
 package dogfight_remake.entities;
 
-
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -13,6 +12,7 @@ public class Explosion extends Entity {
 	private Ellipse explosion1, explosion2;
 	private float radius = 0;
 	private float radius_small = 0;
+	private boolean broken = false;
 
 	public Explosion(float xpos, float ypos, float size) {
 		super(xpos, ypos);
@@ -21,7 +21,8 @@ public class Explosion extends Entity {
 		this.size = size;
 	}
 
-	public void render(GameContainer container, Graphics g, int delta) {
+	
+	public void render(GameContainer container, Graphics g, float delta) {
 
 		explosion1 = new Ellipse(xpos - radius / 2, ypos - radius / 2, radius,
 				radius);
@@ -35,11 +36,15 @@ public class Explosion extends Entity {
 			g.setColor(Color.yellow);
 			g.fill(explosion2);
 		}
+		
 	}
 
-	public void move(float delta) {
+	
+	public void update(float delta) {
 		if (radius < (MAX_RADIUS * size)) {
 			radius += 2;
+		} else {
+			//broken = true;
 		}
 	}
 
@@ -49,6 +54,10 @@ public class Explosion extends Entity {
 		} else {
 			return false;
 		}
+	}
+
+	public boolean isBroken() {
+		return broken;
 	}
 
 }

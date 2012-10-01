@@ -17,6 +17,7 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import dogfight_remake.controls.KeyControls;
 import dogfight_remake.entities.Explosion;
+import dogfight_remake.entities.ai.TurretAi;
 import dogfight_remake.entities.planes.Planes;
 import dogfight_remake.entities.weapons.Homing_Missiles;
 import dogfight_remake.entities.weapons.Reload;
@@ -31,25 +32,28 @@ public class GamePlayState extends BasicGameState {
 	public static Dimension dim = GlbVar.dim_chosen;
 
 	public static final long RESPAWNTIME_PLAYER = 3000;
+	public static final long RESPAWNTIME_TURRET = 3000;
 	public static float GRAVITY = 6;
 	public static ArrayList<Weapons> weapons;
 	public static ArrayList<Explosion> explosions;
 
-	public static Rectangle p1;
-	public static Rectangle p2;
-	Rectangle wep;
-	public Polygon p1A;
-	public Polygon p2A;
-	public Polygon a;
-	public Polygon b;
+	private static Rectangle p1;
+	private static Rectangle p2;
+	Rectangle turret;
+	private Rectangle wep;
+	private Polygon p1A;
+	private Polygon p2A;
+	private Polygon a;
+	private Polygon b;
 	public static Render r;
 	public Random rnd;
 	public static int score_p1 = 0, score_p2 = 0;
 	public static long respawntimer_p1 = RESPAWNTIME_PLAYER;
 	public static long respawntimer_p2 = RESPAWNTIME_PLAYER;
-
+	public static long respawntimer_turret = RESPAWNTIME_TURRET;
 	public static Image plane;
 	public static Camera camera;
+	public int time;
 
 	int stateID = -1;
 	private int delta = 0;
@@ -89,7 +93,6 @@ public class GamePlayState extends BasicGameState {
 	public void render(GameContainer container, StateBasedGame game, Graphics g)
 			throws SlickException {
 		GlbVar.img_bg.draw(0, 0, 1680, 1050);
-		g.drawString("Time : " + time / 1000, 100, 100);
 		camera.drawMap();
 		camera.translateGraphics();
 		r.render(container, g, delta);
@@ -110,8 +113,6 @@ public class GamePlayState extends BasicGameState {
 
 	}
 
-	int time;
-
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta)
 			throws SlickException {
@@ -119,34 +120,32 @@ public class GamePlayState extends BasicGameState {
 		KeyControls.update(gc, sbg, delta);
 		if (r.player1 != null && r.player2 != null && !GlbVar.paused) {
 			time += delta;
+			GlbVar.timePassed = time / 1000;
 
-			if (time / 1000 % 3 == 0) {
-				Weapons wmp = GamePlayState.r.turret.shoot();
-				if (wmp != null) {
-					GlbVar.prim_gun_light.play(1, GlbVar.sounds_volume);
-					weapons.add(wmp);
-				}
-				if (r.turret.getTarget() != r.player1) {
-					r.turret.setTarget(r.player2);
-				}
+			Weapons wmp = GamePlayState.r.turret.shoot();
+			if (wmp != null) {
+				GlbVar.prim_gun_middle.play(1, GlbVar.sounds_volume);
+				weapons.add(wmp);
 			}
-			r.player1.move(delta);
-			r.player2.move(delta);
-			Reload.reload_primary(r.player1);
-			Reload.reload_primary(r.player2);
-			Reload.reload_secondary_1(r.player1);
-			Reload.reload_secondary_1(r.player2);
-			Reload.reload_secondary_2(r.player1);
-			Reload.reload_secondary_2(r.player2);
-			r.turret.update(gc, delta);
+
+			r.player1.update(delta);
+			r.player2.update(delta);
+			Reload.reload_primary(r.player1, delta);
+			Reload.reload_primary(r.player2, delta);
+			Reload.reload_secondary_1(r.player1, delta);
+			Reload.reload_secondary_1(r.player2, delta);
+			Reload.reload_secondary_2(r.player1, delta);
+			Reload.reload_secondary_2(r.player2, delta);
+			r.turret.update(delta);
 			checkCollision(gc);
 			for (int i = 0; i < weapons.size(); i++) {
 				if (!weapons.get(i).isHit() && weapons.get(i).isAlive()) {
 					if (weapons.get(i).getType() == WeaponTypes.GUN
 							|| weapons.get(i).getType() == WeaponTypes.BOMB
 							|| weapons.get(i).getType() == WeaponTypes.UNGUIDED
-							|| weapons.get(i).getType() == WeaponTypes.MINIGUN) {
-						weapons.get(i).move(delta);
+							|| weapons.get(i).getType() == WeaponTypes.MINIGUN
+							|| weapons.get(i).getType() == WeaponTypes.TURRET_MIDDLE) {
+						weapons.get(i).update(delta);
 					} else if (weapons.get(i).getType() == WeaponTypes.BOMB_SPLIT
 							|| weapons.get(i).getType() == WeaponTypes.BOMB_SPLIT_SMALL) {
 						if (weapons.get(i).canSplit()) {
@@ -177,7 +176,7 @@ public class GamePlayState extends BasicGameState {
 							weapons.add(split1);
 							weapons.get(i).setSplit();
 						}
-						weapons.get(i).move(delta);
+						weapons.get(i).update(delta);
 					} else if (weapons.get(i).getType() == WeaponTypes.GUIDED_AIR) {
 						if (weapons.get(i).getID() == 1) {
 							if (r.player2.getHitpoints() > 0
@@ -187,7 +186,7 @@ public class GamePlayState extends BasicGameState {
 										temp, r.player1, r.player2, delta));
 							} else {
 								weapons.get(i).setTarget(false);
-								weapons.get(i).move(delta);
+								weapons.get(i).update(delta);
 							}
 						} else {
 							if (r.player1.getHitpoints() > 0
@@ -197,31 +196,50 @@ public class GamePlayState extends BasicGameState {
 										temp, r.player2, r.player1, delta));
 							} else {
 								weapons.get(i).setTarget(false);
-								weapons.get(i).move(delta);
+								weapons.get(i).update(delta);
 							}
+						}
+					} else if (weapons.get(i).getType() == WeaponTypes.GUIDED_GROUND) {
+						if (r.turret.getHitpoints() > 0
+								&& weapons.get(i).hasTarget()) {
+							Weapons temp = weapons.get(i);
+							weapons.set(i, Homing_Missiles.moveMissile(temp,
+									r.player1, r.turret, delta));
+						} else {
+							weapons.get(i).setTarget(false);
+							weapons.get(i).update(delta);
 						}
 					}
 				} else {
 					weapons.remove(i);
+
 				}
 			}
 
-			if (r.player1.getHitpoints() <= 0 || r.player2.getHitpoints() <= 0) {
+			if (r.player1.getHitpoints() <= 0 || r.player2.getHitpoints() <= 0
+					|| r.turret.getHitpoints() <= 0) {
 				respawn();
 			}
-			for (int i = 0; i < explosions.size(); i++) {
-				explosions.get(i).move(delta);
-			}
-			if (r.player1 != null)
+			for (int i = 0; i < explosions.size(); i++)
+				explosions.get(i).update(delta);
+
+			if (r.player1 != null) {
 				if (r.player1.getHitpoints() <= 0) {
-					respawntimer_p1 -= 18;
+					respawntimer_p1 -= 17;
 				}
-			if (r.player2 != null)
+			}
+			if (r.player2 != null) {
 				if (r.player2.getHitpoints() <= 0) {
-					respawntimer_p2 -= 18;
+					respawntimer_p2 -= 17;
+				}
+			}
+			if (r.turret != null)
+				if (r.turret.getHitpoints() <= 0) {
+					respawntimer_turret -= 17;
 				}
 		}
 		camera.centerOn(r.player1.getXpos(), r.player1.getYpos());
+
 	}
 
 	/**
@@ -239,6 +257,11 @@ public class GamePlayState extends BasicGameState {
 					GlbVar.img_player2, 100, GlbVar.wpn1_p2, GlbVar.wpn2_p2,
 					GlbVar.wpn3_p2);
 			respawntimer_p2 = RESPAWNTIME_PLAYER;
+		}
+		if (respawntimer_turret <= 0) {
+			r.turret = new TurretAi(3, 815, 1623, 270, 100, r.player1,
+					WeaponTypes.MINIGUN, GlbVar.img_bullet1);
+			respawntimer_turret = RESPAWNTIME_TURRET;
 		}
 	}
 
@@ -266,6 +289,9 @@ public class GamePlayState extends BasicGameState {
 				p2.getX() + p2.getWidth(), p2.getY(),
 				p2.getX() + p2.getWidth(), p2.getY() + p2.getHeight(),
 				p2.getX(), p2.getY() + p2.getHeight() }); // Player 2 Area
+		turret = new Rectangle((int) r.turret.getXpos(),
+				(int) r.turret.getYpos(), GlbVar.img_turret_base.getWidth(),
+				GlbVar.img_turret_base.getHeight());
 		if (r.player1.getHitpoints() > 0) {
 			if (r.player1.getAim() != null) {
 				float deltaX = r.player1.getCenterX()
@@ -326,6 +352,20 @@ public class GamePlayState extends BasicGameState {
 						}
 					}
 				}
+
+				if (turret != null) {
+					if (tmp.getID() == 1 || tmp.getID() == 2) {
+						if (turret.intersects(wep)
+								&& r.turret.getHitpoints() > 0) {
+							explosions.add(new Explosion(tmp.getXpos(), tmp
+									.getYpos(), tmp.getType().getExploSize()));
+							GlbVar.hit.play(1, GlbVar.sounds_volume);
+							tmp.setHit();
+							r.turret.decreaseHitpoints(tmp.getDamage());
+						}
+					}
+				}
+
 			}
 
 		}
@@ -347,6 +387,17 @@ public class GamePlayState extends BasicGameState {
 						.getYpos(), 4));
 				p2A = null;
 				score_p1++;
+				GlbVar.explode.play(1, GlbVar.sounds_volume);
+			}
+		}
+		if (turret != null) {
+			if (r.turret.getHitpoints() <= 0
+					&& respawntimer_turret >= RESPAWNTIME_TURRET) {
+				System.out.println(2);
+				explosions.add(new Explosion(r.turret.getXpos(), r.turret
+						.getYpos(), 4));
+				r.turret.setHit();
+				turret = null;
 				GlbVar.explode.play(1, GlbVar.sounds_volume);
 			}
 		}

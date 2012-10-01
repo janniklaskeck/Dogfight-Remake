@@ -52,23 +52,23 @@ public class Planes extends Entity {
 		this.wpn1 = wpn1;
 		this.wpn2 = wpn2;
 		this.wpn3 = wpn3;
-		counter_prim = wpn1.getAmmoCount();
-		counter_sec_1 = wpn2.getAmmoCount();
-		counter_sec_2 = wpn3.getAmmoCount();
+		this.counter_prim = wpn1.getAmmoCount();
+		this.counter_sec_1 = wpn2.getAmmoCount();
+		this.counter_sec_2 = wpn3.getAmmoCount();
 
 	}
 
 	/**
-	 * move method currently clunky possible rewrite: use gravity only when
-	 * speed is too low else gravity does nothing
+	 * update method
 	 * 
 	 * @param delta
 	 */
-	public void move(int delta) {
+	
+	public void update(float delta) {
 		hspeed = Math.abs(speed)
-				* (float) Math.cos(Math.toRadians(angle) * (float) delta / 17);
+				* (float) Math.cos(Math.toRadians(angle) * delta / 17);
 		vspeed = Math.abs(speed)
-				* (float) Math.sin(Math.toRadians(angle) * (float) delta / 17);
+				* (float) Math.sin(Math.toRadians(angle) * delta / 17);
 		if (Math.abs(hspeed) + Math.abs(vspeed) < 1.3 || stall) {
 			stall = true;
 			xpos += hspeed;
@@ -106,16 +106,16 @@ public class Planes extends Entity {
 			angle -= rnd;
 		}
 
-		int delay_prim = 0;
+		//int delay_prim = 0;
 		long time = System.currentTimeMillis();
-		if (counter_prim % wpn1.getAmmoCount() == 0) {
-			delay_prim = wpn1.getReload_delay();
-		}
-		if (counter_prim % wpn1.getAmmoCount() != 0) {
-			delay_prim = wpn1.getShoot_delay();
-		}
+		//if (counter_prim % wpn1.getAmmoCount() == 0) {
+		//	delay_prim = wpn1.getReload_delay();
+		//}
+		//if (counter_prim % wpn1.getAmmoCount() != 0) {
+		//	delay_prim = wpn1.getShoot_delay();
+		//}
 
-		if (Math.abs(lastshot_prim - time) < delay_prim) {
+		if (Math.abs(lastshot_prim - time) < wpn1.getShoot_delay()) {
 			return null;
 		}
 		lastshot_prim = time;
@@ -188,8 +188,8 @@ public class Planes extends Entity {
 	/**
 	 * Paint method
 	 */
-	@Override
-	public void render(GameContainer container, Graphics g, int delta) {
+	
+	public void render(GameContainer container, Graphics g, float delta) {
 		if (broken) {
 			return;
 		}

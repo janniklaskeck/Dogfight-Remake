@@ -6,10 +6,13 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.geom.Polygon;
+import org.newdawn.slick.geom.Rectangle;
+
 import dogfight_remake.entities.Entity;
 import dogfight_remake.entities.planes.Planes;
 import dogfight_remake.entities.weapons.WeaponTypes;
 import dogfight_remake.entities.weapons.Weapons;
+import dogfight_remake.main.GamePlayState;
 import dogfight_remake.main.GlbVar;
 
 public class TurretAi extends Entity {
@@ -25,19 +28,27 @@ public class TurretAi extends Entity {
 	private Image image;
 	private WeaponTypes wmp;
 	private int height, width;
+	private int hitpoints;
+	private Rectangle turret;
 
-	public TurretAi(int id, float xpos, float ypos, float angle, Planes target,
-			WeaponTypes wmp, Image image) {
+	public TurretAi(int id, float xpos, float ypos, float angle, int hitpoints,
+			Planes target, WeaponTypes wmp, Image image) {
 		super(xpos, ypos, angle);
 		this.id = id;
 		this.target = target;
 		this.angle = angle;
 		this.image = image;
 		this.wmp = wmp;
+		this.hitpoints = hitpoints;
+		turret = new Rectangle(xpos, ypos, image.getWidth(), image.getHeight());
 	}
 
 	@Override
-	public void render(GameContainer gc, Graphics g, int delta) {
+	public void render(GameContainer gc, Graphics g, float delta) {
+		if (broken) {
+			return;
+		}
+
 		lifetime++;
 		barrel = new Polygon(new float[] { xpos, ypos, xpos, ypos + 6,
 				xpos + 15, ypos + 6, xpos + 15, ypos });
@@ -53,8 +64,8 @@ public class TurretAi extends Entity {
 
 	}
 
-	public void update(GameContainer gc, int delta) {
-
+	@Override
+	public void update(float delta) {
 		if (angle > -120 && angle < -60) {
 			inRange = true;
 		} else {
@@ -63,14 +74,16 @@ public class TurretAi extends Entity {
 		if (barrel != null) {
 			float deltaX = target.getCenterX() - xpos;
 			float deltaY = target.getCenterY() - ypos;
-
 			angle = (float) Math.toDegrees(Math.atan2(deltaY, deltaX));
-
 		}
+		target = getNearestTarget();
 	}
-
+	
+	/**
+	 * Shoots this turrets weapon
+	 * @return
+	 */
 	public Weapons shoot() {
-
 		float angle = this.angle;
 		if (broken || !inRange) {
 			return null;
@@ -83,13 +96,8 @@ public class TurretAi extends Entity {
 		} else if (rnd % 2 != 0) {
 			angle -= rnd;
 		}
-
-		int delay_prim = 0;
 		long time = System.currentTimeMillis();
-
-		delay_prim = wmp.getShoot_delay();
-
-		if (Math.abs(lastshot_prim - time) < delay_prim) {
+		if (Math.abs(lastshot_prim - time) < wmp.getShoot_delay()) {
 			return null;
 		}
 		lastshot_prim = time;
@@ -97,6 +105,24 @@ public class TurretAi extends Entity {
 		float y = (float) (ypos + Math.sin(Math.toRadians(angle)) - 50);
 		return new Weapons(x, y, angle, wmp.getDamage(), wmp, 0, image, id);
 
+	}
+	
+	/**
+	 * Returns nearest target (Player 1 or Player 2)
+	 * @return
+	 */
+	public Planes getNearestTarget() {
+		double xDiff_p1 = xpos - GamePlayState.r.player1.getXpos();
+		double yDiff_p1 = ypos - GamePlayState.r.player1.getYpos();
+		double xDiff_p2 = xpos - GamePlayState.r.player2.getXpos();
+		double yDiff_p2 = ypos - GamePlayState.r.player2.getYpos();
+
+		if (Math.sqrt(xDiff_p1 * xDiff_p1 + yDiff_p1 * yDiff_p1) > Math
+				.sqrt(xDiff_p2 * xDiff_p2 + yDiff_p2 * yDiff_p2)) {
+			return GamePlayState.r.player2;
+		} else {
+			return GamePlayState.r.player1;
+		}
 	}
 
 	public int getId() {
@@ -139,6 +165,84 @@ public class TurretAi extends Entity {
 	 */
 	public float getHeight() {
 		return height;
+	}
+
+	/**
+	 * Sets Hitpoints to desired value
+	 * 
+	 * @param hitpoints
+	 */
+	public void setHitpoints(int hitpoints) {
+		this.hitpoints = hitpoints;
+		if (hitpoints == 0)
+			broken = true;
+	}
+
+	/**
+	 * Returns current Hitpoints
+	 * 
+	 * @return
+	 */
+	public int getHitpoints() {
+		if (hitpoints < 0) {
+			return 0;
+		} else {
+			return hitpoints;
+		}
+
+	}
+
+	/**
+	 * Returns players plane image
+	 * 
+	 * @return
+	 */
+	public Image getImage() {
+		return image;
+	}
+
+	/**
+	 * Decreases hitpoints
+	 */
+	public void decreaseHitpoints(int damage) {
+		hitpoints -= damage;
+		if (hitpoints <= 0)
+			broken = true;
+	}
+
+	/**
+	 * Returns plane rectangle
+	 * 
+	 * @return
+	 */
+	public Rectangle getPlane() {
+		return turret;
+	}
+
+	/**
+	 * Returns Center xpos of plane
+	 * 
+	 * @return
+	 */
+	public float getCenterX() {
+		if (turret != null) {
+			return turret.getCenterX();
+		} else {
+			return xpos;
+		}
+	}
+
+	/**
+	 * Returns Center ypos of plane
+	 * 
+	 * @return
+	 */
+	public float getCenterY() {
+		if (turret != null) {
+			return turret.getCenterY();
+		} else {
+			return ypos;
+		}
 	}
 
 	/**

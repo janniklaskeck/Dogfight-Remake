@@ -75,7 +75,8 @@ public class KeyControls {
 					Weapons tmp = GamePlayState.r.player1.shoot_secondary_1();
 					if (tmp != null) {
 						if (tmp.getType() == WeaponTypes.GUIDED_AIR
-								|| tmp.getType() == WeaponTypes.UNGUIDED) {
+								|| tmp.getType() == WeaponTypes.UNGUIDED
+								|| tmp.getType() == WeaponTypes.GUIDED_GROUND) {
 							GlbVar.sec_missile1.play(1, GlbVar.sounds_volume);
 						} else {
 							GlbVar.sec_bomb_drop.play(1, GlbVar.sounds_volume);
@@ -189,7 +190,6 @@ public class KeyControls {
 		if (input.isKeyPressed(Input.KEY_P)) {
 			GlbVar.paused = true;
 		}
-
 
 	}
 }

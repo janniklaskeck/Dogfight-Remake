@@ -5,7 +5,7 @@ import org.newdawn.slick.Image;
 import dogfight_remake.main.GlbVar;
 
 public enum WeaponTypes {
-	// Type, Name, Damage, Ammo Count, Speed, Reload Delay, Shoot Delay, Explosion size, Image
+	// Type(Name, Damage, Ammo Count, Speed, Reload Delay, Shoot Delay, Explosion size, Image)
 	MINIGUN("MiniGun", 2, 100, 15, 2500, 50, 1, GlbVar.img_bullet1),
 	GUN("Gun", 3, 50, 15, 3000, 75, 1, GlbVar.img_bullet1),
 	BOMB("Bomb", 40, 2, 12, 8000, 300, 5, GlbVar.img_bomb1),
@@ -13,9 +13,10 @@ public enum WeaponTypes {
 	BOMB_SPLIT_SMALL("Split Bomb(small)", 10, 5, 12, 8000, 300, 3, GlbVar.img_bomb1),
 	UNGUIDED("Unguided Missile", 25, 8, 12, 4000, 350, 3, GlbVar.img_missile1),
 	GUIDED_AIR("Guided Air Missile", 20, 2, 8, 5000, 500, 3, GlbVar.img_missile1), 
-	GUIDED_GROUND("Guided Ground Missile", 2, 35, 8, 5000, 500, 3, GlbVar.img_missile1), 
+	GUIDED_GROUND("Guided Ground Missile", 35, 2, 8, 5000, 500, 3, GlbVar.img_missile1), 
 	RADAR_AIR("Radar Air Missile", 35, 4, 8, 5000, 500, 3, GlbVar.img_missile1), 
-	RADAR_GROUND("Radar Ground Missile", 40, 4, 8, 5000, 500, 3, GlbVar.img_missile1);
+	RADAR_GROUND("Radar Ground Missile", 40, 4, 8, 5000, 500, 3, GlbVar.img_missile1),
+	TURRET_MIDDLE("Turret middle", 10, -1, 13, -1, 300, 1, GlbVar.img_bullet1);
 
 	private int damage;
 	private int ammoCount;

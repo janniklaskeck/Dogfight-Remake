@@ -190,7 +190,7 @@ public class ModernTestPlane2 extends Entity {
 	 * Paint method
 	 */
 	@Override
-	public void render(GameContainer container, Graphics g, int delta) {
+	public void render(GameContainer container, Graphics g, float delta) {
 		if (broken) {
 			return;
 		}

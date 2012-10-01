@@ -88,12 +88,13 @@ public class PausedState extends BasicGameState {
 				gc.exit();
 		} else if (insideMainMenu) {
 			if (input.isMouseButtonDown(Input.MOUSE_LEFT_BUTTON)) {
-				
+
 				sbg.enterState(Dogfight_Remake.MAINMENUSTATE);
 			}
 		} else if (insideOptions) {
 			if (input.isMouseButtonDown(Input.MOUSE_LEFT_BUTTON)) {
-				GlbVar.app.setDisplayMode(GlbVar.dim_chosen.width, GlbVar.dim_chosen.height, GlbVar.fullscreen);
+				GlbVar.app.setDisplayMode(GlbVar.dim_chosen.width,
+						GlbVar.dim_chosen.height, GlbVar.fullscreen);
 			}
 		}
 	}
