@@ -54,6 +54,7 @@ public class GamePlayState extends BasicGameState {
 	public static long respawntimer_turret = RESPAWNTIME_TURRET;
 	public static Image plane;
 	public static Camera camera;
+	public static Camera camera2;
 	public int time;
 
 	int stateID = -1;
@@ -81,6 +82,7 @@ public class GamePlayState extends BasicGameState {
 			weapons = new ArrayList<Weapons>();
 			explosions = new ArrayList<Explosion>();
 			camera = new Camera(gc, GlbVar.tmap);
+			camera2 = new Camera(gc, GlbVar.tmap);
 			rnd = new Random();
 			// GlbVar.music1.loop(1, GlbVar.music_volume);
 			score_p1 = 0;
@@ -93,12 +95,13 @@ public class GamePlayState extends BasicGameState {
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g)
 			throws SlickException {
-		GlbVar.img_bg.draw(0, 0, 1680, 1050);
+		GlbVar.img_bg.draw(0, 0,
+				GlbVar.tmap.getWidth() * GlbVar.tmap.getTileWidth(),
+				GlbVar.tmap.getHeight() * GlbVar.tmap.getTileHeight());
 		camera.drawMap();
 		camera.translateGraphics();
+		//camera2.translateGraphics();
 		r.render(container, g, delta);
-
-		// GlbVar.tmap.render(0, 0);
 
 		if (GlbVar.paused) {
 			GlbVar.img_pause_bg = new Image(1680, 1050);
@@ -235,6 +238,7 @@ public class GamePlayState extends BasicGameState {
 				}
 		}
 		camera.centerOn(r.player1.getXpos(), r.player1.getYpos());
+		//camera2.centerOn(r.player2.getXpos(), r.player2.getYpos());
 
 	}
 

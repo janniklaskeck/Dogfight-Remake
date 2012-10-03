@@ -106,9 +106,9 @@ public class Render {
 	public void render(GameContainer gc, Graphics g, int delta) {
 		// Background and Entities
 
-		// g.drawImage(img_bg, 0, 0, null);
-		// GlbVar.img_bg.draw(0, 0, 3000, 2240);
-
+		// g.setClip(0, 0, (int) GlbVar.dim_chosen.getWidth(),
+		// (int) GlbVar.dim_chosen.getHeight() / 2);
+		
 		if (turret != null) {
 			turret.render(gc, g, delta);
 		}
@@ -137,7 +137,7 @@ public class Render {
 		// Hitpoints
 		if (player1 != null && player2 != null) {
 			GamePlayState.camera.untranslateGraphics();
-			g.setColor(Color.black);
+			g.setColor(Color.gray);
 			// Player 1
 			g.drawString("Player1: " + player1.getHitpoints(), dim.width / 20,
 					dim.height / 20);
@@ -156,7 +156,7 @@ public class Render {
 						+ GamePlayState.respawntimer_p1 / 100, dim.width / 5,
 						dim.height / 20);
 			}
-			// g.drawString("" + turret.getHitpoints(), 400, 500);
+			g.drawString("", 400, 500);
 			// Player 2
 			g.drawString("Player2: " + player2.getHitpoints(), dim.width
 					- dim.width / 7, dim.height / 20);

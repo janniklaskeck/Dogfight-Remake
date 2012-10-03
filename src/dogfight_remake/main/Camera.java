@@ -7,34 +7,34 @@ import org.newdawn.slick.tiled.TiledMap;
 public class Camera {
 
 	/** the map used for our scene */
-	protected TiledMap map;
+	public TiledMap map;
 
 	/** the number of tiles in x-direction (width) */
-	protected int numTilesX;
+	public int numTilesX;
 
 	/** the number of tiles in y-direction (height) */
-	protected int numTilesY;
+	public int numTilesY;
 
 	/** the height of the map in pixel */
-	protected int mapHeight;
+	public int mapHeight;
 
 	/** the width of the map in pixel */
-	protected int mapWidth;
+	public int mapWidth;
 
 	/** the width of one tile of the map in pixel */
-	protected int tileWidth;
+	public int tileWidth;
 
 	/** the height of one tile of the map in pixel */
-	protected int tileHeight;
+	public int tileHeight;
 
 	/** the GameContainer, used for getting the size of the GameCanvas */
-	protected GameContainer gc;
+	public GameContainer gc;
 
 	/** the x-position of our "camera" in pixel */
-	protected float cameraX;
+	public float cameraX;
 
 	/** the y-position of our "camera" in pixel */
-	protected float cameraY;
+	public float cameraY;
 
 	/**
 	 * Create a new camera
@@ -53,8 +53,8 @@ public class Camera {
 		this.tileWidth = map.getTileWidth();
 		this.tileHeight = map.getTileHeight();
 
-		this.mapHeight = this.numTilesX * this.tileWidth;
-		this.mapWidth = this.numTilesY * this.tileHeight;
+		this.mapHeight = this.numTilesY * this.tileHeight;
+		this.mapWidth = this.numTilesX * this.tileWidth;
 
 		this.gc = gc;
 	}
