@@ -104,7 +104,7 @@ public class TurretAi extends Entity {
 		lastshot_prim = time;
 		float x = (float) (xpos + Math.cos(Math.toRadians(angle)));
 		float y = (float) (ypos + Math.sin(Math.toRadians(angle)) - 50);
-		return new Weapons(x, y, angle, wmp.getDamage(), wmp, 0, image, id);
+		return new Weapons(x, y, angle, wmp, 0, image, id);
 
 	}
 
@@ -254,7 +254,7 @@ public class TurretAi extends Entity {
 	 * @return
 	 */
 	public boolean isAlive() {
-		if (lifetime > Weapons.MAX_LIFETIME_GUN) {
+		if (lifetime > wmp.getLife_time()) {
 			return false;
 		}
 		return true;

@@ -28,18 +28,14 @@ import dogfight_remake.map.BlockMap;
 import dogfight_remake.rendering.Render;
 
 public class GamePlayState extends BasicGameState {
-
 	public static Dimension dim = GlbVar.dim_chosen;
 
-	public static final long RESPAWNTIME_PLAYER = 3000;
-	public static final long RESPAWNTIME_TURRET = 3000;
-	public static float GRAVITY = 6;
 	public static ArrayList<Weapons> weapons;
 	public static ArrayList<Explosion> explosions;
 
 	private static Rectangle p1;
 	private static Rectangle p2;
-	Rectangle turret;
+	private Rectangle turret;
 	private Rectangle wep;
 	private Ellipse wep_ellipse;
 	private Polygon p1A;
@@ -47,12 +43,8 @@ public class GamePlayState extends BasicGameState {
 	private Polygon a;
 	private Polygon b;
 	public static Render r;
-	public Random rnd;
-	public static int score_p1 = 0, score_p2 = 0;
-	public static long respawntimer_p1 = RESPAWNTIME_PLAYER;
-	public static long respawntimer_p2 = RESPAWNTIME_PLAYER;
-	public static long respawntimer_turret = RESPAWNTIME_TURRET;
-	public static Image plane;
+	private Random rnd;
+
 	public static Camera camera;
 	public static Camera camera2;
 	public int time;
@@ -85,8 +77,8 @@ public class GamePlayState extends BasicGameState {
 			camera2 = new Camera(gc, GlbVar.tmap);
 			rnd = new Random();
 			// GlbVar.music1.loop(1, GlbVar.music_volume);
-			score_p1 = 0;
-			score_p2 = 0;
+			GlbVar.score_p1 = 0;
+			GlbVar.score_p2 = 0;
 			GlbVar.paused = false;
 		}
 
@@ -100,7 +92,7 @@ public class GamePlayState extends BasicGameState {
 				GlbVar.tmap.getHeight() * GlbVar.tmap.getTileHeight());
 		camera.drawMap();
 		camera.translateGraphics();
-		//camera2.translateGraphics();
+		// camera2.translateGraphics();
 		r.render(container, g, delta);
 
 		if (GlbVar.paused) {
@@ -126,7 +118,7 @@ public class GamePlayState extends BasicGameState {
 			time += delta;
 			GlbVar.timePassed = time / 1000;
 
-			Weapons wmp = GamePlayState.r.turret.shoot();
+			Weapons wmp = r.turret.shoot();
 			if (wmp != null) {
 				GlbVar.prim_gun_middle.play(1, GlbVar.sounds_volume);
 				weapons.add(wmp);
@@ -155,22 +147,19 @@ public class GamePlayState extends BasicGameState {
 						if (weapons.get(i).canSplit()) {
 							Weapons split1 = new Weapons(weapons.get(i)
 									.getXpos(), weapons.get(i).getYpos(),
-									rnd.nextFloat() * 180, weapons.get(i)
-											.getDamage(),
+									rnd.nextFloat() * 180,
 									WeaponTypes.BOMB_SPLIT_SMALL, 0, weapons
 											.get(i).getImage(), weapons.get(i)
 											.getID());
 							Weapons split2 = new Weapons(weapons.get(i)
 									.getXpos(), weapons.get(i).getYpos(),
-									rnd.nextFloat() * 180, weapons.get(i)
-											.getDamage(),
+									rnd.nextFloat() * 180,
 									WeaponTypes.BOMB_SPLIT_SMALL, 0, weapons
 											.get(i).getImage(), weapons.get(i)
 											.getID());
 							Weapons split3 = new Weapons(weapons.get(i)
 									.getXpos(), weapons.get(i).getYpos(),
-									rnd.nextFloat() * 180, weapons.get(i)
-											.getDamage(),
+									rnd.nextFloat() * 180,
 									WeaponTypes.BOMB_SPLIT_SMALL, 0, weapons
 											.get(i).getImage(), weapons.get(i)
 											.getID());
@@ -224,21 +213,21 @@ public class GamePlayState extends BasicGameState {
 
 			if (r.player1 != null) {
 				if (r.player1.getHitpoints() <= 0) {
-					respawntimer_p1 -= 17;
+					GlbVar.respawntimer_p1 -= delta;
 				}
 			}
 			if (r.player2 != null) {
 				if (r.player2.getHitpoints() <= 0) {
-					respawntimer_p2 -= 17;
+					GlbVar.respawntimer_p2 -= delta;
 				}
 			}
 			if (r.turret != null)
 				if (r.turret.getHitpoints() <= 0) {
-					respawntimer_turret -= 17;
+					GlbVar.respawntimer_turret -= delta;
 				}
 		}
 		camera.centerOn(r.player1.getXpos(), r.player1.getYpos());
-		//camera2.centerOn(r.player2.getXpos(), r.player2.getYpos());
+		// camera2.centerOn(r.player2.getXpos(), r.player2.getYpos());
 
 	}
 
@@ -246,22 +235,22 @@ public class GamePlayState extends BasicGameState {
 	 * Respawn method
 	 */
 	private void respawn() {
-		if (respawntimer_p1 <= 0) {
+		if (GlbVar.respawntimer_p1 <= 0) {
 			r.player1 = new Planes(1, 100, dim.height / 2, 0,
 					GlbVar.img_player1, 100, GlbVar.wpn1_p1, GlbVar.wpn2_p1,
 					GlbVar.wpn3_p1);
-			respawntimer_p1 = RESPAWNTIME_PLAYER;
+			GlbVar.respawntimer_p1 = GlbVar.RESPAWNTIME_PLAYER;
 		}
-		if (respawntimer_p2 <= 0) {
+		if (GlbVar.respawntimer_p2 <= 0) {
 			r.player2 = new Planes(2, dim.width - 150, dim.height / 2, 180,
 					GlbVar.img_player2, 100, GlbVar.wpn1_p2, GlbVar.wpn2_p2,
 					GlbVar.wpn3_p2);
-			respawntimer_p2 = RESPAWNTIME_PLAYER;
+			GlbVar.respawntimer_p2 = GlbVar.RESPAWNTIME_PLAYER;
 		}
-		if (respawntimer_turret <= 0) {
+		if (GlbVar.respawntimer_turret <= 0) {
 			r.turret = new TurretAi(3, 815, 1623, 270, 100, r.player1,
 					WeaponTypes.MINIGUN, GlbVar.img_bullet1);
-			respawntimer_turret = RESPAWNTIME_TURRET;
+			GlbVar.respawntimer_turret = GlbVar.RESPAWNTIME_TURRET;
 		}
 	}
 
@@ -396,27 +385,27 @@ public class GamePlayState extends BasicGameState {
 
 		if (p1A != null) {
 			if (r.player1.getHitpoints() <= 0
-					&& respawntimer_p1 >= RESPAWNTIME_PLAYER) {
+					&& GlbVar.respawntimer_p1 >= GlbVar.RESPAWNTIME_PLAYER) {
 				explosions.add(new Explosion(r.player1.getXpos(), r.player1
 						.getYpos(), 4));
 				p1A = null;
-				score_p2++;
+				GlbVar.score_p2++;
 				GlbVar.explode.play(1, GlbVar.sounds_volume);
 			}
 		}
 		if (p2A != null) {
 			if (r.player2.getHitpoints() <= 0
-					&& respawntimer_p2 >= RESPAWNTIME_PLAYER) {
+					&& GlbVar.respawntimer_p2 >= GlbVar.RESPAWNTIME_PLAYER) {
 				explosions.add(new Explosion(r.player2.getXpos(), r.player2
 						.getYpos(), 4));
 				p2A = null;
-				score_p1++;
+				GlbVar.score_p1++;
 				GlbVar.explode.play(1, GlbVar.sounds_volume);
 			}
 		}
 		if (turret != null) {
 			if (r.turret.getHitpoints() <= 0
-					&& respawntimer_turret >= RESPAWNTIME_TURRET) {
+					&& GlbVar.respawntimer_turret >= GlbVar.RESPAWNTIME_TURRET) {
 				explosions.add(new Explosion(r.turret.getXpos(), r.turret
 						.getYpos(), 4));
 				r.turret.setHit();
@@ -425,8 +414,9 @@ public class GamePlayState extends BasicGameState {
 			}
 		}
 		if (p1A != null && p2A != null && GlbVar.getPlayerCollision()) {
-			if (p1A.intersects(p2A) && respawntimer_p1 >= RESPAWNTIME_PLAYER
-					&& respawntimer_p2 >= RESPAWNTIME_PLAYER) {
+			if (p1A.intersects(p2A)
+					&& GlbVar.respawntimer_p1 >= GlbVar.RESPAWNTIME_PLAYER
+					&& GlbVar.respawntimer_p2 >= GlbVar.RESPAWNTIME_PLAYER) {
 				explosions.add(new Explosion(r.player1.getXpos(), r.player1
 						.getYpos(), 4));
 				explosions.add(new Explosion(r.player2.getXpos(), r.player2
@@ -442,7 +432,7 @@ public class GamePlayState extends BasicGameState {
 			for (int i = 0; i < BlockMap.entities.size(); i++) {
 				Block entity1 = (Block) BlockMap.entities.get(i);
 				if (r.player1.getPlane().intersects(entity1.poly)
-						&& respawntimer_p1 >= RESPAWNTIME_PLAYER) {
+						&& GlbVar.respawntimer_p1 >= GlbVar.RESPAWNTIME_PLAYER) {
 					explosions.add(new Explosion(r.player1.getXpos(), r.player1
 							.getYpos(), 4));
 					p1A = null;
@@ -450,7 +440,7 @@ public class GamePlayState extends BasicGameState {
 					r.player1.setHitpoints(0);
 				}
 				if (r.player2.getPlane().intersects(entity1.poly)
-						&& respawntimer_p2 >= RESPAWNTIME_PLAYER) {
+						&& GlbVar.respawntimer_p2 >= GlbVar.RESPAWNTIME_PLAYER) {
 					explosions.add(new Explosion(r.player2.getXpos(), r.player2
 							.getYpos(), 4));
 					p2A = null;

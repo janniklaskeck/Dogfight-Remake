@@ -106,20 +106,17 @@ public class Render {
 	public void render(GameContainer gc, Graphics g, int delta) {
 		// Background and Entities
 
-		// g.setClip(0, 0, (int) GlbVar.dim_chosen.getWidth(),
-		// (int) GlbVar.dim_chosen.getHeight() / 2);
-		
-		if (turret != null) {
-			turret.render(gc, g, delta);
-		}
-
+		g.setClip(0, 0, (int) GlbVar.dim_chosen.getWidth(),
+				(int) GlbVar.dim_chosen.getHeight() / 2);
 		if (player1 != null) {
 			player1.render(gc, g, delta);
 		}
 		if (player2 != null) {
 			player2.render(gc, g, delta);
 		}
-
+		if (turret != null) {
+			turret.render(gc, g, delta);
+		}
 		if (GamePlayState.weapons != null) {
 			for (int i = 0; i < GamePlayState.weapons.size(); i++) {
 				GamePlayState.weapons.get(i).render(gc, g, delta);
@@ -137,7 +134,7 @@ public class Render {
 		// Hitpoints
 		if (player1 != null && player2 != null) {
 			GamePlayState.camera.untranslateGraphics();
-			g.setColor(Color.gray);
+			g.setColor(Color.black);
 			// Player 1
 			g.drawString("Player1: " + player1.getHitpoints(), dim.width / 20,
 					dim.height / 20);
@@ -151,9 +148,9 @@ public class Render {
 					player1.getWeapon(3).getName() + ": " + player1.getAmmo(3),
 					dim.width / 20, (dim.height / 20) + (dim.height / 30)
 							+ (dim.height / 15));
-			if (GamePlayState.respawntimer_p1 < GamePlayState.RESPAWNTIME_PLAYER) {
+			if (GlbVar.respawntimer_p1 < GlbVar.RESPAWNTIME_PLAYER) {
 				g.drawString("Respawn Player1: "
-						+ GamePlayState.respawntimer_p1 / 100, dim.width / 5,
+						+ GlbVar.respawntimer_p1 / 100, dim.width / 5,
 						dim.height / 20);
 			}
 			g.drawString("", 400, 500);
@@ -172,16 +169,17 @@ public class Render {
 					player2.getWeapon(3).getName() + ": " + player2.getAmmo(3),
 					dim.width - dim.width / 7, (dim.height / 20)
 							+ (dim.height / 30) + (dim.height / 15));
-			if (GamePlayState.respawntimer_p2 < GamePlayState.RESPAWNTIME_PLAYER) {
+			if (GlbVar.respawntimer_p2 < GlbVar.RESPAWNTIME_PLAYER) {
 				g.drawString("Respawn Player2: "
-						+ GamePlayState.respawntimer_p2 / 100, dim.width
+						+ GlbVar.respawntimer_p2 / 100, dim.width
 						- dim.width / 3, dim.height / 20);
 			}
 			// FPS and score
-			g.drawString(GamePlayState.score_p1 + " : "
-					+ GamePlayState.score_p2, dim.width / 2, dim.height / 10);
+			g.drawString(GlbVar.score_p1 + " : "
+					+ GlbVar.score_p2, dim.width / 2, dim.height / 10);
 			g.drawString(GlbVar.timePassed + "", dim.width / 2, dim.height / 13);
 			GamePlayState.camera.translateGraphics();
 		}
+		
 	}
 }

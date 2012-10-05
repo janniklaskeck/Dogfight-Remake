@@ -11,20 +11,14 @@ import org.newdawn.slick.geom.Rectangle;
 import dogfight_remake.entities.Entity;
 import dogfight_remake.entities.weapons.WeaponTypes;
 import dogfight_remake.entities.weapons.Weapons;
-import dogfight_remake.main.GamePlayState;
 import dogfight_remake.main.GlbVar;
 
 public class Planes extends Entity {
-
 	private Random random;
-	// constants
-	// default values
-	public final static float MAX_SPEED = 7;
-
 	private Image image;
 	private Rectangle plane;
 	private Ellipse aim;
-	protected int id;
+	private int id;
 	private int hitpoints;
 	private float angle;
 	private long lastshot_prim, lastshot_sec_1, lastshot_sec_2;
@@ -32,7 +26,7 @@ public class Planes extends Entity {
 	private int counter_sec_1;
 	private int counter_sec_2;
 	private boolean broken;
-	public float hspeed, vspeed;
+	private float hspeed, vspeed;
 	private WeaponTypes wpn1;
 	private WeaponTypes wpn2;
 	private WeaponTypes wpn3;
@@ -55,7 +49,6 @@ public class Planes extends Entity {
 		this.counter_prim = wpn1.getAmmoCount();
 		this.counter_sec_1 = wpn2.getAmmoCount();
 		this.counter_sec_2 = wpn3.getAmmoCount();
-
 	}
 
 	/**
@@ -63,7 +56,7 @@ public class Planes extends Entity {
 	 * 
 	 * @param delta
 	 */
-	
+
 	public void update(float delta) {
 		hspeed = Math.abs(speed)
 				* (float) Math.cos(Math.toRadians(angle) * delta / 17);
@@ -72,10 +65,10 @@ public class Planes extends Entity {
 		if (Math.abs(hspeed) + Math.abs(vspeed) < 1.3 || stall) {
 			stall = true;
 			xpos += hspeed;
-			ypos += vspeed + GamePlayState.GRAVITY;
+			ypos += vspeed + GlbVar.GRAVITY;
 			if (stall && vspeed > 3) {
 				stall = false;
-			} else if (vspeed + GamePlayState.GRAVITY < 0) {
+			} else if (vspeed + GlbVar.GRAVITY < 0) {
 				stall = false;
 			}
 		} else {
@@ -106,14 +99,14 @@ public class Planes extends Entity {
 			angle -= rnd;
 		}
 
-		//int delay_prim = 0;
+		// int delay_prim = 0;
 		long time = System.currentTimeMillis();
-		//if (counter_prim % wpn1.getAmmoCount() == 0) {
-		//	delay_prim = wpn1.getReload_delay();
-		//}
-		//if (counter_prim % wpn1.getAmmoCount() != 0) {
-		//	delay_prim = wpn1.getShoot_delay();
-		//}
+		// if (counter_prim % wpn1.getAmmoCount() == 0) {
+		// delay_prim = wpn1.getReload_delay();
+		// }
+		// if (counter_prim % wpn1.getAmmoCount() != 0) {
+		// delay_prim = wpn1.getShoot_delay();
+		// }
 
 		if (Math.abs(lastshot_prim - time) < wpn1.getShoot_delay()) {
 			return null;
@@ -122,8 +115,7 @@ public class Planes extends Entity {
 		float x = (float) (plane.getCenterX() + Math.cos(Math.toRadians(angle)));
 		float y = (float) (plane.getCenterY() + Math.sin(Math.toRadians(angle)) + 5);
 		counter_prim--;
-		return new Weapons(x, y, angle, wpn1.getDamage(), wpn1, 0,
-				wpn1.getImage(), id);
+		return new Weapons(x, y, angle, wpn1, 0, wpn1.getImage(), id);
 	}
 
 	/**
@@ -152,8 +144,7 @@ public class Planes extends Entity {
 		float x = (float) (plane.getCenterX() + Math.cos(Math.toRadians(angle)));
 		float y = (float) (plane.getCenterY() + Math.sin(Math.toRadians(angle)) + 5);
 		counter_sec_1--;
-		return new Weapons(x, y, angle, wpn2.getDamage(), wpn2, 0,
-				wpn2.getImage(), id);
+		return new Weapons(x, y, angle, wpn2, 0, wpn2.getImage(), id);
 	}
 
 	/**
@@ -181,14 +172,13 @@ public class Planes extends Entity {
 		float x = (float) (plane.getCenterX() + Math.cos(Math.toRadians(angle)));
 		float y = (float) (plane.getCenterY() + Math.sin(Math.toRadians(angle)) + 5);
 		counter_sec_2--;
-		return new Weapons(x, y, angle, wpn3.getDamage(), wpn3, 0,
-				wpn3.getImage(), id);
+		return new Weapons(x, y, angle, wpn3, 0, wpn3.getImage(), id);
 	}
 
 	/**
 	 * Paint method
 	 */
-	
+
 	public void render(GameContainer container, Graphics g, float delta) {
 		if (broken) {
 			return;
@@ -208,7 +198,7 @@ public class Planes extends Entity {
 	 * @param angle
 	 */
 	public void increaseAngle(float f) {
-		if (speed > MAX_SPEED) {
+		if (speed > GlbVar.PLANES_MAX_SPEED) {
 			angle += f * 0.8;
 		} else {
 			angle += f;

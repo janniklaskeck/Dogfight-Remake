@@ -60,13 +60,23 @@ public class GlbVar {
 	// Camera x and y
 	public static float cx;
 	public static float cy;
-	
+
 	// Game options
+	public final static float PLANES_MAX_SPEED = 7;
+	public static float GRAVITY = 6;
 	private static boolean player_collision = false;
 	private static int multisample = 2;
 	public static boolean fullscreen = true;;
 	public static boolean paused = true;
 	public static int timePassed = 0;
+	// Scores
+	public static int score_p1 = 0, score_p2 = 0;
+	// RespawnTimer
+	public static final long RESPAWNTIME_PLAYER = 3000;
+	public static final long RESPAWNTIME_TURRET = 3000;
+	public static long respawntimer_p1 = RESPAWNTIME_PLAYER;
+	public static long respawntimer_p2 = RESPAWNTIME_PLAYER;
+	public static long respawntimer_turret = RESPAWNTIME_TURRET;
 
 	public static float music_volume = 0.1f;
 	public static float sounds_volume = 0.1f;

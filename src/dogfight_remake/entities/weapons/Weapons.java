@@ -6,15 +6,10 @@ import org.newdawn.slick.Image;
 import dogfight_remake.entities.Entity;
 import dogfight_remake.entities.ai.TurretAi;
 import dogfight_remake.entities.planes.Planes;
-import dogfight_remake.main.GamePlayState;
+import dogfight_remake.main.GlbVar;
 
 public class Weapons extends Entity {
-	public final static int MAX_LIFETIME_GUN = 1000;
-	public final static int MAX_LIFETIME_GUIDED_AIR = 35000;
-	public final static int MAX_LIFETIME_GUIDED_GROUND = 35000;
-	public final static int MAX_LIFETIME_UNGUIDED = 2000;
-	public final static int MAX_LIFETIME_BOMB = 10000;
-	public final static int MAX_LIFETIME_TURRET_MIDDLE = 1500;
+
 	private float angle;
 	private boolean broken;
 	private int height, width;
@@ -30,14 +25,14 @@ public class Weapons extends Entity {
 	private float firstHeight;
 	private int time;
 
-	public Weapons(float xpos, float ypos, float angle, int damage,
-			WeaponTypes type, int time, Image image, int id) {
+	public Weapons(float xpos, float ypos, float angle, WeaponTypes type,
+			int time, Image image, int id) {
 		super(xpos, ypos);
 		this.speed = type.getSpeed();
 		this.angle = angle;
 		this.image = image;
 		this.broken = false;
-		this.damage = damage;
+		this.damage = type.getDamage();
 		this.type = type;
 		this.id = id;
 		this.firstHeight = ypos;
@@ -55,22 +50,21 @@ public class Weapons extends Entity {
 		if (broken) {
 			return;
 		}
-		if (type == WeaponTypes.GUN && time <= MAX_LIFETIME_GUN) {
+		if (type == WeaponTypes.GUN && time <= type.getLife_time()) {
 			image.setRotation(angle);
 			image.draw(xpos, ypos);
-		} else if (type == WeaponTypes.MINIGUN && time <= MAX_LIFETIME_GUN) {
+		} else if (type == WeaponTypes.MINIGUN && time <= type.getLife_time()) {
 			image.setRotation(angle);
 			image.draw(xpos, ypos);
-		} else if (type == WeaponTypes.UNGUIDED
-				&& time <= MAX_LIFETIME_UNGUIDED) {
+		} else if (type == WeaponTypes.UNGUIDED && time <= type.getLife_time()) {
 			image.setRotation(angle);
 			image.draw(xpos, ypos);
 		} else if (type == WeaponTypes.GUIDED_GROUND
-				&& time <= MAX_LIFETIME_GUIDED_GROUND) {
+				&& time <= type.getLife_time()) {
 			image.setRotation(angle);
 			image.draw(xpos, ypos);
 		} else if (type == WeaponTypes.GUIDED_AIR
-				&& time <= MAX_LIFETIME_GUIDED_AIR) {
+				&& time <= type.getLife_time()) {
 			image.setRotation(angle);
 			image.draw(xpos, ypos);
 		} else if (type == WeaponTypes.RADAR_AIR) {
@@ -89,7 +83,7 @@ public class Weapons extends Entity {
 			image.setRotation(angle);
 			image.draw(xpos, ypos);
 		} else if (type == WeaponTypes.TURRET_MIDDLE
-				&& time <= MAX_LIFETIME_TURRET_MIDDLE) {
+				&& time <= type.getLife_time()) {
 			image.setRotation(angle);
 			image.draw(xpos, ypos);
 		} else {
@@ -164,7 +158,7 @@ public class Weapons extends Entity {
 			float hspeed = (speed * speed_mod_bomb)
 					* (float) Math.cos(Math.toRadians(angle)) * delta / 17;
 			xpos += hspeed;
-			ypos += GamePlayState.GRAVITY * 4 * speed_mod_bomb;
+			ypos += GlbVar.GRAVITY * 4 * speed_mod_bomb;
 		} else if (type == WeaponTypes.BOMB_SPLIT) {
 			angleCheck();
 			if (ypos - firstHeight > 300 && !isSplit) {
@@ -187,7 +181,7 @@ public class Weapons extends Entity {
 			float hspeed = (speed * speed_mod_bomb)
 					* (float) Math.cos(Math.toRadians(angle)) * delta / 17;
 			xpos += hspeed;
-			ypos += GamePlayState.GRAVITY * 4 * speed_mod_bomb;
+			ypos += GlbVar.GRAVITY * 4 * speed_mod_bomb;
 		} else if (type == WeaponTypes.BOMB_SPLIT_SMALL) {
 			if (angle <= 90 && angle >= 0) {
 				angle += (90 - angle) / 75;
@@ -204,7 +198,7 @@ public class Weapons extends Entity {
 			float hspeed = (speed * speed_mod_bomb)
 					* (float) Math.cos(Math.toRadians(angle)) * delta / 17;
 			xpos += hspeed;
-			ypos += GamePlayState.GRAVITY * 4 * speed_mod_bomb;
+			ypos += GlbVar.GRAVITY * 4 * speed_mod_bomb;
 		}
 	}
 
@@ -464,27 +458,27 @@ public class Weapons extends Entity {
 	 */
 	public boolean isAlive() {
 		if (type == WeaponTypes.GUN || type == WeaponTypes.MINIGUN) {
-			if (time > MAX_LIFETIME_GUN) {
+			if (time > type.getLife_time()) {
 				return false;
 			}
 		} else if (type == WeaponTypes.GUIDED_AIR) {
-			if (time > MAX_LIFETIME_GUIDED_AIR) {
+			if (time > type.getLife_time()) {
 				return false;
 			}
 		} else if (type == WeaponTypes.UNGUIDED) {
-			if (time > MAX_LIFETIME_UNGUIDED) {
+			if (time > type.getLife_time()) {
 				return false;
 			}
 		} else if (type == WeaponTypes.GUIDED_GROUND) {
-			if (time > MAX_LIFETIME_GUIDED_GROUND) {
+			if (time > type.getLife_time()) {
 				return false;
 			}
 		} else if (type == WeaponTypes.BOMB || type == WeaponTypes.BOMB_SPLIT) {
-			if (time > MAX_LIFETIME_BOMB) {
+			if (time > type.getLife_time()) {
 				return false;
 			}
 		} else if (type == WeaponTypes.TURRET_MIDDLE) {
-			if (time > MAX_LIFETIME_TURRET_MIDDLE) {
+			if (time > type.getLife_time()) {
 				return false;
 			}
 		}

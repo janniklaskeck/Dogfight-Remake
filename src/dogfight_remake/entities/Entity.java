@@ -2,16 +2,11 @@ package dogfight_remake.entities;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-
-import dogfight_remake.entities.planes.Planes;
+import dogfight_remake.main.GlbVar;
 
 public abstract class Entity {
-	// constants
-	protected static final float DEFAULT_SPEED = 2;
 
-	// instance variables
 	protected float xpos;
-
 	protected float ypos;
 	protected float speed;
 
@@ -21,18 +16,15 @@ public abstract class Entity {
 	public Entity(float xpos, float ypos) {
 		this.xpos = xpos;
 		this.ypos = ypos;
-		this.speed = DEFAULT_SPEED;
 	}
 
 	public Entity(float xpos, float ypos, float angle) {
 		this.setAngle(angle);
 		this.xpos = xpos;
 		this.ypos = ypos;
-		this.speed = DEFAULT_SPEED;
 	}
 
-	public void update(float delta) {
-	}
+	public abstract void update(float delta);
 
 	public abstract void render(GameContainer container, Graphics g, float delta);
 
@@ -66,8 +58,8 @@ public abstract class Entity {
 	}
 
 	public void incSpeed(float speed) {
-		if (this.speed + speed > Planes.MAX_SPEED) {
-			this.speed = Planes.MAX_SPEED;
+		if (this.speed + speed > GlbVar.PLANES_MAX_SPEED) {
+			this.speed = GlbVar.PLANES_MAX_SPEED;
 		} else {
 			this.speed += speed;
 		}
