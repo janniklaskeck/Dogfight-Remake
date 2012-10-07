@@ -31,19 +31,15 @@ public class MainMenuState extends BasicGameState {
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg)
 			throws SlickException {
-		GlbVar.button1 = GlbVar.buttons.getSubImage(0, 0, 32, 32);
-		GlbVar.button2 = GlbVar.buttons.getSubImage(32, 0, 32, 32);
-		GlbVar.button3 = GlbVar.buttons.getSubImage(64, 0, 32, 32);
-		// load the menu images
-		GlbVar.startGameOption = GlbVar.menuOptions.getSubImage(0, 0, 377, 71);
-		GlbVar.exitOption = GlbVar.menuOptions.getSubImage(0, 71, 377, 71);
+		gc.setVSync(GlbVar.vSync);
 	}
 
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g)
 			throws SlickException {
 		// render the background
-		GlbVar.background.draw(0, 0, 1680, 1050);
+		GlbVar.background.draw(0, 0, GlbVar.dim_chosen.width,
+				GlbVar.dim_chosen.height);
 		GlbVar.gameOptionsMenu.draw(
 				GameOptionsX - GlbVar.gameOptionsMenu.getWidth() / 2,
 				GameOptionsY, GlbVar.gameOptionsMenu.getWidth() / 2,
@@ -72,11 +68,11 @@ public class MainMenuState extends BasicGameState {
 		g.drawString(fullscreen,
 				GameOptionsX - GlbVar.gameOptionsMenu.getWidth() / 2 + 50,
 				GameOptionsY + 70);
-		GlbVar.button3.draw(1680 - 91, 72, 16, 16);
+
 		g.drawString(options, 1680 - 512, 72);
-		
-		
-		
+
+		GlbVar.button3.draw(GameOptionsX - 41, GameOptionsY + 22, 16, 16);
+
 		// Draw menu
 		GlbVar.startGameOption.draw(menuX, menuY, startGameScale);
 		GlbVar.exitOption.draw(menuX, menuY + 80, exitScale);
@@ -92,6 +88,7 @@ public class MainMenuState extends BasicGameState {
 
 		boolean insideStartGame = false;
 		boolean insideExit = false;
+		boolean insideExitCorner = false;
 		boolean insidePlCol = false;
 		boolean insideFullscreen = false;
 
@@ -115,16 +112,20 @@ public class MainMenuState extends BasicGameState {
 				- GlbVar.gameOptionsMenu.getWidth() / 2 + 30 + 16)
 				&& (mouseY >= GameOptionsY + 70 && mouseY <= GameOptionsY + 70 + 16)) {
 			insideFullscreen = true;
+		} else if ((mouseX >= GameOptionsX - 41 && mouseX <= GameOptionsX
+				- 25)
+				&& (mouseY >= GameOptionsY + 22 && mouseY <= GameOptionsY + 38)) {
+			insideExitCorner = true;
 		}
 
 		if (insideStartGame) {
 			if (startGameScale < 1.05f)
 				startGameScale += scaleStep * delta;
 			if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
-				sbg.enterState(Dogfight_Remake.GAMEPLAYSTATE);
+				sbg.enterState(Dogfight_Remake.PLANESTATE);
 			}
-		} else if (insideExit) {
-			if (startGameScale > 1.0f)
+		} else if (insideExit || insideExitCorner) {
+			if (startGameScale > 1.0f && insideExit)
 				startGameScale -= scaleStep * delta;
 			if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON))
 				gc.exit();

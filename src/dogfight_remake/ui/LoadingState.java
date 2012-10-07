@@ -34,6 +34,15 @@ public class LoadingState extends BasicGameState {
 		GlbVar.menuOptions = new Image("dogfight_remake/images/mainMenu.png");
 		GlbVar.gameOptionsMenu = new Image("dogfight_remake/images/GameOptionsMenu.png");
 		GlbVar.buttons = new Image("dogfight_remake/images/buttons.png");
+		GlbVar.button1 = GlbVar.buttons.getSubImage(0, 0, 32, 32);
+		GlbVar.button2 = GlbVar.buttons.getSubImage(32, 0, 32, 32);
+		GlbVar.button3 = GlbVar.buttons.getSubImage(64, 0, 32, 32);
+		GlbVar.startGameOption = GlbVar.menuOptions.getSubImage(0, 0, 377, 71);
+		GlbVar.exitOption = GlbVar.menuOptions.getSubImage(0, 71, 377, 71);
+		// Images Plane Menu
+		GlbVar.arrows = new Image("dogfight_remake/images/buttons2.png");
+		GlbVar.arrow_left = GlbVar.arrows.getSubImage(0, 0, 64, 64);
+		GlbVar.arrow_right = GlbVar.arrows.getSubImage(64, 0, 64, 64);
 		// Images Game
 		GlbVar.img_player1 = new Image("dogfight_remake/images/plane1.png");
 		GlbVar.img_player2 = new Image("dogfight_remake/images/plane2.png");

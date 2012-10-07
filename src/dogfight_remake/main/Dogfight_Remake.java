@@ -8,6 +8,7 @@ import org.newdawn.slick.state.StateBasedGame;
 import dogfight_remake.ui.LoadingState;
 import dogfight_remake.ui.MainMenuState;
 import dogfight_remake.ui.PausedState;
+import dogfight_remake.ui.PlaneState;
 
 public class Dogfight_Remake extends StateBasedGame {
 
@@ -19,13 +20,14 @@ public class Dogfight_Remake extends StateBasedGame {
 	public static final int GAMEPLAYSTATE = 2;
 	public static final int PAUSEDSTATE = 3;
 	public static final int LOADINGSTATE = 0;
+	public static final int PLANESTATE = 4;
 
 	public static void main(String[] args) throws SlickException {
 		GlbVar.app = new AppGameContainer(new Dogfight_Remake());
 		GlbVar.app.setMultiSample(GlbVar.getMultiSample());
 		GlbVar.app.setDisplayMode(1680, 1050, GlbVar.fullscreen);
 		GlbVar.app.start();
-		GlbVar.app.setVSync(true);
+		GlbVar.app.setVSync(GlbVar.vSync);
 	}
 
 	@Override
@@ -35,6 +37,7 @@ public class Dogfight_Remake extends StateBasedGame {
 		this.addState(new MainMenuState(MAINMENUSTATE));
 		this.addState(new GamePlayState(GAMEPLAYSTATE));
 		this.addState(new PausedState(PAUSEDSTATE));
+		this.addState(new PlaneState(PLANESTATE));
 
 	}
 

@@ -52,7 +52,7 @@ public class GamePlayState extends BasicGameState {
 	int stateID = -1;
 	private int delta = 0;
 
-	GamePlayState(int stateID) {
+	public GamePlayState(int stateID) {
 		this.stateID = stateID;
 	}
 
@@ -74,7 +74,7 @@ public class GamePlayState extends BasicGameState {
 			weapons = new ArrayList<Weapons>();
 			explosions = new ArrayList<Explosion>();
 			camera = new Camera(gc, GlbVar.tmap);
-			camera2 = new Camera(gc, GlbVar.tmap);
+			//camera2 = new Camera(gc, GlbVar.tmap);
 			rnd = new Random();
 			// GlbVar.music1.loop(1, GlbVar.music_volume);
 			GlbVar.score_p1 = 0;

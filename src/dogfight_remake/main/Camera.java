@@ -27,7 +27,6 @@ public class Camera {
 	/** the height of one tile of the map in pixel */
 	public int tileHeight;
 
-	/** the GameContainer, used for getting the size of the GameCanvas */
 	public GameContainer gc;
 
 	/** the x-position of our "camera" in pixel */
@@ -55,7 +54,6 @@ public class Camera {
 
 		this.mapHeight = this.numTilesY * this.tileHeight;
 		this.mapWidth = this.numTilesX * this.tileWidth;
-
 		this.gc = gc;
 	}
 

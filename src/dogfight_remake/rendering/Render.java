@@ -6,7 +6,6 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
-
 import dogfight_remake.entities.ai.TurretAi;
 import dogfight_remake.entities.planes.Planes;
 import dogfight_remake.entities.weapons.WeaponTypes;
@@ -19,7 +18,6 @@ public class Render {
 	public Planes player1_respawn;
 	public Planes player2_respawn;
 	public TurretAi turret;
-
 	protected static Dimension dim = GlbVar.dim_chosen;
 
 	// public static Map map = new Map(dim.getWidth(), dim.getHeight());
@@ -106,8 +104,8 @@ public class Render {
 	public void render(GameContainer gc, Graphics g, int delta) {
 		// Background and Entities
 
-		g.setClip(0, 0, (int) GlbVar.dim_chosen.getWidth(),
-				(int) GlbVar.dim_chosen.getHeight() / 2);
+		// g.setClip(0, 0, (int) GlbVar.dim_chosen.getWidth(),
+		// (int) GlbVar.dim_chosen.getHeight() / 2);
 		if (player1 != null) {
 			player1.render(gc, g, delta);
 		}
@@ -132,6 +130,7 @@ public class Render {
 			}
 		}
 		// Hitpoints
+
 		if (player1 != null && player2 != null) {
 			GamePlayState.camera.untranslateGraphics();
 			g.setColor(Color.black);
@@ -149,11 +148,11 @@ public class Render {
 					dim.width / 20, (dim.height / 20) + (dim.height / 30)
 							+ (dim.height / 15));
 			if (GlbVar.respawntimer_p1 < GlbVar.RESPAWNTIME_PLAYER) {
-				g.drawString("Respawn Player1: "
-						+ GlbVar.respawntimer_p1 / 100, dim.width / 5,
-						dim.height / 20);
+				g.drawString(
+						"Respawn Player1: " + GlbVar.respawntimer_p1 / 100,
+						dim.width / 5, dim.height / 20);
 			}
-			g.drawString("", 400, 500);
+			// g.drawString("", 400, 500);
 			// Player 2
 			g.drawString("Player2: " + player2.getHitpoints(), dim.width
 					- dim.width / 7, dim.height / 20);
@@ -170,16 +169,16 @@ public class Render {
 					dim.width - dim.width / 7, (dim.height / 20)
 							+ (dim.height / 30) + (dim.height / 15));
 			if (GlbVar.respawntimer_p2 < GlbVar.RESPAWNTIME_PLAYER) {
-				g.drawString("Respawn Player2: "
-						+ GlbVar.respawntimer_p2 / 100, dim.width
-						- dim.width / 3, dim.height / 20);
+				g.drawString(
+						"Respawn Player2: " + GlbVar.respawntimer_p2 / 100,
+						dim.width - dim.width / 3, dim.height / 20);
 			}
 			// FPS and score
-			g.drawString(GlbVar.score_p1 + " : "
-					+ GlbVar.score_p2, dim.width / 2, dim.height / 10);
+			g.drawString(GlbVar.score_p1 + " : " + GlbVar.score_p2,
+					dim.width / 2, dim.height / 10);
 			g.drawString(GlbVar.timePassed + "", dim.width / 2, dim.height / 13);
 			GamePlayState.camera.translateGraphics();
 		}
-		
+
 	}
 }

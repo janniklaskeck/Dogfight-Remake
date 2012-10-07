@@ -46,6 +46,10 @@ public class GlbVar {
 	public static Image mainMenu;
 	public static Image exit;
 	public static Image options;
+	// Images PlaneMenu
+	public static Image arrows;
+	public static Image arrow_left;
+	public static Image arrow_right;
 	// Sounds and Music
 	public static Music music1;
 	public static Music music2;
@@ -68,6 +72,7 @@ public class GlbVar {
 	private static int multisample = 2;
 	public static boolean fullscreen = true;;
 	public static boolean paused = true;
+	public static boolean vSync = true;
 	public static int timePassed = 0;
 	// Scores
 	public static int score_p1 = 0, score_p2 = 0;
