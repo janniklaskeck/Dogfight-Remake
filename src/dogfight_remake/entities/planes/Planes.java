@@ -31,12 +31,15 @@ public class Planes extends Entity {
 	private WeaponTypes wpn2;
 	private WeaponTypes wpn3;
 	private boolean stall;
+	private float speed_mod;
 
 	public Planes(int id, float xpos, float ypos, float angle, Image image,
-			int hitpoints, WeaponTypes wpn1, WeaponTypes wpn2, WeaponTypes wpn3) {
+			PlaneTypes type, WeaponTypes wpn1, WeaponTypes wpn2,
+			WeaponTypes wpn3) {
 		super(xpos, ypos, angle);
 		this.id = id;
-		this.hitpoints = hitpoints;
+		this.hitpoints = type.getHitpoints();
+		this.speed_mod = type.getSpeed();
 		this.image = image;
 		this.angle = angle;
 		this.lastshot_prim = 0;
@@ -58,9 +61,9 @@ public class Planes extends Entity {
 	 */
 
 	public void update(float delta) {
-		hspeed = Math.abs(speed)
+		hspeed = Math.abs(speed * speed_mod)
 				* (float) Math.cos(Math.toRadians(angle) * delta / 17);
-		vspeed = Math.abs(speed)
+		vspeed = Math.abs(speed * speed_mod)
 				* (float) Math.sin(Math.toRadians(angle) * delta / 17);
 		if (Math.abs(hspeed) + Math.abs(vspeed) < 1.3 || stall) {
 			stall = true;
@@ -98,16 +101,7 @@ public class Planes extends Entity {
 		} else if (rnd % 2 != 0) {
 			angle -= rnd;
 		}
-
-		// int delay_prim = 0;
 		long time = System.currentTimeMillis();
-		// if (counter_prim % wpn1.getAmmoCount() == 0) {
-		// delay_prim = wpn1.getReload_delay();
-		// }
-		// if (counter_prim % wpn1.getAmmoCount() != 0) {
-		// delay_prim = wpn1.getShoot_delay();
-		// }
-
 		if (Math.abs(lastshot_prim - time) < wpn1.getShoot_delay()) {
 			return null;
 		}
@@ -187,7 +181,6 @@ public class Planes extends Entity {
 		float x = (float) (plane.getCenterX() + Math.cos(Math.toRadians(angle)) * 100);
 		float y = (float) (plane.getCenterY() + Math.sin(Math.toRadians(angle)) * 100);
 		aim = new Ellipse(x, y, 10, 10);
-		// g.draw(aim);
 		image.setRotation(angle);
 		image.draw(xpos, ypos);
 	}

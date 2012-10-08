@@ -1,7 +1,8 @@
 package dogfight_remake.entities.planes;
 
 public enum PlaneTypes {
-	NORMAL("Normal", 100, 1, 1), FAST("Fast", 100, 1, 1), SLOW("Slow", 100, 1, 1);
+	NORMAL("Normal", 100, 1, 1), FAST("Fast", 75, 1.25f, 0.75f), SLOW("Slow",
+			150, 0.75f, 1.25f);
 
 	private int hitpoints;
 	private float speed;

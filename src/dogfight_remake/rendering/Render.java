@@ -86,9 +86,9 @@ public class Render {
 		GlbVar.img_turret_barrel = GlbVar.img_turret1
 				.getSubImage(25, 0, 25, 15);
 		player1 = new Planes(1, 100, dim.height / 2, 0, GlbVar.img_player1,
-				10000, GlbVar.wpn1_p1, GlbVar.wpn2_p1, GlbVar.wpn3_p1);
+				GlbVar.player1, GlbVar.wpn1_p1, GlbVar.wpn2_p1, GlbVar.wpn3_p1);
 		player2 = new Planes(2, dim.width - 150, dim.height / 2, 180,
-				GlbVar.img_player2, 100, GlbVar.wpn1_p2, GlbVar.wpn2_p2,
+				GlbVar.img_player2, GlbVar.player2, GlbVar.wpn1_p2, GlbVar.wpn2_p2,
 				GlbVar.wpn3_p2);
 		turret = new TurretAi(3, 815, 1623, 270, 100, player1,
 				WeaponTypes.TURRET_MIDDLE, GlbVar.img_bullet1);

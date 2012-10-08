@@ -10,6 +10,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
 import org.newdawn.slick.tiled.TiledMap;
 
+import dogfight_remake.entities.planes.PlaneTypes;
 import dogfight_remake.entities.weapons.WeaponTypes;
 import dogfight_remake.map.BlockMap;
 
@@ -38,7 +39,9 @@ public class GlbVar {
 	public static Image buttons;
 	public static Image button1;
 	public static Image button2;
-	public static Image button3;
+	public static Image exitCorner;
+	public static Image plane_p1;
+	public static Image plane_p2;
 	// Images Pause Menu
 	public static Image pauseMenuText;
 	public static Image pauseMenu;
@@ -70,10 +73,13 @@ public class GlbVar {
 	public static float GRAVITY = 6;
 	private static boolean player_collision = false;
 	private static int multisample = 2;
-	public static boolean fullscreen = true;;
+	public static boolean fullscreen = false;
 	public static boolean paused = true;
 	public static boolean vSync = true;
 	public static int timePassed = 0;
+	public static int plane_id = 1;
+	public static PlaneTypes player1 = PlaneTypes.NORMAL;
+	public static PlaneTypes player2 = PlaneTypes.NORMAL;
 	// Scores
 	public static int score_p1 = 0, score_p2 = 0;
 	// RespawnTimer

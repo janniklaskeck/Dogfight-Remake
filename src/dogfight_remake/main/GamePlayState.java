@@ -74,7 +74,7 @@ public class GamePlayState extends BasicGameState {
 			weapons = new ArrayList<Weapons>();
 			explosions = new ArrayList<Explosion>();
 			camera = new Camera(gc, GlbVar.tmap);
-			//camera2 = new Camera(gc, GlbVar.tmap);
+			// camera2 = new Camera(gc, GlbVar.tmap);
 			rnd = new Random();
 			// GlbVar.music1.loop(1, GlbVar.music_volume);
 			GlbVar.score_p1 = 0;
@@ -237,14 +237,15 @@ public class GamePlayState extends BasicGameState {
 	private void respawn() {
 		if (GlbVar.respawntimer_p1 <= 0) {
 			r.player1 = new Planes(1, 100, dim.height / 2, 0,
-					GlbVar.img_player1, 100, GlbVar.wpn1_p1, GlbVar.wpn2_p1,
-					GlbVar.wpn3_p1);
+					GlbVar.img_player1, GlbVar.player1, GlbVar.wpn1_p1,
+					GlbVar.wpn2_p1, GlbVar.wpn3_p1);
+
 			GlbVar.respawntimer_p1 = GlbVar.RESPAWNTIME_PLAYER;
 		}
 		if (GlbVar.respawntimer_p2 <= 0) {
 			r.player2 = new Planes(2, dim.width - 150, dim.height / 2, 180,
-					GlbVar.img_player2, 100, GlbVar.wpn1_p2, GlbVar.wpn2_p2,
-					GlbVar.wpn3_p2);
+					GlbVar.img_player2, GlbVar.player2, GlbVar.wpn1_p2,
+					GlbVar.wpn2_p2, GlbVar.wpn3_p2);
 			GlbVar.respawntimer_p2 = GlbVar.RESPAWNTIME_PLAYER;
 		}
 		if (GlbVar.respawntimer_turret <= 0) {
