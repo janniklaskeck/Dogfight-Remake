@@ -61,24 +61,26 @@ public class Planes extends Entity {
 	 */
 
 	public void update(float delta) {
-		hspeed = Math.abs(speed * speed_mod)
-				* (float) Math.cos(Math.toRadians(angle) * delta / 17);
-		vspeed = Math.abs(speed * speed_mod)
-				* (float) Math.sin(Math.toRadians(angle) * delta / 17);
-		if (Math.abs(hspeed) + Math.abs(vspeed) < 1.3 || stall) {
-			stall = true;
-			xpos += hspeed;
-			ypos += vspeed + GlbVar.GRAVITY;
-			if (stall && vspeed > 3) {
-				stall = false;
-			} else if (vspeed + GlbVar.GRAVITY < 0) {
-				stall = false;
+		if (!broken) {
+			hspeed = Math.abs(speed * speed_mod)
+					* (float) Math.cos(Math.toRadians(angle) * delta / 17);
+			vspeed = Math.abs(speed * speed_mod)
+					* (float) Math.sin(Math.toRadians(angle) * delta / 17);
+			if (Math.abs(hspeed) + Math.abs(vspeed) < 1.3 || stall) {
+				stall = true;
+				xpos += hspeed;
+				ypos += vspeed + GlbVar.GRAVITY;
+				if (stall && vspeed > 3) {
+					stall = false;
+				} else if (vspeed + GlbVar.GRAVITY < 0) {
+					stall = false;
+				}
+			} else {
+				xpos += hspeed;
+				GlbVar.cx += hspeed;
+				ypos += vspeed;
+				GlbVar.cy += vspeed;
 			}
-		} else {
-			xpos += hspeed;
-			GlbVar.cx += hspeed;
-			ypos += vspeed;
-			GlbVar.cy += vspeed;
 		}
 	}
 

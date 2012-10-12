@@ -88,9 +88,9 @@ public class Render {
 		player1 = new Planes(1, 100, dim.height / 2, 0, GlbVar.img_player1,
 				GlbVar.player1, GlbVar.wpn1_p1, GlbVar.wpn2_p1, GlbVar.wpn3_p1);
 		player2 = new Planes(2, dim.width - 150, dim.height / 2, 180,
-				GlbVar.img_player2, GlbVar.player2, GlbVar.wpn1_p2, GlbVar.wpn2_p2,
-				GlbVar.wpn3_p2);
-		turret = new TurretAi(3, 815, 1623, 270, 100, player1,
+				GlbVar.img_player2, GlbVar.player2, GlbVar.wpn1_p2,
+				GlbVar.wpn2_p2, GlbVar.wpn3_p2);
+		turret = new TurretAi(3, 815, 2520, 270, 100, player1,
 				WeaponTypes.TURRET_MIDDLE, GlbVar.img_bullet1);
 		player1_respawn = player1;
 		player2_respawn = player2;
@@ -102,16 +102,33 @@ public class Render {
 	 */
 
 	public void render(GameContainer gc, Graphics g, int delta) {
-		// Background and Entities
-
-		// g.setClip(0, 0, (int) GlbVar.dim_chosen.getWidth(),
-		// (int) GlbVar.dim_chosen.getHeight() / 2);
+		g.setClip(0, 0, 1680, 525);
+		GlbVar.img_bg.draw(0, 0,
+				GlbVar.tmap.getWidth() * GlbVar.tmap.getTileWidth(),
+				GlbVar.tmap.getHeight() * GlbVar.tmap.getTileHeight());
+		GamePlayState.camera.drawMap();
+		GamePlayState.camera.translateGraphics();
 		if (player1 != null) {
 			player1.render(gc, g, delta);
 		}
 		if (player2 != null) {
 			player2.render(gc, g, delta);
 		}
+		g.setClip(0, 525, 1680, 525);
+		GlbVar.img_bg.draw(0, 525,
+				GlbVar.tmap.getWidth() * GlbVar.tmap.getTileWidth(),
+				GlbVar.tmap.getHeight() * GlbVar.tmap.getTileHeight());
+		GamePlayState.camera.untranslateGraphics();
+		GamePlayState.camera2.drawMap();
+		GamePlayState.camera2.translateGraphics();
+		if (player1 != null) {
+			player1.render(gc, g, delta);
+		}
+		if (player2 != null) {
+			player2.render(gc, g, delta);
+		}
+		GamePlayState.camera2.untranslateGraphics();
+		g.clearClip();
 		if (turret != null) {
 			turret.render(gc, g, delta);
 		}
@@ -130,11 +147,13 @@ public class Render {
 			}
 		}
 		// Hitpoints
-
+		g.clearClip();
 		if (player1 != null && player2 != null) {
 			GamePlayState.camera.untranslateGraphics();
+			GamePlayState.camera2.untranslateGraphics();
 			g.setColor(Color.black);
 			// Player 1
+
 			g.drawString("Player1: " + player1.getHitpoints(), dim.width / 20,
 					dim.height / 20);
 			g.drawString(
@@ -178,6 +197,7 @@ public class Render {
 					dim.width / 2, dim.height / 10);
 			g.drawString(GlbVar.timePassed + "", dim.width / 2, dim.height / 13);
 			GamePlayState.camera.translateGraphics();
+			GamePlayState.camera2.translateGraphics();
 		}
 
 	}

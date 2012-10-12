@@ -89,8 +89,8 @@ public class GlbVar {
 	public static long respawntimer_p2 = RESPAWNTIME_PLAYER;
 	public static long respawntimer_turret = RESPAWNTIME_TURRET;
 
-	public static float music_volume = 0.1f;
-	public static float sounds_volume = 0.1f;
+	public static float music_volume = 0.2f;
+	public static float sounds_volume = 0.05f;
 
 	public static Toolkit toolkit = Toolkit.getDefaultToolkit();
 	public static Dimension dim_fullscreen = toolkit.getScreenSize();

@@ -74,9 +74,9 @@ public class GamePlayState extends BasicGameState {
 			weapons = new ArrayList<Weapons>();
 			explosions = new ArrayList<Explosion>();
 			camera = new Camera(gc, GlbVar.tmap);
-			// camera2 = new Camera(gc, GlbVar.tmap);
+			camera2 = new Camera(gc, GlbVar.tmap);
 			rnd = new Random();
-			// GlbVar.music1.loop(1, GlbVar.music_volume);
+			//GlbVar.music1.loop(1, GlbVar.music_volume);
 			GlbVar.score_p1 = 0;
 			GlbVar.score_p2 = 0;
 			GlbVar.paused = false;
@@ -85,22 +85,16 @@ public class GamePlayState extends BasicGameState {
 	}
 
 	@Override
-	public void render(GameContainer container, StateBasedGame game, Graphics g)
+	public void render(GameContainer gc, StateBasedGame game, Graphics g)
 			throws SlickException {
-		GlbVar.img_bg.draw(0, 0,
-				GlbVar.tmap.getWidth() * GlbVar.tmap.getTileWidth(),
-				GlbVar.tmap.getHeight() * GlbVar.tmap.getTileHeight());
-		camera.drawMap();
-		camera.translateGraphics();
-		// camera2.translateGraphics();
-		r.render(container, g, delta);
+
+		r.render(gc, g, delta);
 
 		if (GlbVar.paused) {
 			GlbVar.img_pause_bg = new Image(1680, 1050);
 			g.copyArea(GlbVar.img_pause_bg, 0, 0);
 			game.enterState(Dogfight_Remake.PAUSEDSTATE);
 		}
-
 	}
 
 	@Override
@@ -123,7 +117,6 @@ public class GamePlayState extends BasicGameState {
 				GlbVar.prim_gun_middle.play(1, GlbVar.sounds_volume);
 				weapons.add(wmp);
 			}
-
 			r.player1.update(delta);
 			r.player2.update(delta);
 			Reload.reload_primary(r.player1, delta);
@@ -203,14 +196,12 @@ public class GamePlayState extends BasicGameState {
 					weapons.remove(i);
 				}
 			}
-
 			if (r.player1.getHitpoints() <= 0 || r.player2.getHitpoints() <= 0
 					|| r.turret.getHitpoints() <= 0) {
 				respawn();
 			}
 			for (int i = 0; i < explosions.size(); i++)
 				explosions.get(i).update(delta);
-
 			if (r.player1 != null) {
 				if (r.player1.getHitpoints() <= 0) {
 					GlbVar.respawntimer_p1 -= delta;
@@ -226,9 +217,9 @@ public class GamePlayState extends BasicGameState {
 					GlbVar.respawntimer_turret -= delta;
 				}
 		}
-		camera.centerOn(r.player1.getXpos(), r.player1.getYpos());
-		// camera2.centerOn(r.player2.getXpos(), r.player2.getYpos());
 
+		camera.centerOn(r.player1.getXpos(), r.player1.getYpos());
+		camera2.centerOn(r.player2.getXpos(), r.player2.getYpos());
 	}
 
 	/**
@@ -249,8 +240,8 @@ public class GamePlayState extends BasicGameState {
 			GlbVar.respawntimer_p2 = GlbVar.RESPAWNTIME_PLAYER;
 		}
 		if (GlbVar.respawntimer_turret <= 0) {
-			r.turret = new TurretAi(3, 815, 1623, 270, 100, r.player1,
-					WeaponTypes.MINIGUN, GlbVar.img_bullet1);
+			r.turret = new TurretAi(3, 815, 2520, 270, 100, null,
+					WeaponTypes.TURRET_MIDDLE, GlbVar.img_bullet1);
 			GlbVar.respawntimer_turret = GlbVar.RESPAWNTIME_TURRET;
 		}
 	}

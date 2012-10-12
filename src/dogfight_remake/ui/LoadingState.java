@@ -14,7 +14,6 @@ import org.newdawn.slick.tiled.TiledMap;
 import org.newdawn.slick.loading.DeferredResource;
 import org.newdawn.slick.loading.LoadingList;
 
-
 import dogfight_remake.main.Dogfight_Remake;
 import dogfight_remake.main.GlbVar;
 import dogfight_remake.map.BlockMap;
@@ -30,42 +29,51 @@ public class LoadingState extends BasicGameState {
 			throws SlickException {
 		LoadingList.setDeferredLoading(true);
 		// Images Main Menu
-		GlbVar.background = new Image("dogfight_remake/images/f4u.jpg");
-		GlbVar.menuOptions = new Image("dogfight_remake/images/mainMenu.png");
-		GlbVar.gameOptionsMenu = new Image("dogfight_remake/images/GameOptionsMenu.png");
-		GlbVar.buttons = new Image("dogfight_remake/images/buttons.png");
+		GlbVar.background = new Image("dogfight_remake/images/menu/f4u.jpg");
+		GlbVar.menuOptions = new Image(
+				"dogfight_remake/images/menu/mainMenu.png");
+		GlbVar.gameOptionsMenu = new Image(
+				"dogfight_remake/images/menu/GameOptionsMenu.png");
+		GlbVar.buttons = new Image("dogfight_remake/images/menu/buttons.png");
 		GlbVar.button1 = GlbVar.buttons.getSubImage(0, 0, 32, 32);
 		GlbVar.button2 = GlbVar.buttons.getSubImage(32, 0, 32, 32);
 		GlbVar.exitCorner = GlbVar.buttons.getSubImage(64, 0, 32, 32);
-		GlbVar.startGameOption = GlbVar.menuOptions.getSubImage(0, 0, 377, 71);
-		GlbVar.exitOption = GlbVar.menuOptions.getSubImage(0, 71, 377, 71);
-		GlbVar.plane_p1 = new Image("dogfight_remake/images/plane_p1.png");
-		GlbVar.plane_p2 = new Image("dogfight_remake/images/plane_p2.png");
+		GlbVar.startGameOption = new Image(
+				"dogfight_remake/images/menu/menu_start.png");
+		GlbVar.plane_p1 = new Image(
+				"dogfight_remake/images/menu/menu_player1.png");
+		GlbVar.plane_p2 = new Image(
+				"dogfight_remake/images/menu/menu_player2.png");
 		// Images Plane Menu
-		GlbVar.arrows = new Image("dogfight_remake/images/buttons2.png");
+		GlbVar.arrows = new Image("dogfight_remake/images/menu/buttons2.png");
 		GlbVar.arrow_left = GlbVar.arrows.getSubImage(0, 0, 64, 64);
 		GlbVar.arrow_right = GlbVar.arrows.getSubImage(64, 0, 64, 64);
 		// Images Game
-		GlbVar.img_player1 = new Image("dogfight_remake/images/plane1.png");
-		GlbVar.img_player2 = new Image("dogfight_remake/images/plane2.png");
+		GlbVar.img_player1 = new Image(
+				"dogfight_remake/images/planes/plane1.png");
+		GlbVar.img_player2 = new Image(
+				"dogfight_remake/images/planes/plane2.png");
 		GlbVar.img_bg = new Image("dogfight_remake/images/img_bg.jpg");
-		GlbVar.img_missile1 = new Image("dogfight_remake/images/missile1.png");
-		GlbVar.img_bullet1 = new Image("dogfight_remake/images/bullet1.png");
-		GlbVar.img_bomb1 = new Image("dogfight_remake/images/bomb1.png");
+		GlbVar.img_missile1 = new Image(
+				"dogfight_remake/images/weapons/missile1.png");
+		GlbVar.img_bullet1 = new Image(
+				"dogfight_remake/images/weapons/bullet1.png");
+		GlbVar.img_bomb1 = new Image("dogfight_remake/images/weapons/bomb1.png");
 		GlbVar.img_turret1 = new Image("dogfight_remake/images/turret.png");
 		// Tiled Map
-		GlbVar.tmap = new TiledMap(
-				"/src/dogfight_remake/map/map_test/map1.tmx",
-				"src/dogfight_remake/map/map_test");
+		GlbVar.tmap = new TiledMap("dogfight_remake/map/map_test/map1.tmx",
+				"dogfight_remake/map/map_test");
 		GlbVar.map = new BlockMap("dogfight_remake/map/map_test/map1.tmx");
 		// Images Pause Menu
 		GlbVar.pauseMenuText = new Image(
-				"dogfight_remake/images/pauseMenuText.png");
-		GlbVar.pauseMenu = new Image("dogfight_remake/images/pauseMenu.png");
+				"dogfight_remake/images/menu/pauseMenuText.png");
+		GlbVar.pauseMenu = new Image(
+				"dogfight_remake/images/menu/pauseMenu.png");
 		// Sounds and Music
-		
+
 		//GlbVar.music1 = new Music("dogfight_remake/sound/sounds/fight07.ogg");
-		//GlbVar.music2 = new Music("dogfight_remake/sound/sounds/fight08.ogg");
+		// GlbVar.music2 = new
+		// Music("dogfight_remake/sound/sounds/fight08.ogg");
 		GlbVar.prim_gun_heavy = new Sound(
 				"dogfight_remake/sound/sounds/prim_gun_heavy.wav");
 		GlbVar.prim_gun_middle = new Sound(
