@@ -49,9 +49,9 @@ public class LoadingState extends BasicGameState {
 		GlbVar.arrow_left = GlbVar.arrows.getSubImage(0, 0, 64, 64);
 		GlbVar.arrow_right = GlbVar.arrows.getSubImage(64, 0, 64, 64);
 		// Images Game
-		GlbVar.img_player1 = new Image(
+		GlbVar.img_plane1 = new Image(
 				"dogfight_remake/images/planes/plane1.png");
-		GlbVar.img_player2 = new Image(
+		GlbVar.img_plane2 = new Image(
 				"dogfight_remake/images/planes/plane2.png");
 		GlbVar.img_bg = new Image("dogfight_remake/images/img_bg.jpg");
 		GlbVar.img_missile1 = new Image(
@@ -71,9 +71,11 @@ public class LoadingState extends BasicGameState {
 				"dogfight_remake/images/menu/pauseMenu.png");
 		// Sounds and Music
 
-		//GlbVar.music1 = new Music("dogfight_remake/sound/sounds/fight07.ogg");
+		// GlbVar.music1 = new
+		// Music("dogfight_remake/sound/sounds/fight07.ogg");
 		// GlbVar.music2 = new
 		// Music("dogfight_remake/sound/sounds/fight08.ogg");
+		
 		GlbVar.prim_gun_heavy = new Sound(
 				"dogfight_remake/sound/sounds/prim_gun_heavy.wav");
 		GlbVar.prim_gun_middle = new Sound(
