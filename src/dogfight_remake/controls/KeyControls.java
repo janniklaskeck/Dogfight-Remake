@@ -4,7 +4,6 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.state.StateBasedGame;
 
-import dogfight_remake.entities.weapons.WeaponTypes;
 import dogfight_remake.entities.weapons.Weapons;
 import dogfight_remake.main.GamePlayState;
 import dogfight_remake.main.GlbVar;
@@ -55,11 +54,7 @@ public class KeyControls {
 				if (GamePlayState.r.player1 != null) {
 					Weapons tmp = GamePlayState.r.player1.shoot_primary();
 					if (tmp != null) {
-						if (tmp.getType() == WeaponTypes.GUN) {
-							GlbVar.prim_gun_heavy.play(1, GlbVar.sounds_volume);
-						} else {
-							GlbVar.prim_gun_light.play(1, GlbVar.sounds_volume);
-						}
+						tmp.getSound().play(1, GlbVar.sounds_volume);
 						GamePlayState.weapons.add(tmp);
 					}
 				}
@@ -68,13 +63,7 @@ public class KeyControls {
 				if (GamePlayState.r.player1 != null) {
 					Weapons tmp = GamePlayState.r.player1.shoot_secondary_1();
 					if (tmp != null) {
-						if (tmp.getType() == WeaponTypes.GUIDED_AIR
-								|| tmp.getType() == WeaponTypes.UNGUIDED
-								|| tmp.getType() == WeaponTypes.GUIDED_GROUND) {
-							GlbVar.sec_missile1.play(1, GlbVar.sounds_volume);
-						} else {
-							GlbVar.sec_bomb_drop.play(1, GlbVar.sounds_volume);
-						}
+						tmp.getSound().play(1, GlbVar.sounds_volume);
 						GamePlayState.weapons.add(tmp);
 					}
 				}
@@ -83,12 +72,7 @@ public class KeyControls {
 				if (GamePlayState.r.player1 != null) {
 					Weapons tmp = GamePlayState.r.player1.shoot_secondary_2();
 					if (tmp != null) {
-						if (tmp.getType() == WeaponTypes.GUIDED_AIR
-								|| tmp.getType() == WeaponTypes.UNGUIDED) {
-							GlbVar.sec_missile1.play(1, GlbVar.sounds_volume);
-						} else {
-							GlbVar.sec_bomb_drop.play(1, GlbVar.sounds_volume);
-						}
+						tmp.getSound().play(1, GlbVar.sounds_volume);
 						GamePlayState.weapons.add(tmp);
 					}
 				}
@@ -133,11 +117,7 @@ public class KeyControls {
 				if (GamePlayState.r.player2 != null) {
 					Weapons tmp = GamePlayState.r.player2.shoot_primary();
 					if (tmp != null) {
-						if (tmp.getType() == WeaponTypes.GUN) {
-							GlbVar.prim_gun_heavy.play(1, GlbVar.sounds_volume);
-						} else {
-							GlbVar.prim_gun_light.play(1, GlbVar.sounds_volume);
-						}
+						tmp.getType().getSound().play(1, GlbVar.sounds_volume);
 						GamePlayState.weapons.add(tmp);
 					}
 				}
@@ -146,12 +126,7 @@ public class KeyControls {
 				if (GamePlayState.r.player2 != null) {
 					Weapons tmp = GamePlayState.r.player2.shoot_secondary_1();
 					if (tmp != null) {
-						if (tmp.getType() == WeaponTypes.GUIDED_AIR
-								|| tmp.getType() == WeaponTypes.UNGUIDED) {
-							GlbVar.sec_missile1.play(1, GlbVar.sounds_volume);
-						} else {
-							GlbVar.sec_bomb_drop.play(1, GlbVar.sounds_volume);
-						}
+						tmp.getSound().play(1, GlbVar.sounds_volume);
 						GamePlayState.weapons.add(tmp);
 					}
 				}
@@ -160,12 +135,7 @@ public class KeyControls {
 				if (GamePlayState.r.player2 != null) {
 					Weapons tmp = GamePlayState.r.player2.shoot_secondary_2();
 					if (tmp != null) {
-						if (tmp.getType() == WeaponTypes.GUIDED_AIR
-								|| tmp.getType() == WeaponTypes.UNGUIDED) {
-							GlbVar.sec_missile1.play(1, GlbVar.sounds_volume);
-						} else {
-							GlbVar.sec_bomb_drop.play(1, GlbVar.sounds_volume);
-						}
+						tmp.getSound().play(1, GlbVar.sounds_volume);
 						GamePlayState.weapons.add(tmp);
 					}
 				}
