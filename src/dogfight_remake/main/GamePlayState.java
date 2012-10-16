@@ -76,10 +76,12 @@ public class GamePlayState extends BasicGameState {
 			camera = new Camera(gc, GlbVar.tmap);
 			camera2 = new Camera(gc, GlbVar.tmap);
 			rnd = new Random();
-			//GlbVar.music1.loop(1, GlbVar.music_volume);
+			// GlbVar.music1.loop(1, GlbVar.music_volume);
 			GlbVar.score_p1 = 0;
 			GlbVar.score_p2 = 0;
 			GlbVar.paused = false;
+			GlbVar.timePassed = 0;
+			WeaponTypes.init();
 		}
 
 	}
@@ -142,20 +144,17 @@ public class GamePlayState extends BasicGameState {
 									.getXpos(), weapons.get(i).getYpos(),
 									rnd.nextFloat() * 180,
 									WeaponTypes.BOMB_SPLIT_SMALL, 0, weapons
-											.get(i).getImage(), weapons.get(i)
-											.getID());
+											.get(i).getID());
 							Weapons split2 = new Weapons(weapons.get(i)
 									.getXpos(), weapons.get(i).getYpos(),
 									rnd.nextFloat() * 180,
 									WeaponTypes.BOMB_SPLIT_SMALL, 0, weapons
-											.get(i).getImage(), weapons.get(i)
-											.getID());
+											.get(i).getID());
 							Weapons split3 = new Weapons(weapons.get(i)
 									.getXpos(), weapons.get(i).getYpos(),
 									rnd.nextFloat() * 180,
 									WeaponTypes.BOMB_SPLIT_SMALL, 0, weapons
-											.get(i).getImage(), weapons.get(i)
-											.getID());
+											.get(i).getID());
 							weapons.add(split1);
 							weapons.add(split2);
 							weapons.add(split3);
@@ -228,15 +227,13 @@ public class GamePlayState extends BasicGameState {
 	private void respawn() {
 		if (GlbVar.respawntimer_p1 <= 0) {
 			r.player1 = new Planes(1, 100, dim.height / 2, 0,
-					GlbVar.img_player1, GlbVar.player1, GlbVar.wpn1_p1,
-					GlbVar.wpn2_p1, GlbVar.wpn3_p1);
+					GlbVar.img_plane1, GlbVar.player1);
 
 			GlbVar.respawntimer_p1 = GlbVar.RESPAWNTIME_PLAYER;
 		}
 		if (GlbVar.respawntimer_p2 <= 0) {
 			r.player2 = new Planes(2, dim.width - 150, dim.height / 2, 180,
-					GlbVar.img_player2, GlbVar.player2, GlbVar.wpn1_p2,
-					GlbVar.wpn2_p2, GlbVar.wpn3_p2);
+					GlbVar.img_plane2, GlbVar.player2);
 			GlbVar.respawntimer_p2 = GlbVar.RESPAWNTIME_PLAYER;
 		}
 		if (GlbVar.respawntimer_turret <= 0) {
@@ -257,11 +254,11 @@ public class GamePlayState extends BasicGameState {
 		 */
 
 		p1 = new Rectangle((int) r.player1.getXpos(),
-				(int) r.player1.getYpos(), GlbVar.img_player1.getWidth(),
-				GlbVar.img_player1.getHeight());
+				(int) r.player1.getYpos(), GlbVar.img_plane1.getWidth(),
+				GlbVar.img_plane1.getHeight());
 		p2 = new Rectangle((int) r.player2.getXpos(),
-				(int) r.player2.getYpos(), GlbVar.img_player2.getWidth(),
-				GlbVar.img_player2.getHeight());
+				(int) r.player2.getYpos(), GlbVar.img_plane2.getWidth(),
+				GlbVar.img_plane2.getHeight());
 		a = new Polygon(new float[] { p1.getX(), p1.getY(),
 				p1.getX() + p1.getWidth(), p1.getY(),
 				p1.getX() + p1.getWidth(), p1.getY() + p1.getHeight(),
