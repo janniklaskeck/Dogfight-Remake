@@ -85,11 +85,10 @@ public class Render {
 		GlbVar.img_turret_base = GlbVar.img_turret1.getSubImage(0, 0, 25, 15);
 		GlbVar.img_turret_barrel = GlbVar.img_turret1
 				.getSubImage(25, 0, 25, 15);
-		player1 = new Planes(1, 100, dim.height / 2, 0, GlbVar.img_player1,
-				GlbVar.player1, GlbVar.wpn1_p1, GlbVar.wpn2_p1, GlbVar.wpn3_p1);
+		player1 = new Planes(1, 100, dim.height / 2, 0, GlbVar.img_plane1,
+				GlbVar.player1);
 		player2 = new Planes(2, dim.width - 150, dim.height / 2, 180,
-				GlbVar.img_player2, GlbVar.player2, GlbVar.wpn1_p2,
-				GlbVar.wpn2_p2, GlbVar.wpn3_p2);
+				GlbVar.img_plane2, GlbVar.player2);
 		turret = new TurretAi(3, 815, 2520, 270, 100, player1,
 				WeaponTypes.TURRET_MIDDLE, GlbVar.img_bullet1);
 		player1_respawn = player1;
@@ -102,7 +101,8 @@ public class Render {
 	 */
 
 	public void render(GameContainer gc, Graphics g, int delta) {
-		g.setClip(0, 0, 1680, 525);
+
+		// g.setClip(0, 0, 1680, 525);
 		GlbVar.img_bg.draw(0, 0,
 				GlbVar.tmap.getWidth() * GlbVar.tmap.getTileWidth(),
 				GlbVar.tmap.getHeight() * GlbVar.tmap.getTileHeight());
@@ -114,21 +114,18 @@ public class Render {
 		if (player2 != null) {
 			player2.render(gc, g, delta);
 		}
-		g.setClip(0, 525, 1680, 525);
-		GlbVar.img_bg.draw(0, 525,
-				GlbVar.tmap.getWidth() * GlbVar.tmap.getTileWidth(),
-				GlbVar.tmap.getHeight() * GlbVar.tmap.getTileHeight());
-		GamePlayState.camera.untranslateGraphics();
-		GamePlayState.camera2.drawMap();
-		GamePlayState.camera2.translateGraphics();
-		if (player1 != null) {
-			player1.render(gc, g, delta);
-		}
-		if (player2 != null) {
-			player2.render(gc, g, delta);
-		}
-		GamePlayState.camera2.untranslateGraphics();
-		g.clearClip();
+
+		/*
+		 * g.setClip(0, 525, 1680, 525); GlbVar.img_bg.draw(0, 525,
+		 * GlbVar.tmap.getWidth() * GlbVar.tmap.getTileWidth(),
+		 * GlbVar.tmap.getHeight() * GlbVar.tmap.getTileHeight());
+		 * GamePlayState.camera.untranslateGraphics();
+		 * GamePlayState.camera2.drawMap();
+		 * GamePlayState.camera2.translateGraphics(); if (player1 != null) {
+		 * player1.render(gc, g, delta); } if (player2 != null) {
+		 * player2.render(gc, g, delta); }
+		 * GamePlayState.camera2.untranslateGraphics(); g.clearClip();
+		 */
 		if (turret != null) {
 			turret.render(gc, g, delta);
 		}
@@ -150,7 +147,7 @@ public class Render {
 		g.clearClip();
 		if (player1 != null && player2 != null) {
 			GamePlayState.camera.untranslateGraphics();
-			GamePlayState.camera2.untranslateGraphics();
+			// GamePlayState.camera2.untranslateGraphics();
 			g.setColor(Color.black);
 			// Player 1
 
@@ -197,7 +194,7 @@ public class Render {
 					dim.width / 2, dim.height / 10);
 			g.drawString(GlbVar.timePassed + "", dim.width / 2, dim.height / 13);
 			GamePlayState.camera.translateGraphics();
-			GamePlayState.camera2.translateGraphics();
+			// GamePlayState.camera2.translateGraphics();
 		}
 
 	}
