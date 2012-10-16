@@ -1,22 +1,35 @@
 package dogfight_remake.entities.weapons;
 
 import org.newdawn.slick.Image;
+import org.newdawn.slick.Sound;
 
 import dogfight_remake.main.GlbVar;
 
 public enum WeaponTypes {
-	// Type(Name, Damage, Ammo Count, Speed, Reload Delay, Shoot Delay, Life Time(ms), Explosion size, Image)
-	MINIGUN("MiniGun", 2, 100, 15, 2500, 50, 1000, 1, GlbVar.img_bullet1),
-	GUN("Gun", 3, 50, 15, 3000, 75, 1000, 1, GlbVar.img_bullet1),
-	BOMB("Bomb", 40, 2, 12, 8000, 300, 10000, 5, GlbVar.img_bomb1),
-	BOMB_SPLIT("Split Bomb", 30, 2, 12, 8000, 300, 10000, 4, GlbVar.img_bomb1),
-	BOMB_SPLIT_SMALL("Split Bomb(small)", 10, 5, 12, 8000, 300, 10000, 3, GlbVar.img_bomb1),
-	UNGUIDED("Unguided Missile", 25, 8, 12, 4000, 350, 2000, 3, GlbVar.img_missile1),
-	GUIDED_AIR("Guided Air Missile", 20, 2, 8, 5000, 500, 3500, 3, GlbVar.img_missile1), 
-	GUIDED_GROUND("Guided Ground Missile", 35, 2, 8, 5000, 500, 4000, 3, GlbVar.img_missile1), 
-	RADAR_AIR("Radar Air Missile", 35, 4, 8, 5000, 500, 3500, 3, GlbVar.img_missile1), 
-	RADAR_GROUND("Radar Ground Missile", 40, 4, 8, 5000, 500, 4000, 3, GlbVar.img_missile1),
-	TURRET_MIDDLE("Turret middle", 10, -1, 13, -1, 300, 1300, 1, GlbVar.img_bullet1);
+	// Type(Name, Damage, Ammo Count, Speed, Reload Delay, Shoot Delay, Life
+	// Time(ms), Explosion size, Image)
+	MINIGUN("MiniGun", 2, 100, 15, 2500, 50, 1000, 1, GlbVar.img_bullet1,
+			GlbVar.prim_gun_light), 
+	GUN("Gun", 3, 50, 15, 3000, 75, 1000, 1,
+			GlbVar.img_bullet1, GlbVar.prim_gun_middle), 
+	BOMB("Bomb", 40, 2,
+			12, 8000, 300, 10000, 5, GlbVar.img_bomb1, GlbVar.sec_bomb_drop), 
+	BOMB_SPLIT("Split Bomb", 30, 2, 12, 8000, 300, 10000, 4, GlbVar.img_bomb1,
+			GlbVar.sec_bomb_drop), 
+	BOMB_SPLIT_SMALL("Split Bomb(small)", 10, 5,
+			12, 8000, 300, 10000, 3, GlbVar.img_bomb1, GlbVar.sec_bomb_drop), 
+	UNGUIDED("Unguided Missile", 25, 8, 12, 4000, 350, 2000, 3,
+			GlbVar.img_missile1, GlbVar.sec_missile1), 
+	GUIDED_AIR("Guided Air Missile", 20, 2, 8, 5000, 500, 3500, 3,
+			GlbVar.img_missile1, GlbVar.sec_missile1), 
+	GUIDED_GROUND("Guided Ground Missile", 35, 2, 8, 5000, 500, 4000, 3,
+			GlbVar.img_missile1, GlbVar.sec_missile1), 
+	RADAR_AIR("Radar Air Missile", 35, 4, 8, 5000, 500, 3500, 3,
+			GlbVar.img_missile1, GlbVar.sec_missile1), 
+	RADAR_GROUND("Radar Ground Missile", 40, 4, 8, 5000, 500, 4000, 3,
+			GlbVar.img_missile1, GlbVar.sec_missile1), 
+	TURRET_MIDDLE("Turret middle", 10, -1, 13, -1, 300, 1300, 1, GlbVar.img_bullet1,
+			GlbVar.prim_gun_heavy);
 
 	private int damage;
 	private int ammoCount;
@@ -27,10 +40,11 @@ public enum WeaponTypes {
 	private int exploSize;
 	private Image image;
 	private String name;
-	
+	private Sound sound;
 
 	private WeaponTypes(String name, int damage, int ammoCount, int speed,
-			int reload_delay, int shoot_delay, int life_time, int exploSize, Image image) {
+			int reload_delay, int shoot_delay, int life_time, int exploSize,
+			Image image, Sound sound) {
 		this.damage = damage;
 		this.image = image;
 		this.name = name;
@@ -40,6 +54,34 @@ public enum WeaponTypes {
 		this.exploSize = exploSize;
 		this.speed = speed;
 		this.life_time = life_time;
+		this.sound = sound;
+	}
+
+	public static void init() {
+		// Sounds
+		GUN.setSound(GlbVar.prim_gun_middle);
+		MINIGUN.setSound(GlbVar.prim_gun_light);
+		BOMB.setSound(GlbVar.sec_bomb_drop);
+		BOMB_SPLIT.setSound(GlbVar.sec_bomb_drop);
+		BOMB_SPLIT_SMALL.setSound(GlbVar.sec_bomb_drop);
+		UNGUIDED.setSound(GlbVar.sec_missile1);
+		GUIDED_AIR.setSound(GlbVar.sec_missile1);
+		GUIDED_GROUND.setSound(GlbVar.sec_missile1);
+		RADAR_AIR.setSound(GlbVar.sec_missile1);
+		RADAR_GROUND.setSound(GlbVar.sec_missile1);
+		TURRET_MIDDLE.setSound(GlbVar.sec_missile1);
+		// Images
+		GUN.setImage(GlbVar.img_bullet1);
+		MINIGUN.setImage(GlbVar.img_bullet1);
+		BOMB.setImage(GlbVar.img_bomb1);
+		BOMB_SPLIT.setImage(GlbVar.img_bomb1);
+		BOMB_SPLIT_SMALL.setImage(GlbVar.img_bomb1);
+		UNGUIDED.setImage(GlbVar.img_missile1);
+		GUIDED_AIR.setImage(GlbVar.img_missile1);
+		GUIDED_GROUND.setImage(GlbVar.img_missile1);
+		RADAR_AIR.setImage(GlbVar.img_missile1);
+		RADAR_GROUND.setImage(GlbVar.img_missile1);
+		TURRET_MIDDLE.setImage(GlbVar.img_missile1);
 	}
 
 	public int getLife_time() {
@@ -77,7 +119,7 @@ public enum WeaponTypes {
 	public int getShoot_delay() {
 		return shoot_delay;
 	}
-	
+
 	public int getExploSize() {
 		return exploSize;
 	}
@@ -88,5 +130,13 @@ public enum WeaponTypes {
 
 	public void setSpeed(int speed) {
 		this.speed = speed;
+	}
+
+	public Sound getSound() {
+		return sound;
+	}
+
+	public void setSound(Sound sound) {
+		this.sound = sound;
 	}
 }
