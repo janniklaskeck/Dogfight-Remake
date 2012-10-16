@@ -3,15 +3,15 @@ package dogfight_remake.entities.planes;
 import org.newdawn.slick.Image;
 
 import dogfight_remake.entities.weapons.WeaponTypes;
-import dogfight_remake.main.GlbVar;
+import dogfight_remake.main.Var;
 
 public enum PlaneTypes {
 	NORMAL("Normal", 100, 1, 1, WeaponTypes.GUN, WeaponTypes.GUIDED_AIR,
-			WeaponTypes.BOMB, GlbVar.img_plane1), 
+			WeaponTypes.BOMB, Var.img_plane1), 
 	FAST("Fast", 75, 1.25f, 0.75f, WeaponTypes.GUN,
-			WeaponTypes.UNGUIDED, WeaponTypes.UNGUIDED, GlbVar.img_plane2), 
+			WeaponTypes.UNGUIDED, WeaponTypes.UNGUIDED, Var.img_plane2), 
 	SLOW("Slow", 150, 0.75f,
-			1.25f, WeaponTypes.GUN, WeaponTypes.GUIDED_AIR, WeaponTypes.BOMB_SPLIT, GlbVar.img_plane1);
+			1.25f, WeaponTypes.GUN, WeaponTypes.GUIDED_AIR, WeaponTypes.BOMB_SPLIT, Var.img_plane1);
 
 	private int hitpoints;
 	private float speed;

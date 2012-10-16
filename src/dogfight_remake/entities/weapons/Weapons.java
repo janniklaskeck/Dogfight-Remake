@@ -8,7 +8,7 @@ import org.newdawn.slick.Sound;
 import dogfight_remake.entities.Entity;
 import dogfight_remake.entities.ai.TurretAi;
 import dogfight_remake.entities.planes.Planes;
-import dogfight_remake.main.GlbVar;
+import dogfight_remake.main.Var;
 
 public class Weapons extends Entity {
 
@@ -162,7 +162,7 @@ public class Weapons extends Entity {
 			float hspeed = (speed * speed_mod_bomb)
 					* (float) Math.cos(Math.toRadians(angle)) * delta / 17;
 			xpos += hspeed;
-			ypos += GlbVar.GRAVITY * 4 * speed_mod_bomb;
+			ypos += Var.GRAVITY * 4 * speed_mod_bomb;
 		} else if (type == WeaponTypes.BOMB_SPLIT) {
 			angleCheck();
 			if (ypos - firstHeight > 300 && !isSplit) {
@@ -185,7 +185,7 @@ public class Weapons extends Entity {
 			float hspeed = (speed * speed_mod_bomb)
 					* (float) Math.cos(Math.toRadians(angle)) * delta / 17;
 			xpos += hspeed;
-			ypos += GlbVar.GRAVITY * 4 * speed_mod_bomb;
+			ypos += Var.GRAVITY * 4 * speed_mod_bomb;
 		} else if (type == WeaponTypes.BOMB_SPLIT_SMALL) {
 			if (angle <= 90 && angle >= 0) {
 				angle += (90 - angle) / 75;
@@ -202,7 +202,7 @@ public class Weapons extends Entity {
 			float hspeed = (speed * speed_mod_bomb)
 					* (float) Math.cos(Math.toRadians(angle)) * delta / 17;
 			xpos += hspeed;
-			ypos += GlbVar.GRAVITY * 4 * speed_mod_bomb;
+			ypos += Var.GRAVITY * 4 * speed_mod_bomb;
 		}
 	}
 

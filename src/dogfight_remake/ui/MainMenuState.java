@@ -9,7 +9,7 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import dogfight_remake.controls.KeyControls;
 import dogfight_remake.main.Dogfight_Remake;
-import dogfight_remake.main.GlbVar;
+import dogfight_remake.main.Var;
 
 public class MainMenuState extends BasicGameState {
 
@@ -40,10 +40,10 @@ public class MainMenuState extends BasicGameState {
 
 	@Override
 	public void enter(GameContainer gc, StateBasedGame sbg) {
-		dim = GlbVar.dim_chosen.width + GlbVar.dim_chosen.height;
+		dim = Var.dim_chosen.width + Var.dim_chosen.height;
 
-		optionsMenuX = GlbVar.dim_chosen.width / 2 + 30;
-		optionsMenuY = GlbVar.dim_chosen.height / 5;
+		optionsMenuX = Var.dim_chosen.width / 2 + 30;
+		optionsMenuY = Var.dim_chosen.height / 5;
 		optionsX = optionsMenuX + 30;
 		optionCollisionY = optionsMenuY + 40;
 		optionCollisionX = optionsX;
@@ -52,79 +52,79 @@ public class MainMenuState extends BasicGameState {
 		optionResolutionY = optionFullscreenY + 20;
 		optionResolutionX = optionsX;
 
-		exitX = GlbVar.dim_chosen.width - GlbVar.dim_chosen.height / 50 - 16;
-		exitY = GlbVar.dim_chosen.height / 50;
+		exitX = Var.dim_chosen.width - Var.dim_chosen.height / 50 - 16;
+		exitY = Var.dim_chosen.height / 50;
 		startGameX = 50;
-		startGameY = GlbVar.dim_chosen.height - 50
-				- GlbVar.startGameOption.getHeight();
+		startGameY = Var.dim_chosen.height - 50
+				- Var.startGameOption.getHeight();
 		plane_p1X = 50;
-		plane_p1Y = startGameY - 50 - GlbVar.plane_p1.getHeight();
+		plane_p1Y = startGameY - 50 - Var.plane_p1.getHeight();
 		plane_p2X = 50;
-		plane_p2Y = plane_p1Y - 50 - GlbVar.plane_p2.getHeight();
+		plane_p2Y = plane_p1Y - 50 - Var.plane_p2.getHeight();
 	}
 
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg)
 			throws SlickException {
-		gc.setVSync(GlbVar.vSync);
-		dim = GlbVar.dim_chosen.width + GlbVar.dim_chosen.height;
+		gc.setVSync(Var.vSync);
+		dim = Var.dim_chosen.width + Var.dim_chosen.height;
 
-		optionsMenuX = GlbVar.dim_chosen.width - 50 - (1024 * dim / 6000);
-		optionsMenuY = GlbVar.dim_chosen.height / 20;
+		optionsMenuX = Var.dim_chosen.width - 50 - (1024 * dim / 6000);
+		optionsMenuY = Var.dim_chosen.height / 20;
 		optionsX = optionsMenuX + 30;
-		optionCollisionY = optionsMenuY + GlbVar.dim_chosen.height / 20;
+		optionCollisionY = optionsMenuY + Var.dim_chosen.height / 20;
 		optionCollisionX = optionsX;
 		optionFullscreenY = optionCollisionY + 20;
 		optionFullscreenX = optionsX;
 		optionResolutionY = optionFullscreenY + 20;
 		optionResolutionX = optionsX;
 
-		exitX = GlbVar.dim_chosen.width - GlbVar.dim_chosen.height / 50 - 16;
-		exitY = GlbVar.dim_chosen.height / 50;
+		exitX = Var.dim_chosen.width - Var.dim_chosen.height / 50 - 16;
+		exitY = Var.dim_chosen.height / 50;
 		startGameX = 50;
-		startGameY = GlbVar.dim_chosen.height - 50
-				- GlbVar.startGameOption.getHeight();
+		startGameY = Var.dim_chosen.height - 50
+				- Var.startGameOption.getHeight();
 		plane_p1X = 50;
-		plane_p1Y = startGameY - 50 - GlbVar.plane_p1.getHeight();
+		plane_p1Y = startGameY - 50 - Var.plane_p1.getHeight();
 		plane_p2X = 50;
-		plane_p2Y = plane_p1Y - 50 - GlbVar.plane_p2.getHeight();
+		plane_p2Y = plane_p1Y - 50 - Var.plane_p2.getHeight();
 	}
 
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g)
 			throws SlickException {
 		// render the background
-		GlbVar.background.draw(0, 0, GlbVar.dim_chosen.width,
-				GlbVar.dim_chosen.height);
+		Var.background.draw(0, 0, Var.dim_chosen.width,
+				Var.dim_chosen.height);
 		// Game Options background
-		GlbVar.gameOptionsMenu.draw(optionsMenuX, optionsMenuY, 430, 400);
+		Var.gameOptionsMenu.draw(optionsMenuX, optionsMenuY, 430, 400);
 		// Player Collision
-		if (GlbVar.getPlayerCollision()) {
-			GlbVar.button2.draw(optionCollisionX, optionCollisionY, 16, 16);
+		if (Var.getPlayerCollision()) {
+			Var.button2.draw(optionCollisionX, optionCollisionY, 16, 16);
 		} else {
-			GlbVar.button1.draw(optionCollisionX, optionCollisionY, 16, 16);
+			Var.button1.draw(optionCollisionX, optionCollisionY, 16, 16);
 		}
 		g.drawString("Air Collisions", optionCollisionX + 20, optionCollisionY);
 		// Fullscreen
-		if (GlbVar.fullscreen) {
-			GlbVar.button2.draw(optionFullscreenX, optionFullscreenY, 16, 16);
+		if (Var.fullscreen) {
+			Var.button2.draw(optionFullscreenX, optionFullscreenY, 16, 16);
 		} else {
-			GlbVar.button1.draw(optionFullscreenX, optionFullscreenY, 16, 16);
+			Var.button1.draw(optionFullscreenX, optionFullscreenY, 16, 16);
 		}
 		g.drawString("Fullscreen", optionFullscreenX + 20, optionFullscreenY);
 		// Resolution
-		GlbVar.button1.draw(optionResolutionX, optionResolutionY, 16, 16);
+		Var.button1.draw(optionResolutionX, optionResolutionY, 16, 16);
 		g.drawString("Resolution", optionResolutionX + 20, optionResolutionY);
 
 		// Exit button
-		GlbVar.exitCorner.draw(exitX, exitY, 16, 16);
+		Var.exitCorner.draw(exitX, exitY, 16, 16);
 
 		// Start game
-		GlbVar.startGameOption.draw(startGameX, startGameY);
+		Var.startGameOption.draw(startGameX, startGameY);
 
 		// Plane Menus
-		GlbVar.plane_p1.draw(plane_p1X, plane_p1Y);
-		GlbVar.plane_p2.draw(plane_p2X, plane_p2Y);
+		Var.plane_p1.draw(plane_p1X, plane_p1Y);
+		Var.plane_p2.draw(plane_p2X, plane_p2Y);
 	}
 
 	@Override
@@ -172,9 +172,9 @@ public class MainMenuState extends BasicGameState {
 		boolean insidePlane_p2 = false;
 
 		if (mouseX >= startGameX
-				&& mouseX <= startGameX + GlbVar.startGameOption.getWidth()
+				&& mouseX <= startGameX + Var.startGameOption.getWidth()
 				&& mouseY >= startGameY
-				&& mouseY <= startGameY + GlbVar.startGameOption.getHeight()) {
+				&& mouseY <= startGameY + Var.startGameOption.getHeight()) {
 			insideStartGame = true;
 		} else if (mouseX >= exitX && mouseX <= exitX + 16 && mouseY >= exitY
 				&& mouseY <= exitY + 16) {
@@ -331,10 +331,10 @@ public class MainMenuState extends BasicGameState {
 				gc.exit();
 		} else if (insidePlCol) {
 			if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON))
-				if (!GlbVar.getPlayerCollision()) {
-					GlbVar.setPlayerCollision(true);
+				if (!Var.getPlayerCollision()) {
+					Var.setPlayerCollision(true);
 				} else {
-					GlbVar.setPlayerCollision(false);
+					Var.setPlayerCollision(false);
 				}
 		} else if (slowGame) {
 
@@ -388,41 +388,41 @@ public class MainMenuState extends BasicGameState {
 			
 		} else if (windowedMode) {
 			if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
-				if (GlbVar.fullscreen) {
-					GlbVar.fullscreen = false;
-					GlbVar.app.setDisplayMode(GlbVar.dim_chosen.width,
-							GlbVar.dim_chosen.height, GlbVar.fullscreen);
-				} else if (!GlbVar.fullscreen
-						&& GlbVar.dim_chosen.width <= GlbVar.dim_fullscreen.width
-						&& GlbVar.dim_chosen.height <= GlbVar.dim_fullscreen.height) {
-					GlbVar.fullscreen = true;
-					GlbVar.app.setDisplayMode(GlbVar.dim_chosen.width,
-							GlbVar.dim_chosen.height, GlbVar.fullscreen);
+				if (Var.fullscreen) {
+					Var.fullscreen = false;
+					Var.app.setDisplayMode(Var.dim_chosen.width,
+							Var.dim_chosen.height, Var.fullscreen);
+				} else if (!Var.fullscreen
+						&& Var.dim_chosen.width <= Var.dim_fullscreen.width
+						&& Var.dim_chosen.height <= Var.dim_fullscreen.height) {
+					Var.fullscreen = true;
+					Var.app.setDisplayMode(Var.dim_chosen.width,
+							Var.dim_chosen.height, Var.fullscreen);
 				}
 			}
 		} else if (resolution) {
 			if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
-				if (GlbVar.dim_chosen == GlbVar.dim_fullscreen) {
-					GlbVar.dim_chosen = GlbVar.dim_720p;
-				} else if (GlbVar.dim_chosen == GlbVar.dim_720p
-						&& GlbVar.dim_1080p.width <= GlbVar.dim_fullscreen.width
-						&& GlbVar.dim_1080p.height <= GlbVar.dim_fullscreen.height) {
-					GlbVar.dim_chosen = GlbVar.dim_1080p;
+				if (Var.dim_chosen == Var.dim_fullscreen) {
+					Var.dim_chosen = Var.dim_720p;
+				} else if (Var.dim_chosen == Var.dim_720p
+						&& Var.dim_1080p.width <= Var.dim_fullscreen.width
+						&& Var.dim_1080p.height <= Var.dim_fullscreen.height) {
+					Var.dim_chosen = Var.dim_1080p;
 				} else {
-					GlbVar.dim_chosen = GlbVar.dim_fullscreen;
+					Var.dim_chosen = Var.dim_fullscreen;
 				}
-				GlbVar.app.setDisplayMode(GlbVar.dim_chosen.width,
-						GlbVar.dim_chosen.height, GlbVar.fullscreen);
+				Var.app.setDisplayMode(Var.dim_chosen.width,
+						Var.dim_chosen.height, Var.fullscreen);
 				init(gc, sbg);
 			}
 		} else if (insidePlane_p1) {
 			if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
-				GlbVar.plane_id = 1;
+				Var.plane_id = 1;
 				sbg.enterState(Dogfight_Remake.PLANESTATE);
 			}
 		} else if (insidePlane_p2) {
 			if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
-				GlbVar.plane_id = 2;
+				Var.plane_id = 2;
 				sbg.enterState(Dogfight_Remake.PLANESTATE);
 			}
 		}

@@ -2,7 +2,7 @@ package dogfight_remake.entities;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import dogfight_remake.main.GlbVar;
+import dogfight_remake.main.Var;
 
 public abstract class Entity {
 
@@ -58,8 +58,8 @@ public abstract class Entity {
 	}
 
 	public void incSpeed(float speed) {
-		if (this.speed + speed > GlbVar.PLANES_MAX_SPEED) {
-			this.speed = GlbVar.PLANES_MAX_SPEED;
+		if (this.speed + speed > Var.PLANES_MAX_SPEED) {
+			this.speed = Var.PLANES_MAX_SPEED;
 		} else {
 			this.speed += speed;
 		}

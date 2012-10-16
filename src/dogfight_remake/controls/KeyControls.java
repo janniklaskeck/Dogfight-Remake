@@ -6,21 +6,21 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import dogfight_remake.entities.weapons.Weapons;
 import dogfight_remake.main.GamePlayState;
-import dogfight_remake.main.GlbVar;
+import dogfight_remake.main.Var;
 
 public class KeyControls {
 
 	public static void update(GameContainer gc, StateBasedGame game, int delta) {
 		Input input = gc.getInput();
-		if (!GlbVar.paused) {
+		if (!Var.paused) {
 			// Player 1
-			if (input.isKeyDown(Input.KEY_LEFT)) {
+			if (input.isKeyDown(Var.p1_key_left)) {
 				GamePlayState.r.player1.increaseAngle(-0.12f * delta);
 			}
-			if (input.isKeyDown(Input.KEY_RIGHT)) {
+			if (input.isKeyDown(Var.p1_key_right)) {
 				GamePlayState.r.player1.increaseAngle(0.12f * delta);
 			}
-			if (input.isKeyDown(Input.KEY_UP)) {
+			if (input.isKeyDown(Var.p1_key_up)) {
 				if (GamePlayState.r.player1.getVspeed() < 0
 						&& !GamePlayState.r.player1.isInStall()) {
 					GamePlayState.r.player1.incSpeed(0.005f * delta);
@@ -34,58 +34,54 @@ public class KeyControls {
 					GamePlayState.r.player1.incSpeed(0.0005f * delta);
 				}
 			}
-			if (input.isKeyDown(Input.KEY_DOWN)) {
+			if (input.isKeyDown(Var.p1_key_down)) {
 				if (GamePlayState.r.player1.getSpeed() <= 0.6) {
 					GamePlayState.r.player1.setSpeed(0.6f);
 				} else {
 					GamePlayState.r.player1.decSpeed(0.035f, false);
 				}
 			}
-			if (!input.isKeyDown(Input.KEY_DOWN)
-					&& !input.isKeyDown(Input.KEY_UP)) {
-
+			if (!input.isKeyDown(Var.p1_key_down)
+					&& !input.isKeyDown(Var.p1_key_up)) {
 				if (GamePlayState.r.player1.getVspeed() < 0) {
 					GamePlayState.r.player1.decSpeed(0.1f, true);
 				} else {
 					GamePlayState.r.player1.decSpeed(0.06f, true);
 				}
 			}
-			if (input.isKeyDown(Input.KEY_COMMA)) {
+			if (input.isKeyDown(Var.p1_key_prim1)) {
 				if (GamePlayState.r.player1 != null) {
 					Weapons tmp = GamePlayState.r.player1.shoot_primary();
 					if (tmp != null) {
-						tmp.getSound().play(1, GlbVar.sounds_volume);
 						GamePlayState.weapons.add(tmp);
 					}
 				}
 			}
-			if (input.isKeyDown(Input.KEY_PERIOD)) {
+			if (input.isKeyDown(Var.p1_key_sec1)) {
 				if (GamePlayState.r.player1 != null) {
 					Weapons tmp = GamePlayState.r.player1.shoot_secondary_1();
 					if (tmp != null) {
-						tmp.getSound().play(1, GlbVar.sounds_volume);
 						GamePlayState.weapons.add(tmp);
 					}
 				}
 			}
-			if (input.isKeyDown(Input.KEY_MINUS)) {
+			if (input.isKeyDown(Var.p1_key_sec2)) {
 				if (GamePlayState.r.player1 != null) {
 					Weapons tmp = GamePlayState.r.player1.shoot_secondary_2();
 					if (tmp != null) {
-						tmp.getSound().play(1, GlbVar.sounds_volume);
 						GamePlayState.weapons.add(tmp);
 					}
 				}
 			}
 
 			// Player 2
-			if (input.isKeyDown(Input.KEY_D)) {
+			if (input.isKeyDown(Var.p2_key_left)) {
 				GamePlayState.r.player2.increaseAngle(-0.12f * delta);
 			}
-			if (input.isKeyDown(Input.KEY_G)) {
+			if (input.isKeyDown(Var.p2_key_right)) {
 				GamePlayState.r.player2.increaseAngle(0.12f * delta);
 			}
-			if (input.isKeyDown(Input.KEY_R)) {
+			if (input.isKeyDown(Var.p2_key_up)) {
 				if (GamePlayState.r.player2.getVspeed() < 0
 						&& !GamePlayState.r.player2.isInStall()) {
 					GamePlayState.r.player2.incSpeed(0.1f);
@@ -99,43 +95,40 @@ public class KeyControls {
 					GamePlayState.r.player2.incSpeed(0.01f);
 				}
 			}
-			if (input.isKeyDown(Input.KEY_F)) {
+			if (input.isKeyDown(Var.p2_key_down)) {
 				if (GamePlayState.r.player2.getSpeed() <= 0.6) {
 					GamePlayState.r.player2.setSpeed(0.6f);
 				} else {
 					GamePlayState.r.player2.decSpeed(0.035f, false);
 				}
 			}
-			if (!input.isKeyDown(Input.KEY_F) && !input.isKeyDown(Input.KEY_R)) {
+			if (!input.isKeyDown(Var.p2_key_down) && !input.isKeyDown(Var.p2_key_up)) {
 				if (GamePlayState.r.player2.getVspeed() < 0) {
 					GamePlayState.r.player2.decSpeed(0.1f, true);
 				} else {
 					GamePlayState.r.player2.decSpeed(0.06f, true);
 				}
 			}
-			if (input.isKeyDown(Input.KEY_1)) {
+			if (input.isKeyDown(Var.p2_key_prim1)) {
 				if (GamePlayState.r.player2 != null) {
 					Weapons tmp = GamePlayState.r.player2.shoot_primary();
 					if (tmp != null) {
-						tmp.getType().getSound().play(1, GlbVar.sounds_volume);
 						GamePlayState.weapons.add(tmp);
 					}
 				}
 			}
-			if (input.isKeyDown(Input.KEY_2)) {
+			if (input.isKeyDown(Var.p2_key_sec1)) {
 				if (GamePlayState.r.player2 != null) {
 					Weapons tmp = GamePlayState.r.player2.shoot_secondary_1();
 					if (tmp != null) {
-						tmp.getSound().play(1, GlbVar.sounds_volume);
 						GamePlayState.weapons.add(tmp);
 					}
 				}
 			}
-			if (input.isKeyDown(Input.KEY_3)) {
+			if (input.isKeyDown(Var.p2_key_sec2)) {
 				if (GamePlayState.r.player2 != null) {
 					Weapons tmp = GamePlayState.r.player2.shoot_secondary_2();
 					if (tmp != null) {
-						tmp.getSound().play(1, GlbVar.sounds_volume);
 						GamePlayState.weapons.add(tmp);
 					}
 				}
@@ -146,7 +139,7 @@ public class KeyControls {
 			gc.exit();
 		}
 		if (input.isKeyPressed(Input.KEY_P)) {
-			GlbVar.paused = true;
+			Var.paused = true;
 		}
 
 	}

@@ -5,6 +5,7 @@ import java.awt.Toolkit;
 
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
@@ -14,11 +15,11 @@ import dogfight_remake.entities.planes.PlaneTypes;
 import dogfight_remake.entities.weapons.WeaponTypes;
 import dogfight_remake.map.BlockMap;
 
-public class GlbVar {
+public class Var {
 	public static AppGameContainer app;
 	// Images Game
-	public static Image img_player1;
-	public static Image img_player2;
+	public static Image img_plane1;
+	public static Image img_plane2;
 	public static Image img_missile1;
 	public static Image img_bullet1;
 	public static Image img_bomb1;
@@ -97,7 +98,25 @@ public class GlbVar {
 	public static Dimension dim_1080p = new Dimension(1920, 1080);
 	public static Dimension dim_720p = new Dimension(1280, 720);
 	public static Dimension dim_chosen = dim_fullscreen;
+	
+	public static int p1_key_left = Input.KEY_LEFT;
+	public static int p1_key_right = Input.KEY_RIGHT;
+	public static int p1_key_up = Input.KEY_UP;
+	public static int p1_key_down = Input.KEY_DOWN;
+	public static int p1_key_prim1 = Input.KEY_COMMA;
+	public static int p1_key_prim2 = Input.KEY_COMMA;
+	public static int p1_key_sec1 = Input.KEY_PERIOD;
+	public static int p1_key_sec2 = Input.KEY_MINUS;
 
+	public static int p2_key_left = Input.KEY_D;
+	public static int p2_key_right = Input.KEY_G;
+	public static int p2_key_up = Input.KEY_R;
+	public static int p2_key_down = Input.KEY_F;
+	public static int p2_key_prim1 = Input.KEY_1;
+	public static int p2_key_prim2 = Input.KEY_1;
+	public static int p2_key_sec1 = Input.KEY_2;
+	public static int p2_key_sec2 = Input.KEY_3;
+	
 	public static void setPlayerCollision(boolean bool) {
 		player_collision = bool;
 	}

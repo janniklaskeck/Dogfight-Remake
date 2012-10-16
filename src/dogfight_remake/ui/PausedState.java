@@ -9,7 +9,7 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import dogfight_remake.controls.KeyControls;
 import dogfight_remake.main.Dogfight_Remake;
-import dogfight_remake.main.GlbVar;
+import dogfight_remake.main.Var;
 
 public class PausedState extends BasicGameState {
 	private int stateID = -1;
@@ -24,21 +24,21 @@ public class PausedState extends BasicGameState {
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg)
 			throws SlickException {
-		GlbVar.continueGame = GlbVar.pauseMenuText.getSubImage(0, 0, 250, 60);
-		GlbVar.mainMenu = GlbVar.pauseMenuText.getSubImage(0, 60, 250, 60);
-		GlbVar.exit = GlbVar.pauseMenuText.getSubImage(0, 120, 250, 60);
-		GlbVar.options = GlbVar.pauseMenuText.getSubImage(0, 180, 250, 60);
+		Var.continueGame = Var.pauseMenuText.getSubImage(0, 0, 250, 60);
+		Var.mainMenu = Var.pauseMenuText.getSubImage(0, 60, 250, 60);
+		Var.exit = Var.pauseMenuText.getSubImage(0, 120, 250, 60);
+		Var.options = Var.pauseMenuText.getSubImage(0, 180, 250, 60);
 	}
 
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g)
 			throws SlickException {
-		GlbVar.img_pause_bg.draw(0, 0);
-		GlbVar.pauseMenu.draw(menuX, menuY);
-		GlbVar.continueGame.draw(menuX + 100, menuY + 35, 100, 45);
-		GlbVar.options.draw(menuX + 100, menuY + 110, 100, 45);
-		GlbVar.mainMenu.draw(menuX + 100, menuY + 185, 100, 45);
-		GlbVar.exit.draw(menuX + 100, menuY + 270, 100, 45);
+		Var.img_pause_bg.draw(0, 0);
+		Var.pauseMenu.draw(menuX, menuY);
+		Var.continueGame.draw(menuX + 100, menuY + 35, 100, 45);
+		Var.options.draw(menuX + 100, menuY + 110, 100, 45);
+		Var.mainMenu.draw(menuX + 100, menuY + 185, 100, 45);
+		Var.exit.draw(menuX + 100, menuY + 270, 100, 45);
 	}
 
 	@Override
@@ -56,30 +56,30 @@ public class PausedState extends BasicGameState {
 		boolean insideOptions = false;
 
 		if ((mouseX >= menuX + 100 && mouseX <= menuX + 100
-				+ GlbVar.continueGame.getWidth())
+				+ Var.continueGame.getWidth())
 				&& (mouseY >= menuY + 35 && mouseY <= menuY + 35
-						+ GlbVar.continueGame.getHeight())) {
+						+ Var.continueGame.getHeight())) {
 			insideContinue = true;
 		} else if ((mouseX >= menuX + 100 && mouseX <= menuX + 100
-				+ GlbVar.exit.getWidth())
+				+ Var.exit.getWidth())
 				&& (mouseY >= menuY + 270 && mouseY <= menuY + 270
-						+ GlbVar.exit.getHeight())) {
+						+ Var.exit.getHeight())) {
 			insideExit = true;
 		} else if ((mouseX >= menuX + 100 && mouseX <= menuX + 100
-				+ GlbVar.mainMenu.getWidth())
+				+ Var.mainMenu.getWidth())
 				&& (mouseY >= menuY + 185 && mouseY <= menuY + 185
-						+ GlbVar.mainMenu.getHeight())) {
+						+ Var.mainMenu.getHeight())) {
 			insideMainMenu = true;
 		} else if ((mouseX >= menuX + 100 && mouseX <= menuX + 100
-				+ GlbVar.options.getWidth())
+				+ Var.options.getWidth())
 				&& (mouseY >= menuY + 110 && mouseY <= menuY + 110
-						+ GlbVar.options.getHeight())) {
+						+ Var.options.getHeight())) {
 			insideOptions = true;
 		}
 		if (insideContinue) {
 
 			if (input.isMouseButtonDown(Input.MOUSE_LEFT_BUTTON)) {
-				GlbVar.paused = false;
+				Var.paused = false;
 				sbg.enterState(Dogfight_Remake.GAMEPLAYSTATE);
 			}
 		} else if (insideExit) {
@@ -93,8 +93,8 @@ public class PausedState extends BasicGameState {
 			}
 		} else if (insideOptions) {
 			if (input.isMouseButtonDown(Input.MOUSE_LEFT_BUTTON)) {
-				GlbVar.app.setDisplayMode(GlbVar.dim_chosen.width,
-						GlbVar.dim_chosen.height, GlbVar.fullscreen);
+				Var.app.setDisplayMode(Var.dim_chosen.width,
+						Var.dim_chosen.height, Var.fullscreen);
 			}
 		}
 	}

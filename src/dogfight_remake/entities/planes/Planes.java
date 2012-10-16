@@ -11,7 +11,7 @@ import org.newdawn.slick.geom.Rectangle;
 import dogfight_remake.entities.Entity;
 import dogfight_remake.entities.weapons.WeaponTypes;
 import dogfight_remake.entities.weapons.Weapons;
-import dogfight_remake.main.GlbVar;
+import dogfight_remake.main.Var;
 
 public class Planes extends Entity {
 	private Random random;
@@ -68,17 +68,17 @@ public class Planes extends Entity {
 			if (Math.abs(hspeed) + Math.abs(vspeed) < 1.3 || stall) {
 				stall = true;
 				xpos += hspeed;
-				ypos += vspeed + GlbVar.GRAVITY;
+				ypos += vspeed + Var.GRAVITY;
 				if (stall && vspeed > 3) {
 					stall = false;
-				} else if (vspeed + GlbVar.GRAVITY < 0) {
+				} else if (vspeed + Var.GRAVITY < 0) {
 					stall = false;
 				}
 			} else {
 				xpos += hspeed;
-				GlbVar.cx += hspeed;
+				Var.cx += hspeed;
 				ypos += vspeed;
-				GlbVar.cy += vspeed;
+				Var.cy += vspeed;
 			}
 		}
 	}
@@ -110,6 +110,7 @@ public class Planes extends Entity {
 		float x = (float) (plane.getCenterX() + Math.cos(Math.toRadians(angle)));
 		float y = (float) (plane.getCenterY() + Math.sin(Math.toRadians(angle)) + 5);
 		counter_prim--;
+		wpn1.getSound().play(1, Var.sounds_volume);
 		return new Weapons(x, y, angle, wpn1, 0, id);
 	}
 
@@ -139,6 +140,7 @@ public class Planes extends Entity {
 		float x = (float) (plane.getCenterX() + Math.cos(Math.toRadians(angle)));
 		float y = (float) (plane.getCenterY() + Math.sin(Math.toRadians(angle)) + 5);
 		counter_sec_1--;
+		wpn2.getSound().play(1, Var.sounds_volume);
 		return new Weapons(x, y, angle, wpn2, 0, id);
 	}
 
@@ -167,6 +169,7 @@ public class Planes extends Entity {
 		float x = (float) (plane.getCenterX() + Math.cos(Math.toRadians(angle)));
 		float y = (float) (plane.getCenterY() + Math.sin(Math.toRadians(angle)) + 5);
 		counter_sec_2--;
+		wpn3.getSound().play(1, Var.sounds_volume);
 		return new Weapons(x, y, angle, wpn3, 0, id);
 	}
 
@@ -192,7 +195,7 @@ public class Planes extends Entity {
 	 * @param angle
 	 */
 	public void increaseAngle(float f) {
-		if (speed > GlbVar.PLANES_MAX_SPEED) {
+		if (speed > Var.PLANES_MAX_SPEED) {
 			angle += f * 0.8;
 		} else {
 			angle += f;
