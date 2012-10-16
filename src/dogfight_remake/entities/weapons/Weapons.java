@@ -3,6 +3,8 @@ package dogfight_remake.entities.weapons;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.Sound;
+
 import dogfight_remake.entities.Entity;
 import dogfight_remake.entities.ai.TurretAi;
 import dogfight_remake.entities.planes.Planes;
@@ -24,13 +26,14 @@ public class Weapons extends Entity {
 	private boolean isSplit = false;
 	private float firstHeight;
 	private int time;
+	private Sound sound;
 
 	public Weapons(float xpos, float ypos, float angle, WeaponTypes type,
-			int time, Image image, int id) {
+			int time, int id) {
 		super(xpos, ypos);
 		this.speed = type.getSpeed();
 		this.angle = angle;
-		this.image = image;
+		this.image = type.getImage();
 		this.broken = false;
 		this.damage = type.getDamage();
 		this.type = type;
@@ -39,6 +42,7 @@ public class Weapons extends Entity {
 		this.height = image.getHeight();
 		this.width = image.getWidth();
 		this.time = time;
+		this.sound = type.getSound();
 	}
 
 	/**
@@ -483,5 +487,13 @@ public class Weapons extends Entity {
 			}
 		}
 		return true;
+	}
+
+	public Sound getSound() {
+		return sound;
+	}
+
+	public void setSound(Sound sound) {
+		this.sound = sound;
 	}
 }
