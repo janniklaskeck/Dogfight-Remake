@@ -34,8 +34,7 @@ public class Planes extends Entity {
 	private float speed_mod;
 
 	public Planes(int id, float xpos, float ypos, float angle, Image image,
-			PlaneTypes type, WeaponTypes wpn1, WeaponTypes wpn2,
-			WeaponTypes wpn3) {
+			PlaneTypes type) {
 		super(xpos, ypos, angle);
 		this.id = id;
 		this.hitpoints = type.getHitpoints();
@@ -46,9 +45,9 @@ public class Planes extends Entity {
 		this.lastshot_sec_1 = 0;
 		this.lastshot_sec_2 = 0;
 		this.broken = false;
-		this.wpn1 = wpn1;
-		this.wpn2 = wpn2;
-		this.wpn3 = wpn3;
+		this.wpn1 = type.getWpn1();
+		this.wpn2 = type.getWpn2();
+		this.wpn3 = type.getWpn3();
 		this.counter_prim = wpn1.getAmmoCount();
 		this.counter_sec_1 = wpn2.getAmmoCount();
 		this.counter_sec_2 = wpn3.getAmmoCount();
@@ -111,7 +110,7 @@ public class Planes extends Entity {
 		float x = (float) (plane.getCenterX() + Math.cos(Math.toRadians(angle)));
 		float y = (float) (plane.getCenterY() + Math.sin(Math.toRadians(angle)) + 5);
 		counter_prim--;
-		return new Weapons(x, y, angle, wpn1, 0, wpn1.getImage(), id);
+		return new Weapons(x, y, angle, wpn1, 0, id);
 	}
 
 	/**
@@ -140,7 +139,7 @@ public class Planes extends Entity {
 		float x = (float) (plane.getCenterX() + Math.cos(Math.toRadians(angle)));
 		float y = (float) (plane.getCenterY() + Math.sin(Math.toRadians(angle)) + 5);
 		counter_sec_1--;
-		return new Weapons(x, y, angle, wpn2, 0, wpn2.getImage(), id);
+		return new Weapons(x, y, angle, wpn2, 0, id);
 	}
 
 	/**
@@ -168,7 +167,7 @@ public class Planes extends Entity {
 		float x = (float) (plane.getCenterX() + Math.cos(Math.toRadians(angle)));
 		float y = (float) (plane.getCenterY() + Math.sin(Math.toRadians(angle)) + 5);
 		counter_sec_2--;
-		return new Weapons(x, y, angle, wpn3, 0, wpn3.getImage(), id);
+		return new Weapons(x, y, angle, wpn3, 0, id);
 	}
 
 	/**
