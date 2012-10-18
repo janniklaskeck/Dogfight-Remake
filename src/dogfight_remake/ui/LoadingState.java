@@ -110,7 +110,6 @@ public class LoadingState extends BasicGameState {
 		if (started) {
 			g.drawString("LOADING COMPLETE", 100, 500);
 		}
-
 	}
 
 	@Override

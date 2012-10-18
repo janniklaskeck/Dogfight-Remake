@@ -70,8 +70,8 @@ public class Var {
 	public static float cy;
 
 	// Game options
-	public final static float PLANES_MAX_SPEED = 7;
-	public static float GRAVITY = 6;
+	public final static float PLANES_MAX_SPEED = 7f;
+	public static float GRAVITY = 6f;
 	private static boolean player_collision = false;
 	private static int multisample = 2;
 	public static boolean fullscreen = false;
@@ -79,13 +79,14 @@ public class Var {
 	public static boolean vSync = true;
 	public static int timePassed = 0;
 	public static int plane_id = 1;
-	public static PlaneTypes player1 = PlaneTypes.NORMAL;
-	public static PlaneTypes player2 = PlaneTypes.NORMAL;
+	
+	public static PlaneTypes player1_type = PlaneTypes.NORMAL;
+	public static PlaneTypes player2_type = PlaneTypes.NORMAL;
 	// Scores
 	public static int score_p1 = 0, score_p2 = 0;
 	// RespawnTimer
-	public static final long RESPAWNTIME_PLAYER = 3000;
-	public static final long RESPAWNTIME_TURRET = 3000;
+	public static final long RESPAWNTIME_PLAYER = 3000L;
+	public static final long RESPAWNTIME_TURRET = 3000L;
 	public static long respawntimer_p1 = RESPAWNTIME_PLAYER;
 	public static long respawntimer_p2 = RESPAWNTIME_PLAYER;
 	public static long respawntimer_turret = RESPAWNTIME_TURRET;
@@ -107,6 +108,19 @@ public class Var {
 	public static int p1_key_prim2 = Input.KEY_COMMA;
 	public static int p1_key_sec1 = Input.KEY_PERIOD;
 	public static int p1_key_sec2 = Input.KEY_MINUS;
+	
+	public static boolean p1_mov_left = false;
+	public static boolean p1_mov_right = false;
+	public static boolean p1_mov_up = false;
+	public static boolean p1_mov_down = false;
+	public static boolean p1_act_prim1 = false;
+	public static boolean p1_act_prim2 = false;
+	public static boolean p1_act_sec1 = false;
+	public static boolean p1_act_sec2 = false;
+	
+	public static WeaponTypes wpn1_p1 = WeaponTypes.GUN;
+	public static WeaponTypes wpn2_p1 = WeaponTypes.GUIDED_AIR;
+	public static WeaponTypes wpn3_p1 = WeaponTypes.BOMB;
 
 	public static int p2_key_left = Input.KEY_D;
 	public static int p2_key_right = Input.KEY_G;
@@ -116,6 +130,19 @@ public class Var {
 	public static int p2_key_prim2 = Input.KEY_1;
 	public static int p2_key_sec1 = Input.KEY_2;
 	public static int p2_key_sec2 = Input.KEY_3;
+	
+	public static boolean p2_mov_left = false;
+	public static boolean p2_mov_right = false;
+	public static boolean p2_mov_up = false;
+	public static boolean p2_mov_down = false;
+	public static boolean p2_act_prim1 = false;
+	public static boolean p2_act_prim2 = false;
+	public static boolean p2_act_sec1 = false;
+	public static boolean p2_act_sec2 = false;
+
+	public static WeaponTypes wpn1_p2 = WeaponTypes.GUN;
+	public static WeaponTypes wpn2_p2 = WeaponTypes.GUIDED_AIR;
+	public static WeaponTypes wpn3_p2 = WeaponTypes.BOMB;
 	
 	public static void setPlayerCollision(boolean bool) {
 		player_collision = bool;
@@ -128,13 +155,6 @@ public class Var {
 	public static void setResolution(int x, int y) throws SlickException {
 		app.setDisplayMode(x, y, fullscreen);
 	}
-
-	public static WeaponTypes wpn1_p1 = WeaponTypes.GUN;
-	public static WeaponTypes wpn2_p1 = WeaponTypes.GUIDED_AIR;
-	public static WeaponTypes wpn3_p1 = WeaponTypes.BOMB;
-	public static WeaponTypes wpn1_p2 = WeaponTypes.GUN;
-	public static WeaponTypes wpn2_p2 = WeaponTypes.GUIDED_AIR;
-	public static WeaponTypes wpn3_p2 = WeaponTypes.BOMB;
 
 	public static void setWeapons() {
 

@@ -31,6 +31,11 @@ public class TurretAi extends Entity {
 	private int hitpoints;
 	private Rectangle turret;
 
+	float xpos_reset;
+	float ypos_reset;
+	int hitpoints_reset;
+	float angle_reset;
+
 	public TurretAi(int id, float xpos, float ypos, float angle, int hitpoints,
 			Planes target, WeaponTypes wmp, Image image) {
 		super(xpos, ypos, angle);
@@ -41,6 +46,10 @@ public class TurretAi extends Entity {
 		this.wmp = wmp;
 		this.hitpoints = hitpoints;
 		turret = new Rectangle(xpos, ypos, image.getWidth(), image.getHeight());
+		xpos_reset = xpos;
+		ypos_reset = ypos;
+		hitpoints_reset = hitpoints;
+		angle_reset = angle;
 	}
 
 	@Override
@@ -106,6 +115,18 @@ public class TurretAi extends Entity {
 		float y = (float) (ypos + Math.sin(Math.toRadians(angle)) - 50);
 		return new Weapons(x, y, angle, wmp, 0, id);
 
+	}
+
+	/**
+	 * 
+	 */
+
+	public void reset() {
+		xpos = xpos_reset;
+		ypos = ypos_reset;
+		hitpoints = hitpoints_reset;
+		angle = angle_reset;
+		broken = false;
 	}
 
 	/**
@@ -266,5 +287,13 @@ public class TurretAi extends Entity {
 
 	public Planes getTarget() {
 		return target;
+	}
+
+	public boolean targetInRange(Planes target) {
+		if (Math.abs((xpos + ypos) - (target.getXpos() + target.getYpos())) <= wmp.getLife_time() - 100) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }

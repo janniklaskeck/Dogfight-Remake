@@ -18,11 +18,10 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import dogfight_remake.controls.KeyControls;
 import dogfight_remake.entities.Explosion;
-import dogfight_remake.entities.ai.TurretAi;
-import dogfight_remake.entities.planes.Planes;
 import dogfight_remake.entities.weapons.Reload;
 import dogfight_remake.entities.weapons.WeaponTypes;
 import dogfight_remake.entities.weapons.Weapons;
+import dogfight_remake.entities.planes.PlaneTypes;
 import dogfight_remake.map.Block;
 import dogfight_remake.map.BlockMap;
 import dogfight_remake.rendering.Render;
@@ -74,24 +73,20 @@ public class GamePlayState extends BasicGameState {
 			weapons = new ArrayList<Weapons>();
 			explosions = new ArrayList<Explosion>();
 			camera = new Camera(gc, Var.tmap);
-			camera2 = new Camera(gc, Var.tmap);
+			// camera2 = new Camera(gc, Var.tmap);
 			rnd = new Random();
 			// GlbVar.music1.loop(1, GlbVar.music_volume);
 			Var.score_p1 = 0;
 			Var.score_p2 = 0;
 			Var.paused = false;
 			Var.timePassed = 0;
-			WeaponTypes.init();
 		}
-
 	}
 
 	@Override
 	public void render(GameContainer gc, StateBasedGame game, Graphics g)
 			throws SlickException {
-
 		r.render(gc, g, delta);
-
 		if (Var.paused) {
 			Var.img_pause_bg = new Image(1680, 1050);
 			g.copyArea(Var.img_pause_bg, 0, 0);
@@ -102,7 +97,8 @@ public class GamePlayState extends BasicGameState {
 	@Override
 	public void init(GameContainer gc, StateBasedGame game)
 			throws SlickException {
-
+		WeaponTypes.init();
+		PlaneTypes.init();
 	}
 
 	@Override
@@ -113,21 +109,22 @@ public class GamePlayState extends BasicGameState {
 		if (r.player1 != null && r.player2 != null && !Var.paused) {
 			time += delta;
 			Var.timePassed = time / 1000;
-
 			Weapons wmp = r.turret.shoot();
 			if (wmp != null) {
-				Var.prim_gun_middle.play(1, Var.sounds_volume);
-				weapons.add(wmp);
+				if (r.turret.targetInRange(r.turret.getTarget())) {
+					Var.prim_gun_middle.play(1, Var.sounds_volume);
+					weapons.add(wmp);
+				}
 			}
 			r.player1.update(delta);
 			r.player2.update(delta);
+			r.turret.update(delta);
 			Reload.reload_primary(r.player1, delta);
 			Reload.reload_primary(r.player2, delta);
 			Reload.reload_secondary_1(r.player1, delta);
 			Reload.reload_secondary_1(r.player2, delta);
 			Reload.reload_secondary_2(r.player1, delta);
 			Reload.reload_secondary_2(r.player2, delta);
-			r.turret.update(delta);
 			checkCollision(gc);
 			for (int i = 0; i < weapons.size(); i++) {
 				if (!weapons.get(i).isHit() && weapons.get(i).isAlive()) {
@@ -216,9 +213,8 @@ public class GamePlayState extends BasicGameState {
 					Var.respawntimer_turret -= delta;
 				}
 		}
-
 		camera.centerOn(r.player1.getXpos(), r.player1.getYpos());
-		camera2.centerOn(r.player2.getXpos(), r.player2.getYpos());
+		// camera2.centerOn(r.player2.getXpos(), r.player2.getYpos());
 	}
 
 	/**
@@ -226,19 +222,15 @@ public class GamePlayState extends BasicGameState {
 	 */
 	private void respawn() {
 		if (Var.respawntimer_p1 <= 0) {
-			r.player1 = new Planes(1, 100, dim.height / 2, 0,
-					Var.img_plane1, Var.player1);
-
+			r.player1.reset();
 			Var.respawntimer_p1 = Var.RESPAWNTIME_PLAYER;
 		}
 		if (Var.respawntimer_p2 <= 0) {
-			r.player2 = new Planes(2, dim.width - 150, dim.height / 2, 180,
-					Var.img_plane2, Var.player2);
+			r.player2.reset();
 			Var.respawntimer_p2 = Var.RESPAWNTIME_PLAYER;
 		}
 		if (Var.respawntimer_turret <= 0) {
-			r.turret = new TurretAi(3, 815, 2520, 270, 100, null,
-					WeaponTypes.TURRET_MIDDLE, Var.img_bullet1);
+			r.turret.reset();
 			Var.respawntimer_turret = Var.RESPAWNTIME_TURRET;
 		}
 	}
@@ -248,11 +240,6 @@ public class GamePlayState extends BasicGameState {
 	 */
 
 	private void checkCollision(GameContainer gc) {
-		/**
-		 * WIP: -Plane to Weapon -Weapon to Map
-		 * 
-		 */
-
 		p1 = new Rectangle((int) r.player1.getXpos(),
 				(int) r.player1.getYpos(), Var.img_plane1.getWidth(),
 				Var.img_plane1.getHeight());
@@ -439,10 +426,13 @@ public class GamePlayState extends BasicGameState {
 			}
 		}
 
-		Rectangle bounds_left = new Rectangle(0, 0, 1, Var.tmap.getHeight());
-		Rectangle bounds_right = new Rectangle(Var.tmap.getWidth() - 1, 0,
-				1, Var.tmap.getHeight());
-		Rectangle bounds_up = new Rectangle(0, 0, Var.tmap.getWidth(), 1);
+		Rectangle bounds_left = new Rectangle(0, 0, 1, Var.tmap.getHeight()
+				* Var.tmap.getTileHeight());
+		Rectangle bounds_right = new Rectangle(Var.tmap.getWidth()
+				* Var.tmap.getTileWidth() - 1, 0, 1, Var.tmap.getHeight()
+				* Var.tmap.getTileHeight());
+		Rectangle bounds_up = new Rectangle(0, 0, Var.tmap.getWidth()
+				* Var.tmap.getTileWidth(), 1);
 		// Collision of planes with frame bounds
 		if (r.player1.getHitpoints() > 0 && p1A != null) {
 			if (p1A.intersects(bounds_left) || p1A.intersects(bounds_right)

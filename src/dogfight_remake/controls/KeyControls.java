@@ -15,39 +15,26 @@ public class KeyControls {
 		if (!Var.paused) {
 			// Player 1
 			if (input.isKeyDown(Var.p1_key_left)) {
-				GamePlayState.r.player1.increaseAngle(-0.12f * delta);
+				GamePlayState.r.player1.setMoveLeft(true);
+			} else {
+				GamePlayState.r.player1.setMoveLeft(false);
 			}
 			if (input.isKeyDown(Var.p1_key_right)) {
-				GamePlayState.r.player1.increaseAngle(0.12f * delta);
+				GamePlayState.r.player1.setMoveRight(true);
+			} else {
+				GamePlayState.r.player1.setMoveRight(false);
 			}
 			if (input.isKeyDown(Var.p1_key_up)) {
-				if (GamePlayState.r.player1.getVspeed() < 0
-						&& !GamePlayState.r.player1.isInStall()) {
-					GamePlayState.r.player1.incSpeed(0.005f * delta);
-				} else if (GamePlayState.r.player1.getVspeed() >= 0
-						&& !GamePlayState.r.player1.isInStall()) {
-					GamePlayState.r.player1.incSpeed(0.01f * delta);
-				} else if (GamePlayState.r.player1.getVspeed() >= 0
-						&& GamePlayState.r.player1.isInStall()) {
-					GamePlayState.r.player1.incSpeed(0.005f * delta);
-				} else {
-					GamePlayState.r.player1.incSpeed(0.0005f * delta);
-				}
+				GamePlayState.r.player1.setAccel(true);
 			}
 			if (input.isKeyDown(Var.p1_key_down)) {
-				if (GamePlayState.r.player1.getSpeed() <= 0.6) {
-					GamePlayState.r.player1.setSpeed(0.6f);
-				} else {
-					GamePlayState.r.player1.decSpeed(0.035f, false);
-				}
+				GamePlayState.r.player1.setBrake(true);
+
 			}
 			if (!input.isKeyDown(Var.p1_key_down)
 					&& !input.isKeyDown(Var.p1_key_up)) {
-				if (GamePlayState.r.player1.getVspeed() < 0) {
-					GamePlayState.r.player1.decSpeed(0.1f, true);
-				} else {
-					GamePlayState.r.player1.decSpeed(0.06f, true);
-				}
+				GamePlayState.r.player1.setAccel(false);
+				GamePlayState.r.player1.setBrake(false);
 			}
 			if (input.isKeyDown(Var.p1_key_prim1)) {
 				if (GamePlayState.r.player1 != null) {
@@ -76,38 +63,26 @@ public class KeyControls {
 
 			// Player 2
 			if (input.isKeyDown(Var.p2_key_left)) {
-				GamePlayState.r.player2.increaseAngle(-0.12f * delta);
+				GamePlayState.r.player2.setMoveLeft(true);
+			} else {
+				GamePlayState.r.player2.setMoveLeft(false);
 			}
 			if (input.isKeyDown(Var.p2_key_right)) {
-				GamePlayState.r.player2.increaseAngle(0.12f * delta);
+				GamePlayState.r.player2.setMoveRight(true);
+			} else {
+				GamePlayState.r.player2.setMoveRight(false);
 			}
 			if (input.isKeyDown(Var.p2_key_up)) {
-				if (GamePlayState.r.player2.getVspeed() < 0
-						&& !GamePlayState.r.player2.isInStall()) {
-					GamePlayState.r.player2.incSpeed(0.1f);
-				} else if (GamePlayState.r.player2.getVspeed() >= 0
-						&& !GamePlayState.r.player2.isInStall()) {
-					GamePlayState.r.player2.incSpeed(0.2f);
-				} else if (GamePlayState.r.player2.getVspeed() >= 0
-						&& GamePlayState.r.player2.isInStall()) {
-					GamePlayState.r.player2.incSpeed(0.1f);
-				} else {
-					GamePlayState.r.player2.incSpeed(0.01f);
-				}
+				GamePlayState.r.player2.setAccel(true);
 			}
 			if (input.isKeyDown(Var.p2_key_down)) {
-				if (GamePlayState.r.player2.getSpeed() <= 0.6) {
-					GamePlayState.r.player2.setSpeed(0.6f);
-				} else {
-					GamePlayState.r.player2.decSpeed(0.035f, false);
-				}
+				GamePlayState.r.player2.setBrake(true);
+
 			}
-			if (!input.isKeyDown(Var.p2_key_down) && !input.isKeyDown(Var.p2_key_up)) {
-				if (GamePlayState.r.player2.getVspeed() < 0) {
-					GamePlayState.r.player2.decSpeed(0.1f, true);
-				} else {
-					GamePlayState.r.player2.decSpeed(0.06f, true);
-				}
+			if (!input.isKeyDown(Var.p2_key_down)
+					&& !input.isKeyDown(Var.p2_key_up)) {
+				GamePlayState.r.player2.setAccel(false);
+				GamePlayState.r.player2.setBrake(false);
 			}
 			if (input.isKeyDown(Var.p2_key_prim1)) {
 				if (GamePlayState.r.player2 != null) {

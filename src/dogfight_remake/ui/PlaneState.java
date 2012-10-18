@@ -175,14 +175,14 @@ public class PlaneState extends BasicGameState {
 					} else {
 						index_plane1--;
 					}
-					Var.player1 = planeList.get(index_plane1);
+					Var.player1_type = planeList.get(index_plane1);
 				} else {
 					if (index_plane2 - 1 < 0) {
 						index_plane2 = planeList.size() - 1;
 					} else {
 						index_plane2--;
 					}
-					Var.player2 = planeList.get(index_plane2);
+					Var.player2_type = planeList.get(index_plane2);
 				}
 			}
 		} else if (insidePlaneRight) {
@@ -193,14 +193,14 @@ public class PlaneState extends BasicGameState {
 					} else {
 						index_plane1++;
 					}
-					Var.player1 = planeList.get(index_plane1);
+					Var.player1_type = planeList.get(index_plane1);
 				} else {
 					if (index_plane2 + 1 > planeList.size() - 1) {
 						index_plane2 = 0;
 					} else {
 						index_plane2++;
 					}
-					Var.player2 = planeList.get(index_plane2);
+					Var.player2_type = planeList.get(index_plane2);
 				}
 			}
 		} else if (insideWeapon1) {

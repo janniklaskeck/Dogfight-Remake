@@ -170,6 +170,7 @@ public class Camera {
 	 */
 	public void untranslateGraphics() {
 		gc.getGraphics().translate(cameraX, cameraY);
+
 	}
 
 }

@@ -22,9 +22,9 @@ public class Planes extends Entity {
 	private int hitpoints;
 	private float angle;
 	private long lastshot_prim, lastshot_sec_1, lastshot_sec_2;
-	private int counter_prim;
-	private int counter_sec_1;
-	private int counter_sec_2;
+	private int ammo_prim;
+	private int ammo_sec_1;
+	private int ammo_sec_2;
 	private boolean broken;
 	private float hspeed, vspeed;
 	private WeaponTypes wpn1;
@@ -32,14 +32,26 @@ public class Planes extends Entity {
 	private WeaponTypes wpn3;
 	private boolean stall;
 	private float speed_mod;
+	private boolean accel = false;
+	private boolean brake = false;
+	private boolean moveLeft = false;
+	private boolean moveRight = false;
+	private PlaneTypes type;
 
-	public Planes(int id, float xpos, float ypos, float angle, Image image,
-			PlaneTypes type) {
+	float xpos_reset;
+	float ypos_reset;
+	int hitpoints_reset;
+	float angle_reset;
+	int ammo_prim_reset;
+	int ammo_sec_1_reset;
+	int ammo_sec_2_reset;
+
+	public Planes(int id, float xpos, float ypos, float angle, PlaneTypes type) {
 		super(xpos, ypos, angle);
 		this.id = id;
 		this.hitpoints = type.getHitpoints();
 		this.speed_mod = type.getSpeed();
-		this.image = image;
+		this.image = type.getImage();
 		this.angle = angle;
 		this.lastshot_prim = 0;
 		this.lastshot_sec_1 = 0;
@@ -48,9 +60,19 @@ public class Planes extends Entity {
 		this.wpn1 = type.getWpn1();
 		this.wpn2 = type.getWpn2();
 		this.wpn3 = type.getWpn3();
-		this.counter_prim = wpn1.getAmmoCount();
-		this.counter_sec_1 = wpn2.getAmmoCount();
-		this.counter_sec_2 = wpn3.getAmmoCount();
+		this.ammo_prim = wpn1.getAmmoCount();
+		this.ammo_sec_1 = wpn2.getAmmoCount();
+		this.ammo_sec_2 = wpn3.getAmmoCount();
+		this.type = type;
+		speed = 2;
+
+		xpos_reset = xpos;
+		ypos_reset = ypos;
+		hitpoints_reset = hitpoints;
+		angle_reset = angle;
+		ammo_prim_reset = ammo_prim;
+		ammo_sec_1_reset = ammo_sec_1;
+		ammo_sec_2_reset = ammo_sec_2;
 	}
 
 	/**
@@ -65,7 +87,7 @@ public class Planes extends Entity {
 					* (float) Math.cos(Math.toRadians(angle) * delta / 17);
 			vspeed = Math.abs(speed * speed_mod)
 					* (float) Math.sin(Math.toRadians(angle) * delta / 17);
-			if (Math.abs(hspeed) + Math.abs(vspeed) < 1.3 || stall) {
+			if (Math.abs(hspeed) + Math.abs(vspeed) < 1.3f || stall) {
 				stall = true;
 				xpos += hspeed;
 				ypos += vspeed + Var.GRAVITY;
@@ -80,7 +102,54 @@ public class Planes extends Entity {
 				ypos += vspeed;
 				Var.cy += vspeed;
 			}
+
+			if (!accel && !brake) {
+				if (vspeed < 0) {
+					this.decSpeed(0.1f, true);
+				} else {
+					this.decSpeed(0.06f, true);
+				}
+			}
+			if (moveLeft) {
+				increaseAngle(-type.getTurnAngle() * delta);
+			}
+			if (moveRight) {
+				increaseAngle(type.getTurnAngle() * delta);
+			}
+			if (accel) {
+				if (vspeed < 0 && !stall) {
+					incSpeed(type.getAccel() / 2 * delta);
+				} else if (vspeed >= 0 && !stall) {
+					incSpeed(type.getAccel() * delta);
+				} else if (vspeed >= 0 && stall) {
+					incSpeed(type.getAccel() / 2 * delta);
+				} else {
+					incSpeed(type.getAccel() / 20 * delta);
+				}
+			}
+			if (brake) {
+				if (speed <= 0.6) {
+					setSpeed(0.6f);
+				} else {
+					decSpeed(0.035f, false);
+				}
+			}
 		}
+	}
+
+	/**
+	 * Paint method
+	 */
+
+	public void render(GameContainer container, Graphics g, float delta) {
+		if (broken)
+			return;
+		plane = new Rectangle(xpos, ypos, image.getWidth(), image.getHeight());
+		float x = (float) (plane.getCenterX() + Math.cos(Math.toRadians(angle)) * 100);
+		float y = (float) (plane.getCenterY() + Math.sin(Math.toRadians(angle)) * 100);
+		aim = new Ellipse(x, y, 10, 10);
+		image.setRotation(angle);
+		image.draw(xpos, ypos);
 	}
 
 	/**
@@ -91,7 +160,7 @@ public class Planes extends Entity {
 	 */
 	public Weapons shoot_primary() {
 		float angle = this.angle;
-		if (broken || counter_prim == 0) {
+		if (broken || ammo_prim == 0) {
 			return null;
 		}
 		random = new Random();
@@ -108,8 +177,8 @@ public class Planes extends Entity {
 		}
 		lastshot_prim = time;
 		float x = (float) (plane.getCenterX() + Math.cos(Math.toRadians(angle)));
-		float y = (float) (plane.getCenterY() + Math.sin(Math.toRadians(angle)) + 5);
-		counter_prim--;
+		float y = (float) (plane.getCenterY() + Math.sin(Math.toRadians(angle)));
+		ammo_prim--;
 		wpn1.getSound().play(1, Var.sounds_volume);
 		return new Weapons(x, y, angle, wpn1, 0, id);
 	}
@@ -121,25 +190,17 @@ public class Planes extends Entity {
 	 * @return new Weapons object
 	 */
 	public Weapons shoot_secondary_1() {
-		if (broken) {
+		if (broken || ammo_sec_1 == 0) {
 			return null;
 		}
-		int delay_sec_1 = 0;
 		long time = System.currentTimeMillis();
-		if (counter_sec_1 % wpn2.getAmmoCount() == 0) {
-			delay_sec_1 = wpn2.getReload_delay();
-		}
-		if (counter_sec_1 % wpn2.getAmmoCount() != 0) {
-			delay_sec_1 = wpn2.getShoot_delay();
-		}
-
-		if (Math.abs(lastshot_sec_1 - time) < delay_sec_1) {
+		if (Math.abs(lastshot_sec_1 - time) < wpn2.getShoot_delay()) {
 			return null;
 		}
 		lastshot_sec_1 = time;
 		float x = (float) (plane.getCenterX() + Math.cos(Math.toRadians(angle)));
-		float y = (float) (plane.getCenterY() + Math.sin(Math.toRadians(angle)) + 5);
-		counter_sec_1--;
+		float y = (float) (plane.getCenterY() + Math.sin(Math.toRadians(angle)));
+		ammo_sec_1--;
 		wpn2.getSound().play(1, Var.sounds_volume);
 		return new Weapons(x, y, angle, wpn2, 0, id);
 	}
@@ -151,42 +212,33 @@ public class Planes extends Entity {
 	 * @return new Weapons object
 	 */
 	public Weapons shoot_secondary_2() {
-		if (broken) {
+		if (broken || ammo_sec_2 == 0) {
 			return null;
 		}
-		int delay_sec_2 = 0;
 		long time = System.currentTimeMillis();
-		if (counter_sec_2 % wpn3.getAmmoCount() == 0) {
-			delay_sec_2 = wpn3.getReload_delay();
-		}
-		if (counter_sec_2 % wpn3.getAmmoCount() != 0) {
-			delay_sec_2 = wpn3.getShoot_delay();
-		}
-		if (Math.abs(lastshot_sec_2 - time) < delay_sec_2) {
+		if (Math.abs(lastshot_sec_2 - time) < wpn3.getShoot_delay()) {
 			return null;
 		}
 		lastshot_sec_2 = time;
 		float x = (float) (plane.getCenterX() + Math.cos(Math.toRadians(angle)));
-		float y = (float) (plane.getCenterY() + Math.sin(Math.toRadians(angle)) + 5);
-		counter_sec_2--;
+		float y = (float) (plane.getCenterY() + Math.sin(Math.toRadians(angle)));
+		ammo_sec_2--;
 		wpn3.getSound().play(1, Var.sounds_volume);
 		return new Weapons(x, y, angle, wpn3, 0, id);
 	}
 
 	/**
-	 * Paint method
+	 * Resets the plane to starting values;
 	 */
-
-	public void render(GameContainer container, Graphics g, float delta) {
-		if (broken) {
-			return;
-		}
-		plane = new Rectangle(xpos, ypos, image.getWidth(), image.getHeight());
-		float x = (float) (plane.getCenterX() + Math.cos(Math.toRadians(angle)) * 100);
-		float y = (float) (plane.getCenterY() + Math.sin(Math.toRadians(angle)) * 100);
-		aim = new Ellipse(x, y, 10, 10);
-		image.setRotation(angle);
-		image.draw(xpos, ypos);
+	public void reset() {
+		xpos = xpos_reset;
+		ypos = ypos_reset;
+		hitpoints = hitpoints_reset;
+		angle = angle_reset;
+		ammo_prim = ammo_prim_reset;
+		ammo_sec_1 = ammo_sec_1_reset;
+		ammo_sec_2 = ammo_sec_2_reset;
+		broken = false;
 	}
 
 	/**
@@ -196,17 +248,46 @@ public class Planes extends Entity {
 	 */
 	public void increaseAngle(float f) {
 		if (speed > Var.PLANES_MAX_SPEED) {
-			angle += f * 0.8;
+			angle += f * 0.8f;
 		} else {
 			angle += f;
 		}
 		if (angle + f < 0) {
-			angle += f + 360;
-		} else if (angle + f > 360) {
-			angle += f - 360;
+			angle += f + 360f;
+		} else if (angle + f > 360f) {
+			angle += f - 360f;
 		}
-		if (angle >= 360 || angle <= -360) {
+		if (angle >= 360f || angle <= -360f) {
 			angle = 0;
+		}
+	}
+
+	/**
+	 * Decreases speed the given amount and stops if base is true at base value
+	 * 
+	 * @param speed
+	 * @param base
+	 */
+	public void decSpeed(float speed, boolean base) {
+		if (base && this.speed < 2f) {
+			this.speed = 2f;
+		} else if (!base && this.speed < 0.5f) {
+			this.speed = 0.5f;
+		} else {
+			this.speed -= speed;
+		}
+	}
+
+	/**
+	 * Increases speed the given amount, stops at max speed
+	 * 
+	 * @param speed
+	 */
+	public void incSpeed(float speed) {
+		if (this.speed + speed > Var.PLANES_MAX_SPEED) {
+			this.speed = Var.PLANES_MAX_SPEED;
+		} else {
+			this.speed += speed;
 		}
 	}
 
@@ -300,11 +381,11 @@ public class Planes extends Entity {
 	 */
 	public int getAmmo(int id) {
 		if (id == 2) {
-			return counter_sec_1;
+			return ammo_sec_1;
 		} else if (id == 1) {
-			return counter_prim;
+			return ammo_prim;
 		} else if (id == 3) {
-			return counter_sec_2;
+			return ammo_sec_2;
 		} else {
 			return -1;
 		}
@@ -318,16 +399,16 @@ public class Planes extends Entity {
 	 */
 	public void addAmmo(int id, WeaponTypes type, int ammount) {
 		if (id == 2) {
-			if (counter_sec_1 < type.getAmmoCount()) {
-				counter_sec_1 += ammount;
+			if (ammo_sec_1 < type.getAmmoCount()) {
+				ammo_sec_1 += ammount;
 			}
 		} else if (id == 1) {
-			if (counter_prim < type.getAmmoCount()) {
-				counter_prim += ammount;
+			if (ammo_prim < type.getAmmoCount()) {
+				ammo_prim += ammount;
 			}
 		} else if (id == 3) {
-			if (counter_sec_2 < type.getAmmoCount()) {
-				counter_sec_2 += ammount;
+			if (ammo_sec_2 < type.getAmmoCount()) {
+				ammo_sec_2 += ammount;
 			}
 		}
 	}
@@ -398,6 +479,38 @@ public class Planes extends Entity {
 
 	public boolean isInStall() {
 		return stall;
+	}
+
+	public boolean isBrake() {
+		return brake;
+	}
+
+	public void setBrake(boolean brake) {
+		this.brake = brake;
+	}
+
+	public boolean isAccel() {
+		return accel;
+	}
+
+	public void setAccel(boolean accel) {
+		this.accel = accel;
+	}
+
+	public boolean isMoveRight() {
+		return moveRight;
+	}
+
+	public void setMoveRight(boolean moveRight) {
+		this.moveRight = moveRight;
+	}
+
+	public boolean isMoveLeft() {
+		return moveLeft;
+	}
+
+	public void setMoveLeft(boolean moveLeft) {
+		this.moveLeft = moveLeft;
 	}
 
 }
