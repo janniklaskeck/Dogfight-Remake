@@ -68,24 +68,82 @@ public class Camera {
 	 *            the real y-coordinate (in pixel) which should be centered on
 	 *            the screen
 	 */
-	public void centerOn(float x, float y) {
+	public void centerOn(float x, float y, int id) {
 		// try to set the given position as center of the camera by default
-		cameraX = x - gc.getWidth() / 2;
-		cameraY = y - gc.getHeight() / 4;
+		if (Var.singlePlayer) {
+			cameraX = x - gc.getWidth() * 0.5f;
+			cameraY = y - gc.getHeight() * 0.5f;
+			// if the camera is at the right or left edge lock it to prevent a
+			// black bar
+			if (cameraX < 0)
+				cameraX = 0;
+			if (cameraX + gc.getWidth() > mapWidth)
+				cameraX = mapWidth - gc.getWidth();
+			// if the camera is at the top or bottom edge lock it to prevent a
+			// black bar
+			if (cameraY < 0) {
+				cameraY = 0;
+			}
+			if (cameraY + gc.getHeight() > mapHeight) {
+				cameraY = mapHeight - gc.getHeight();
+			}
+		} else if (!Var.singlePlayer) {
 
-		// if the camera is at the right or left edge lock it to prevent a black
-		// bar
-		if (cameraX < 0)
-			cameraX = 0;
-		if (cameraX + gc.getWidth() > mapWidth)
-			cameraX = mapWidth - gc.getWidth();
+			if (Var.vertical_split) {
+				cameraY = y - gc.getHeight() * 0.5f;
+				if (id == 1) {
+					cameraX = x - gc.getWidth() * 0.25f;
+				} else if (id == 2) {
+					cameraX = x - gc.getWidth() * 0.75f;
+				}
+				// if the camera is at the right or left edge lock it to prevent
+				// black bar
 
-		// if the camera is at the top or bottom edge lock it to prevent a black
-		// bar
-		if (cameraY < 0)
-			cameraY = 0;
-		if (cameraY + gc.getHeight() / 2 > mapHeight)
-			cameraY = mapHeight - gc.getHeight() / 2;
+				if (cameraX < 0 && id == 1) {
+					cameraX = 0;
+				} else if (cameraX < -gc.getScreenWidth() / 2 && id == 2) {
+					cameraX = -gc.getScreenWidth() / 2;
+				}
+				if (cameraX + gc.getWidth() * 0.5f > mapWidth && id == 1) {
+					cameraX = mapWidth - gc.getWidth() * 0.5f;
+				} else if (cameraX + gc.getWidth() > mapWidth && id == 2) {
+					cameraX = mapWidth - gc.getWidth();
+				}
+				// if the camera is at the top or bottom edge lock it to prevent
+				// black bar
+				if (cameraY < 0)
+					cameraY = 0;
+				if (cameraY + gc.getHeight() > mapHeight) {
+					cameraY = mapHeight - gc.getHeight();
+				}
+
+			} else if (!Var.vertical_split) {
+				cameraX = x - gc.getWidth() * 0.5f;
+				if (id == 1) {
+					cameraY = y - gc.getHeight() * 0.25f;
+				} else if (id == 2) {
+					cameraY = y - gc.getHeight() * 0.75f;
+				}
+				// if the camera is at the right or left edge lock it to prevent
+				// black bar
+				if (cameraX < 0)
+					cameraX = 0;
+				if (cameraX + gc.getWidth() > mapWidth)
+					cameraX = mapWidth - gc.getWidth();
+				// if the camera is at the top or bottom edge lock it to prevent
+				// black bar
+				if (cameraY < 0 && id == 1) {
+					cameraY = 0;
+				} else if (cameraY < -gc.getScreenHeight() / 2 && id == 2) {
+					cameraY = -gc.getScreenHeight() / 2;
+				}
+				if (cameraY + gc.getHeight() / 2 > mapHeight && id == 1) {
+					cameraY = mapHeight - gc.getHeight() / 2;
+				} else if (cameraY + gc.getHeight() > mapHeight && id == 2) {
+					cameraY = mapHeight - gc.getHeight();
+				}
+			}
+		}
 	}
 
 	/**
@@ -103,8 +161,8 @@ public class Camera {
 	 * @param width
 	 *            the width (in pixel) of the rectangle
 	 */
-	public void centerOn(float x, float y, float height, float width) {
-		this.centerOn(x + width / 2, y + height / 2);
+	public void centerOn(float x, float y, float height, float width, int id) {
+		this.centerOn(x + width / 2, y + height / 2, id);
 	}
 
 	/**
@@ -114,8 +172,8 @@ public class Camera {
 	 * @param shape
 	 *            the Shape which should be centered on the screen
 	 */
-	public void centerOn(Shape shape) {
-		this.centerOn(shape.getCenterX(), shape.getCenterY());
+	public void centerOn(Shape shape, int id) {
+		this.centerOn(shape.getCenterX(), shape.getCenterY(), id);
 	}
 
 	/**

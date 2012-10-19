@@ -6,10 +6,15 @@ import dogfight_remake.entities.weapons.WeaponTypes;
 import dogfight_remake.main.Var;
 
 public enum PlaneTypes {
-	// Name, Hitpoints, MaxSpeed, Acceleration, TurnAngle, Damage-Modifier, Wpn1, Wpn2, Wpn3, Image
-	NORMAL("Normal", 100, 1, 0.01f, 0.12f, 1, WeaponTypes.GUN, WeaponTypes.GUIDED_AIR,WeaponTypes.BOMB, Var.img_plane1), 
-	FAST("Fast", 75, 1.25f, 0.01f, 0.12f,0.75f, WeaponTypes.GUN,WeaponTypes.UNGUIDED, WeaponTypes.UNGUIDED, Var.img_plane1), 
-	SLOW("Slow", 150, 0.75f, 0.01f, 0.12f,1.25f, WeaponTypes.GUN, WeaponTypes.GUIDED_AIR, WeaponTypes.BOMB_SPLIT, Var.img_plane1);
+	// Name, Hitpoints, MaxSpeed, Acceleration, TurnAngle, Damage-Modifier,
+	// Wpn1, Wpn2, Wpn3, Image
+	NORMAL("Normal", 100, 1, 0.01f, 0.12f, 1, WeaponTypes.GUN, WeaponTypes.GUN,
+			WeaponTypes.GUIDED_AIR, WeaponTypes.BOMB, Var.img_plane1), FAST(
+			"Fast", 75, 1.25f, 0.01f, 0.12f, 0.75f, WeaponTypes.GUN,
+			WeaponTypes.GUN, WeaponTypes.UNGUIDED, WeaponTypes.UNGUIDED,
+			Var.img_plane2), SLOW("Slow", 150, 0.75f, 0.01f, 0.12f, 1.25f,
+			WeaponTypes.GUN, WeaponTypes.GUN, WeaponTypes.GUIDED_AIR,
+			WeaponTypes.BOMB_SPLIT, Var.img_plane1);
 
 	private int hitpoints;
 	private float speed;
@@ -18,12 +23,14 @@ public enum PlaneTypes {
 	private WeaponTypes wpn1;
 	private WeaponTypes wpn2;
 	private WeaponTypes wpn3;
+	private WeaponTypes wpn4;
 	private Image image;
 	private float accel;
 	private float turnAngle;
 
-	PlaneTypes(String name, int hitpoins, float speed, float accel, float turnAngle, float damage,
-			WeaponTypes wpn1, WeaponTypes wpn2, WeaponTypes wpn3, Image image) {
+	PlaneTypes(String name, int hitpoins, float speed, float accel,
+			float turnAngle, float damage, WeaponTypes wpn1, WeaponTypes wpn2,
+			WeaponTypes wpn3, WeaponTypes wpn4, Image image) {
 		this.setHitpoints(hitpoins);
 		this.setName(name);
 		this.setSpeed(speed);
@@ -33,15 +40,16 @@ public enum PlaneTypes {
 		this.setWpn1(wpn1);
 		this.setWpn2(wpn2);
 		this.setWpn3(wpn3);
+		this.setWpn4(wpn4);
 		this.setImage(image);
 	}
 
 	public static void init() {
 		NORMAL.setImage(Var.img_plane1);
-		FAST.setImage(Var.img_plane1);
+		FAST.setImage(Var.img_plane2);
 		SLOW.setImage(Var.img_plane1);
 	}
-	
+
 	public float getDamage() {
 		return damage;
 	}
@@ -98,6 +106,14 @@ public enum PlaneTypes {
 		this.wpn3 = wpn3;
 	}
 
+	public WeaponTypes getWpn4() {
+		return wpn4;
+	}
+
+	public void setWpn4(WeaponTypes wpn4) {
+		this.wpn4 = wpn4;
+	}
+
 	public Image getImage() {
 		return image;
 	}
@@ -121,5 +137,4 @@ public enum PlaneTypes {
 	public void setTurnAngle(float turnAngle) {
 		this.turnAngle = turnAngle;
 	}
-
 }

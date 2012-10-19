@@ -4,13 +4,11 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.state.StateBasedGame;
 
-import dogfight_remake.entities.weapons.Weapons;
 import dogfight_remake.main.GamePlayState;
 import dogfight_remake.main.Var;
 
 public class KeyControls {
-
-	public static void update(GameContainer gc, StateBasedGame game, int delta) {
+	public static void update(GameContainer gc, StateBasedGame sbg, int delta) {
 		Input input = gc.getInput();
 		if (!Var.paused) {
 			// Player 1
@@ -38,27 +36,31 @@ public class KeyControls {
 			}
 			if (input.isKeyDown(Var.p1_key_prim1)) {
 				if (GamePlayState.r.player1 != null) {
-					Weapons tmp = GamePlayState.r.player1.shoot_primary();
-					if (tmp != null) {
-						GamePlayState.weapons.add(tmp);
-					}
+					GamePlayState.r.player1.setShoot_prim1(true);
 				}
+			} else {
+				GamePlayState.r.player1.setShoot_prim1(false);
+			}
+			if (input.isKeyDown(Var.p1_key_prim2)) {
+				if (GamePlayState.r.player1 != null) {
+					GamePlayState.r.player1.setShoot_prim2(true);
+				}
+			} else {
+				GamePlayState.r.player1.setShoot_prim2(false);
 			}
 			if (input.isKeyDown(Var.p1_key_sec1)) {
 				if (GamePlayState.r.player1 != null) {
-					Weapons tmp = GamePlayState.r.player1.shoot_secondary_1();
-					if (tmp != null) {
-						GamePlayState.weapons.add(tmp);
-					}
+					GamePlayState.r.player1.setShoot_sec1(true);
 				}
+			} else {
+				GamePlayState.r.player1.setShoot_sec1(false);
 			}
 			if (input.isKeyDown(Var.p1_key_sec2)) {
 				if (GamePlayState.r.player1 != null) {
-					Weapons tmp = GamePlayState.r.player1.shoot_secondary_2();
-					if (tmp != null) {
-						GamePlayState.weapons.add(tmp);
-					}
+					GamePlayState.r.player1.setShoot_sec2(true);
 				}
+			} else {
+				GamePlayState.r.player1.setShoot_sec2(false);
 			}
 
 			// Player 2
@@ -86,27 +88,31 @@ public class KeyControls {
 			}
 			if (input.isKeyDown(Var.p2_key_prim1)) {
 				if (GamePlayState.r.player2 != null) {
-					Weapons tmp = GamePlayState.r.player2.shoot_primary();
-					if (tmp != null) {
-						GamePlayState.weapons.add(tmp);
-					}
+					GamePlayState.r.player2.setShoot_prim1(true);
 				}
+			} else {
+				GamePlayState.r.player2.setShoot_prim1(false);
+			}
+			if (input.isKeyDown(Var.p2_key_prim2)) {
+				if (GamePlayState.r.player2 != null) {
+					GamePlayState.r.player2.setShoot_prim2(true);
+				}
+			} else {
+				GamePlayState.r.player2.setShoot_prim2(false);
 			}
 			if (input.isKeyDown(Var.p2_key_sec1)) {
 				if (GamePlayState.r.player2 != null) {
-					Weapons tmp = GamePlayState.r.player2.shoot_secondary_1();
-					if (tmp != null) {
-						GamePlayState.weapons.add(tmp);
-					}
+					GamePlayState.r.player2.setShoot_sec1(true);
 				}
+			} else {
+				GamePlayState.r.player2.setShoot_sec1(false);
 			}
 			if (input.isKeyDown(Var.p2_key_sec2)) {
 				if (GamePlayState.r.player2 != null) {
-					Weapons tmp = GamePlayState.r.player2.shoot_secondary_2();
-					if (tmp != null) {
-						GamePlayState.weapons.add(tmp);
-					}
+					GamePlayState.r.player2.setShoot_sec2(true);
 				}
+			} else {
+				GamePlayState.r.player2.setShoot_sec2(false);
 			}
 		}
 		if (input.isKeyPressed(Input.KEY_ESCAPE)) {

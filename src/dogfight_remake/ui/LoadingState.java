@@ -50,9 +50,9 @@ public class LoadingState extends BasicGameState {
 		Var.arrow_right = Var.arrows.getSubImage(64, 0, 64, 64);
 		// Images Game
 		Var.img_plane1 = new Image(
-				"dogfight_remake/images/planes/plane1.png");
+				"dogfight_remake/images/planes/gen5/F35.png").getScaledCopy(0.65f);
 		Var.img_plane2 = new Image(
-				"dogfight_remake/images/planes/plane2.png");
+				"dogfight_remake/images/planes/plane1.png", true);
 		Var.img_bg = new Image("dogfight_remake/images/img_bg.jpg");
 		Var.img_missile1 = new Image(
 				"dogfight_remake/images/weapons/missile1.png");

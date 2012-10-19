@@ -8,7 +8,7 @@ import dogfight_remake.main.Var;
 public enum WeaponTypes {
 	// Type(Name, Damage, Ammo Count, Speed, Reload Delay, Shoot Delay, Lifetime(ms), Explosion size, Image)
 	MINIGUN("MiniGun", 2, 100, 15, 2500, 50, 1000, 1, Var.img_bullet1,Var.prim_gun_light), 
-	GUN("Gun", 3, 50, 15, 3000, 75, 1000, 1,Var.img_bullet1, Var.prim_gun_middle), 
+	GUN("Gun", 3, 50, 15, 3000, 75, 1500, 1,Var.img_bullet1, Var.prim_gun_middle), 
 	BOMB("Bomb", 40, 2,12, 8000, 300, 10000, 5, Var.img_bomb1, Var.sec_bomb_drop), 
 	BOMB_SPLIT("Split Bomb", 30, 2, 12, 8000, 300, 10000, 4, Var.img_bomb1,Var.sec_bomb_drop), 
 	BOMB_SPLIT_SMALL("Split Bomb(small)", 10, 5,12, 8000, 300, 10000, 3, Var.img_bomb1, Var.sec_bomb_drop), 

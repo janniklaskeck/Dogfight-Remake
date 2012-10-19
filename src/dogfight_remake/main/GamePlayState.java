@@ -73,7 +73,7 @@ public class GamePlayState extends BasicGameState {
 			weapons = new ArrayList<Weapons>();
 			explosions = new ArrayList<Explosion>();
 			camera = new Camera(gc, Var.tmap);
-			// camera2 = new Camera(gc, Var.tmap);
+			camera2 = new Camera(gc, Var.tmap);
 			rnd = new Random();
 			// GlbVar.music1.loop(1, GlbVar.music_volume);
 			Var.score_p1 = 0;
@@ -109,18 +109,13 @@ public class GamePlayState extends BasicGameState {
 		if (r.player1 != null && r.player2 != null && !Var.paused) {
 			time += delta;
 			Var.timePassed = time / 1000;
-			Weapons wmp = r.turret.shoot();
-			if (wmp != null) {
-				if (r.turret.targetInRange(r.turret.getTarget())) {
-					Var.prim_gun_middle.play(1, Var.sounds_volume);
-					weapons.add(wmp);
-				}
-			}
 			r.player1.update(delta);
 			r.player2.update(delta);
 			r.turret.update(delta);
-			Reload.reload_primary(r.player1, delta);
-			Reload.reload_primary(r.player2, delta);
+			Reload.reload_primary_1(r.player1, delta);
+			Reload.reload_primary_1(r.player2, delta);
+			Reload.reload_primary_2(r.player1, delta);
+			Reload.reload_primary_2(r.player2, delta);
 			Reload.reload_secondary_1(r.player1, delta);
 			Reload.reload_secondary_1(r.player2, delta);
 			Reload.reload_secondary_2(r.player1, delta);
@@ -213,8 +208,12 @@ public class GamePlayState extends BasicGameState {
 					Var.respawntimer_turret -= delta;
 				}
 		}
-		camera.centerOn(r.player1.getXpos(), r.player1.getYpos());
-		// camera2.centerOn(r.player2.getXpos(), r.player2.getYpos());
+		if (Var.singlePlayer) {
+			camera.centerOn(r.player1.getXpos(), r.player1.getYpos(), 1);
+		} else if (!Var.singlePlayer) {
+			camera.centerOn(r.player1.getXpos(), r.player1.getYpos(), 1);
+			camera2.centerOn(r.player2.getXpos(), r.player2.getYpos(), 2);
+		}
 	}
 
 	/**

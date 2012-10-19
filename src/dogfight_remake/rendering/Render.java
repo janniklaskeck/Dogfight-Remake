@@ -1,6 +1,5 @@
 package dogfight_remake.rendering;
 
-import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
@@ -9,6 +8,7 @@ import dogfight_remake.entities.planes.Planes;
 import dogfight_remake.entities.weapons.WeaponTypes;
 import dogfight_remake.main.GamePlayState;
 import dogfight_remake.main.Var;
+import dogfight_remake.ui.GameUI;
 
 public class Render {
 	public Planes player1;
@@ -99,105 +99,188 @@ public class Render {
 	 */
 
 	public void render(GameContainer gc, Graphics g, int delta) {
-		// g.setClip(0, 0, 1680, 525);
+		if (Var.singlePlayer) {
+			GamePlayState.camera.translateGraphics();
+			Var.img_bg.draw(0, 0,
+					Var.tmap.getWidth() * Var.tmap.getTileWidth(),
+					Var.tmap.getHeight() * Var.tmap.getTileHeight());
+			GamePlayState.camera.untranslateGraphics();
+			GamePlayState.camera.drawMap();
+			GamePlayState.camera.translateGraphics();
 
-		GamePlayState.camera.translateGraphics();
-		Var.img_bg.draw(0, 0, Var.tmap.getWidth() * Var.tmap.getTileWidth(),
-				Var.tmap.getHeight() * Var.tmap.getTileHeight());
-		GamePlayState.camera.untranslateGraphics();
-		GamePlayState.camera.drawMap();
-		GamePlayState.camera.translateGraphics();
-		
-		if (player1 != null) {
-			player1.render(gc, g, delta);
-		}
-		if (player2 != null) {
-			player2.render(gc, g, delta);
-		}
-		/*
-		 * g.setClip(0, 525, 1680, 525); GlbVar.img_bg.draw(0, 525,
-		 * GlbVar.tmap.getWidth() * GlbVar.tmap.getTileWidth(),
-		 * GlbVar.tmap.getHeight() * GlbVar.tmap.getTileHeight());
-		 * GamePlayState.camera.untranslateGraphics();
-		 * GamePlayState.camera2.drawMap();
-		 * GamePlayState.camera2.translateGraphics(); if (player1 != null) {
-		 * player1.render(gc, g, delta); } if (player2 != null) {
-		 * player2.render(gc, g, delta); }
-		 * GamePlayState.camera2.untranslateGraphics(); g.clearClip();
-		 */
-		if (turret != null) {
-			turret.render(gc, g, delta);
-		}
-		if (GamePlayState.weapons != null) {
-			for (int i = 0; i < GamePlayState.weapons.size(); i++) {
-				GamePlayState.weapons.get(i).render(gc, g, delta);
+			if (player1 != null) {
+				player1.render(gc, g, delta);
 			}
-		}
-		if (GamePlayState.explosions != null) {
-			for (int i = 0; i < GamePlayState.explosions.size(); i++) {
-				if (!GamePlayState.explosions.get(i).isMaxRadius()) {
-					GamePlayState.explosions.get(i).render(gc, g, delta);
-				} else {
-					GamePlayState.explosions.remove(i);
+			if (player2 != null) {
+				player2.render(gc, g, delta);
+			}
+			if (turret != null) {
+				turret.render(gc, g, delta);
+			}
+			if (GamePlayState.weapons != null) {
+				for (int i = 0; i < GamePlayState.weapons.size(); i++) {
+					GamePlayState.weapons.get(i).render(gc, g, delta);
 				}
 			}
-		}
-		// Hitpoints
-		g.clearClip();
-		if (player1 != null && player2 != null) {
+			if (GamePlayState.explosions != null) {
+				for (int i = 0; i < GamePlayState.explosions.size(); i++) {
+					if (!GamePlayState.explosions.get(i).isMaxRadius()) {
+						GamePlayState.explosions.get(i).render(gc, g, delta);
+					} else {
+						GamePlayState.explosions.remove(i);
+					}
+				}
+			}
 			GamePlayState.camera.untranslateGraphics();
-			// GamePlayState.camera2.untranslateGraphics();
-			g.setColor(Color.black);
-			// Player 1
-			g.drawString("Player1: " + player1.getHitpoints(),
-					Var.dim_chosen.width / 20, Var.dim_chosen.height / 20);
-			g.drawString(
-					player1.getWeapon(1).getName() + ": " + player1.getAmmo(1),
-					Var.dim_chosen.width / 20, Var.dim_chosen.height / 20
-							+ Var.dim_chosen.height / 30);
-			g.drawString(
-					player1.getWeapon(2).getName() + ": " + player1.getAmmo(2),
-					Var.dim_chosen.width / 20, Var.dim_chosen.height / 20
-							+ Var.dim_chosen.height / 15);
-			g.drawString(
-					player1.getWeapon(3).getName() + ": " + player1.getAmmo(3),
-					Var.dim_chosen.width / 20, (Var.dim_chosen.height / 20)
-							+ (Var.dim_chosen.height / 30)
-							+ (Var.dim_chosen.height / 15));
-			if (Var.respawntimer_p1 < Var.RESPAWNTIME_PLAYER) {
-				g.drawString("Respawn Player1: " + Var.respawntimer_p1 / 100,
-						Var.dim_chosen.width / 5, Var.dim_chosen.height / 20);
+			GameUI.renderPlayerInterface(0, 0, gc, g, delta);
+		} else if (!Var.singlePlayer) {
+			if (Var.vertical_split) {
+				g.setWorldClip(0, 0, gc.getWidth() / 2, gc.getHeight());
+				GamePlayState.camera.translateGraphics();
+				Var.img_bg.draw(0, 0,
+						Var.tmap.getWidth() * Var.tmap.getTileWidth(),
+						Var.tmap.getHeight() * Var.tmap.getTileHeight());
+				GamePlayState.camera.untranslateGraphics();
+				GamePlayState.camera.drawMap();
+				GamePlayState.camera.translateGraphics();
+
+				if (player1 != null) {
+					player1.render(gc, g, delta);
+				}
+				if (player2 != null) {
+					player2.render(gc, g, delta);
+				}
+				if (turret != null) {
+					turret.render(gc, g, delta);
+				}
+				if (GamePlayState.weapons != null) {
+					for (int i = 0; i < GamePlayState.weapons.size(); i++) {
+						GamePlayState.weapons.get(i).render(gc, g, delta);
+					}
+				}
+				if (GamePlayState.explosions != null) {
+					for (int i = 0; i < GamePlayState.explosions.size(); i++) {
+						if (!GamePlayState.explosions.get(i).isMaxRadius()) {
+							GamePlayState.explosions.get(i)
+									.render(gc, g, delta);
+						} else {
+							GamePlayState.explosions.remove(i);
+						}
+					}
+				}
+				GamePlayState.camera.untranslateGraphics();
+				g.setWorldClip(gc.getWidth() / 2, 0, gc.getWidth() / 2,
+						gc.getHeight());
+				// ---
+				GamePlayState.camera2.translateGraphics();
+				Var.img_bg.draw(0, 0,
+						Var.tmap.getWidth() * Var.tmap.getTileWidth(),
+						Var.tmap.getHeight() * Var.tmap.getTileHeight());
+				GamePlayState.camera2.untranslateGraphics();
+				GamePlayState.camera2.drawMap();
+				GamePlayState.camera2.translateGraphics();
+				if (player1 != null) {
+					player1.render(gc, g, delta);
+				}
+				if (player2 != null) {
+					player2.render(gc, g, delta);
+				}
+				if (turret != null) {
+					turret.render(gc, g, delta);
+				}
+				if (GamePlayState.weapons != null) {
+					for (int i = 0; i < GamePlayState.weapons.size(); i++) {
+						GamePlayState.weapons.get(i).render(gc, g, delta);
+					}
+				}
+				if (GamePlayState.explosions != null) {
+					for (int i = 0; i < GamePlayState.explosions.size(); i++) {
+						if (!GamePlayState.explosions.get(i).isMaxRadius()) {
+							GamePlayState.explosions.get(i)
+									.render(gc, g, delta);
+						} else {
+							GamePlayState.explosions.remove(i);
+						}
+					}
+				}
+				GamePlayState.camera2.untranslateGraphics();
+				g.clearWorldClip();
+				GameUI.renderPlayerInterface(0, 0, gc, g, delta);
+			} else if (!Var.vertical_split) {
+				g.setWorldClip(0, 0, gc.getWidth(), gc.getHeight() / 2);
+				GamePlayState.camera.translateGraphics();
+				Var.img_bg.draw(0, 0,
+						Var.tmap.getWidth() * Var.tmap.getTileWidth(),
+						Var.tmap.getHeight() * Var.tmap.getTileHeight());
+				GamePlayState.camera.untranslateGraphics();
+				GamePlayState.camera.drawMap();
+				GamePlayState.camera.translateGraphics();
+
+				if (player1 != null) {
+					player1.render(gc, g, delta);
+				}
+				if (player2 != null) {
+					player2.render(gc, g, delta);
+				}
+				if (turret != null) {
+					turret.render(gc, g, delta);
+				}
+				if (GamePlayState.weapons != null) {
+					for (int i = 0; i < GamePlayState.weapons.size(); i++) {
+						GamePlayState.weapons.get(i).render(gc, g, delta);
+					}
+				}
+				if (GamePlayState.explosions != null) {
+					for (int i = 0; i < GamePlayState.explosions.size(); i++) {
+						if (!GamePlayState.explosions.get(i).isMaxRadius()) {
+							GamePlayState.explosions.get(i)
+									.render(gc, g, delta);
+						} else {
+							GamePlayState.explosions.remove(i);
+						}
+					}
+				}
+				GamePlayState.camera.untranslateGraphics();
+				g.setWorldClip(0, gc.getHeight() / 2, gc.getWidth(),
+						gc.getHeight() / 2);
+				// ---
+				GamePlayState.camera2.translateGraphics();
+				Var.img_bg.draw(0, 0,
+						Var.tmap.getWidth() * Var.tmap.getTileWidth(),
+						Var.tmap.getHeight() * Var.tmap.getTileHeight());
+				GamePlayState.camera2.untranslateGraphics();
+				GamePlayState.camera2.drawMap();
+				GamePlayState.camera2.translateGraphics();
+				if (player1 != null) {
+					player1.render(gc, g, delta);
+				}
+				if (player2 != null) {
+					player2.render(gc, g, delta);
+				}
+				if (turret != null) {
+					turret.render(gc, g, delta);
+				}
+				if (GamePlayState.weapons != null) {
+					for (int i = 0; i < GamePlayState.weapons.size(); i++) {
+						GamePlayState.weapons.get(i).render(gc, g, delta);
+					}
+				}
+				if (GamePlayState.explosions != null) {
+					for (int i = 0; i < GamePlayState.explosions.size(); i++) {
+						if (!GamePlayState.explosions.get(i).isMaxRadius()) {
+							GamePlayState.explosions.get(i)
+									.render(gc, g, delta);
+						} else {
+							GamePlayState.explosions.remove(i);
+						}
+					}
+				}
+				GamePlayState.camera2.untranslateGraphics();
+				g.clearWorldClip();
+				GameUI.renderPlayerInterface(0, 0, gc, g, delta);
+
 			}
-			// g.drawString("", 400, 500);
-			// Player 2
-			g.drawString("Player2: " + player2.getHitpoints(),
-					Var.dim_chosen.width - Var.dim_chosen.width / 7,
-					Var.dim_chosen.height / 20);
-			g.drawString(
-					player2.getWeapon(1).getName() + ": " + player2.getAmmo(1),
-					Var.dim_chosen.width - Var.dim_chosen.width / 7,
-					Var.dim_chosen.height / 20 + Var.dim_chosen.height / 30);
-			g.drawString(
-					player2.getWeapon(2).getName() + ": " + player2.getAmmo(2),
-					Var.dim_chosen.width - Var.dim_chosen.width / 7,
-					Var.dim_chosen.height / 20 + Var.dim_chosen.height / 15);
-			g.drawString(
-					player2.getWeapon(3).getName() + ": " + player2.getAmmo(3),
-					Var.dim_chosen.width - Var.dim_chosen.width / 7,
-					(Var.dim_chosen.height / 20) + (Var.dim_chosen.height / 30)
-							+ (Var.dim_chosen.height / 15));
-			if (Var.respawntimer_p2 < Var.RESPAWNTIME_PLAYER) {
-				g.drawString("Respawn Player2: " + Var.respawntimer_p2 / 100,
-						Var.dim_chosen.width - Var.dim_chosen.width / 3,
-						Var.dim_chosen.height / 20);
-			}
-			// FPS and score
-			g.drawString(Var.score_p1 + " : " + Var.score_p2,
-					Var.dim_chosen.width / 2, Var.dim_chosen.height / 10);
-			g.drawString(Var.timePassed + "", Var.dim_chosen.width / 2,
-					Var.dim_chosen.height / 13);
-			GamePlayState.camera.translateGraphics();
-			// GamePlayState.camera2.translateGraphics();
 		}
+
 	}
 }

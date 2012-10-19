@@ -86,6 +86,9 @@ public class TurretAi extends Entity {
 			angle = (float) Math.toDegrees(Math.atan2(deltaY, deltaX));
 		}
 		target = getNearestTarget();
+		if (targetInRange(getTarget())) {
+			shoot();
+		}
 	}
 
 	/**
@@ -93,10 +96,10 @@ public class TurretAi extends Entity {
 	 * 
 	 * @return
 	 */
-	public Weapons shoot() {
+	public void shoot() {
 		float angle = this.angle;
 		if (broken || !inRange) {
-			return null;
+			return;
 		}
 		random = new Random();
 		double rnd = random.nextDouble() * 2;
@@ -108,13 +111,13 @@ public class TurretAi extends Entity {
 		}
 		long time = System.currentTimeMillis();
 		if (Math.abs(lastshot_prim - time) < wmp.getShoot_delay()) {
-			return null;
+			return;
 		}
 		lastshot_prim = time;
 		float x = (float) (xpos + Math.cos(Math.toRadians(angle)));
 		float y = (float) (ypos + Math.sin(Math.toRadians(angle)) - 50);
-		return new Weapons(x, y, angle, wmp, 0, id);
-
+		wmp.getSound().play(1, Var.sounds_volume);
+		GamePlayState.weapons.add(new Weapons(x, y, angle, wmp, 0, id));
 	}
 
 	/**
@@ -139,7 +142,6 @@ public class TurretAi extends Entity {
 		double yDiff_p1 = ypos - GamePlayState.r.player1.getYpos();
 		double xDiff_p2 = xpos - GamePlayState.r.player2.getXpos();
 		double yDiff_p2 = ypos - GamePlayState.r.player2.getYpos();
-
 		if (Math.sqrt(xDiff_p1 * xDiff_p1 + yDiff_p1 * yDiff_p1) > Math
 				.sqrt(xDiff_p2 * xDiff_p2 + yDiff_p2 * yDiff_p2)) {
 			return GamePlayState.r.player2;
@@ -290,7 +292,8 @@ public class TurretAi extends Entity {
 	}
 
 	public boolean targetInRange(Planes target) {
-		if (Math.abs((xpos + ypos) - (target.getXpos() + target.getYpos())) <= wmp.getLife_time() - 100) {
+		if (Math.abs((xpos + ypos) - (target.getXpos() + target.getYpos())) <= wmp
+				.getLife_time() - 100) {
 			return true;
 		} else {
 			return false;

@@ -11,6 +11,7 @@ import org.newdawn.slick.geom.Rectangle;
 import dogfight_remake.entities.Entity;
 import dogfight_remake.entities.weapons.WeaponTypes;
 import dogfight_remake.entities.weapons.Weapons;
+import dogfight_remake.main.GamePlayState;
 import dogfight_remake.main.Var;
 
 public class Planes extends Entity {
@@ -21,8 +22,9 @@ public class Planes extends Entity {
 	private int id;
 	private int hitpoints;
 	private float angle;
-	private long lastshot_prim, lastshot_sec_1, lastshot_sec_2;
-	private int ammo_prim;
+	private long lastshot_prim_1, lastshot_prim_2,lastshot_sec_1, lastshot_sec_2;
+	private int ammo_prim_1;
+	private int ammo_prim_2;
 	private int ammo_sec_1;
 	private int ammo_sec_2;
 	private boolean broken;
@@ -30,19 +32,25 @@ public class Planes extends Entity {
 	private WeaponTypes wpn1;
 	private WeaponTypes wpn2;
 	private WeaponTypes wpn3;
+	private WeaponTypes wpn4;
 	private boolean stall;
 	private float speed_mod;
 	private boolean accel = false;
 	private boolean brake = false;
 	private boolean moveLeft = false;
 	private boolean moveRight = false;
+	private boolean shoot_prim1 = false;
+	private boolean shoot_prim2 = false;
+	private boolean shoot_sec1 = false;
+	private boolean shoot_sec2 = false;
 	private PlaneTypes type;
 
 	float xpos_reset;
 	float ypos_reset;
 	int hitpoints_reset;
 	float angle_reset;
-	int ammo_prim_reset;
+	int ammo_prim_1_reset;
+	int ammo_prim_2_reset;
 	int ammo_sec_1_reset;
 	int ammo_sec_2_reset;
 
@@ -53,16 +61,19 @@ public class Planes extends Entity {
 		this.speed_mod = type.getSpeed();
 		this.image = type.getImage();
 		this.angle = angle;
-		this.lastshot_prim = 0;
+		this.lastshot_prim_1 = 0;
+		this.lastshot_prim_2 = 0;
 		this.lastshot_sec_1 = 0;
 		this.lastshot_sec_2 = 0;
 		this.broken = false;
 		this.wpn1 = type.getWpn1();
 		this.wpn2 = type.getWpn2();
 		this.wpn3 = type.getWpn3();
-		this.ammo_prim = wpn1.getAmmoCount();
-		this.ammo_sec_1 = wpn2.getAmmoCount();
-		this.ammo_sec_2 = wpn3.getAmmoCount();
+		this.wpn4 = type.getWpn4();
+		this.ammo_prim_1 = wpn1.getAmmoCount();
+		this.ammo_prim_2 = wpn2.getAmmoCount();
+		this.ammo_sec_1 = wpn3.getAmmoCount();
+		this.ammo_sec_2 = wpn4.getAmmoCount();
 		this.type = type;
 		speed = 2;
 
@@ -70,7 +81,8 @@ public class Planes extends Entity {
 		ypos_reset = ypos;
 		hitpoints_reset = hitpoints;
 		angle_reset = angle;
-		ammo_prim_reset = ammo_prim;
+		ammo_prim_1_reset = ammo_prim_1;
+		ammo_prim_2_reset = ammo_prim_2;
 		ammo_sec_1_reset = ammo_sec_1;
 		ammo_sec_2_reset = ammo_sec_2;
 	}
@@ -105,9 +117,9 @@ public class Planes extends Entity {
 
 			if (!accel && !brake) {
 				if (vspeed < 0) {
-					this.decSpeed(0.1f, true);
+					this.decSpeed(0.08f, true);
 				} else {
-					this.decSpeed(0.06f, true);
+					this.decSpeed(0.04f, true);
 				}
 			}
 			if (moveLeft) {
@@ -134,6 +146,18 @@ public class Planes extends Entity {
 					decSpeed(0.035f, false);
 				}
 			}
+			if (shoot_prim1) {
+				shoot_primary_1();
+			}
+			if (shoot_prim2) {
+				shoot_primary_2();
+			}
+			if (shoot_sec1) {
+				shoot_secondary_1();
+			}
+			if (shoot_sec2) {
+				shoot_secondary_2();
+			}
 		}
 	}
 
@@ -158,10 +182,10 @@ public class Planes extends Entity {
 	 * @param type
 	 * @return new Weapons object
 	 */
-	public Weapons shoot_primary() {
+	public void shoot_primary_1() {
 		float angle = this.angle;
-		if (broken || ammo_prim == 0) {
-			return null;
+		if (broken || ammo_prim_1 == 0) {
+			return;
 		}
 		random = new Random();
 		double rnd = random.nextDouble() * 2;
@@ -172,15 +196,15 @@ public class Planes extends Entity {
 			angle -= rnd;
 		}
 		long time = System.currentTimeMillis();
-		if (Math.abs(lastshot_prim - time) < wpn1.getShoot_delay()) {
-			return null;
+		if (Math.abs(lastshot_prim_1 - time) < wpn1.getShoot_delay()) {
+			return;
 		}
-		lastshot_prim = time;
+		lastshot_prim_1 = time;
 		float x = (float) (plane.getCenterX() + Math.cos(Math.toRadians(angle)));
 		float y = (float) (plane.getCenterY() + Math.sin(Math.toRadians(angle)));
-		ammo_prim--;
+		ammo_prim_1--;
 		wpn1.getSound().play(1, Var.sounds_volume);
-		return new Weapons(x, y, angle, wpn1, 0, id);
+		GamePlayState.weapons.add(new Weapons(x, y, angle, wpn1, 0, id));
 	}
 
 	/**
@@ -189,20 +213,51 @@ public class Planes extends Entity {
 	 * @param type
 	 * @return new Weapons object
 	 */
-	public Weapons shoot_secondary_1() {
-		if (broken || ammo_sec_1 == 0) {
-			return null;
+	public void shoot_primary_2() {
+		float angle = this.angle;
+		if (broken || ammo_prim_2 == 0) {
+			return;
+		}
+		random = new Random();
+		double rnd = random.nextDouble() * 2;
+		double rnd1 = random.nextInt();
+		if (rnd1 % 2 == 0) {
+			angle += rnd;
+		} else if (rnd % 2 != 0) {
+			angle -= rnd;
 		}
 		long time = System.currentTimeMillis();
-		if (Math.abs(lastshot_sec_1 - time) < wpn2.getShoot_delay()) {
-			return null;
+		if (Math.abs(lastshot_prim_2 - time) < wpn2.getShoot_delay()) {
+			return;
+		}
+		lastshot_prim_2 = time;
+		float x = (float) (plane.getCenterX() + Math.cos(Math.toRadians(angle)));
+		float y = (float) (plane.getCenterY() + Math.sin(Math.toRadians(angle)));
+		ammo_prim_2--;
+		wpn2.getSound().play(1, Var.sounds_volume);
+		GamePlayState.weapons.add(new Weapons(x, y, angle, wpn2, 0, id));
+	}
+
+	/**
+	 * Shoot Weapon depending on type
+	 * 
+	 * @param type
+	 * @return new Weapons object
+	 */
+	public void shoot_secondary_1() {
+		if (broken || ammo_sec_1 == 0) {
+			return;
+		}
+		long time = System.currentTimeMillis();
+		if (Math.abs(lastshot_sec_1 - time) < wpn3.getShoot_delay()) {
+			return;
 		}
 		lastshot_sec_1 = time;
 		float x = (float) (plane.getCenterX() + Math.cos(Math.toRadians(angle)));
 		float y = (float) (plane.getCenterY() + Math.sin(Math.toRadians(angle)));
 		ammo_sec_1--;
-		wpn2.getSound().play(1, Var.sounds_volume);
-		return new Weapons(x, y, angle, wpn2, 0, id);
+		wpn3.getSound().play(1, Var.sounds_volume);
+		GamePlayState.weapons.add(new Weapons(x, y, angle, wpn3, 0, id));
 	}
 
 	/**
@@ -211,20 +266,21 @@ public class Planes extends Entity {
 	 * @param type
 	 * @return new Weapons object
 	 */
-	public Weapons shoot_secondary_2() {
+	public void shoot_secondary_2() {
 		if (broken || ammo_sec_2 == 0) {
-			return null;
+			return;
 		}
 		long time = System.currentTimeMillis();
-		if (Math.abs(lastshot_sec_2 - time) < wpn3.getShoot_delay()) {
-			return null;
+		if (Math.abs(lastshot_sec_2 - time) < wpn4.getShoot_delay()) {
+			return;
 		}
 		lastshot_sec_2 = time;
 		float x = (float) (plane.getCenterX() + Math.cos(Math.toRadians(angle)));
 		float y = (float) (plane.getCenterY() + Math.sin(Math.toRadians(angle)));
 		ammo_sec_2--;
-		wpn3.getSound().play(1, Var.sounds_volume);
-		return new Weapons(x, y, angle, wpn3, 0, id);
+		wpn4.getSound().play(1, Var.sounds_volume);
+		System.out.println(1);
+		GamePlayState.weapons.add(new Weapons(x, y, angle, wpn4, 0, id));
 	}
 
 	/**
@@ -235,7 +291,8 @@ public class Planes extends Entity {
 		ypos = ypos_reset;
 		hitpoints = hitpoints_reset;
 		angle = angle_reset;
-		ammo_prim = ammo_prim_reset;
+		ammo_prim_1 = ammo_prim_1_reset;
+		ammo_prim_2 = ammo_prim_2_reset;
 		ammo_sec_1 = ammo_sec_1_reset;
 		ammo_sec_2 = ammo_sec_2_reset;
 		broken = false;
@@ -380,11 +437,13 @@ public class Planes extends Entity {
 	 * @return
 	 */
 	public int getAmmo(int id) {
-		if (id == 2) {
-			return ammo_sec_1;
-		} else if (id == 1) {
-			return ammo_prim;
+		if (id == 1) {
+			return ammo_prim_1;
+		} else if (id == 2) {
+			return ammo_prim_2;
 		} else if (id == 3) {
+			return ammo_sec_1;
+		} else if (id == 4) {
 			return ammo_sec_2;
 		} else {
 			return -1;
@@ -397,18 +456,22 @@ public class Planes extends Entity {
 	 * @param type
 	 * @param ammount
 	 */
-	public void addAmmo(int id, WeaponTypes type, int ammount) {
-		if (id == 2) {
-			if (ammo_sec_1 < type.getAmmoCount()) {
-				ammo_sec_1 += ammount;
+	public void addAmmo(int id, WeaponTypes type, int amount) {
+		if (id == 1) {
+			if (ammo_prim_1 < type.getAmmoCount()) {
+				ammo_prim_1 += amount;
 			}
-		} else if (id == 1) {
-			if (ammo_prim < type.getAmmoCount()) {
-				ammo_prim += ammount;
+		} else if (id == 2) {
+			if (ammo_prim_2 < type.getAmmoCount()) {
+				ammo_prim_2 += amount;
 			}
 		} else if (id == 3) {
+			if (ammo_sec_1 < type.getAmmoCount()) {
+				ammo_sec_1 += amount;
+			}
+		} else if (id == 4) {
 			if (ammo_sec_2 < type.getAmmoCount()) {
-				ammo_sec_2 += ammount;
+				ammo_sec_2 += amount;
 			}
 		}
 	}
@@ -472,8 +535,12 @@ public class Planes extends Entity {
 			return wpn1;
 		} else if (id == 2) {
 			return wpn2;
-		} else {
+		} else if (id == 3) {
 			return wpn3;
+		} else if (id == 4) {
+			return wpn4;
+		} else {
+			return null;
 		}
 	}
 
@@ -513,4 +580,35 @@ public class Planes extends Entity {
 		this.moveLeft = moveLeft;
 	}
 
+	public boolean isShoot_prim1() {
+		return shoot_prim1;
+	}
+
+	public void setShoot_prim1(boolean shoot_prim1) {
+		this.shoot_prim1 = shoot_prim1;
+	}
+
+	public boolean isShoot_prim2() {
+		return shoot_prim2;
+	}
+
+	public void setShoot_prim2(boolean shoot_prim2) {
+		this.shoot_prim2 = shoot_prim2;
+	}
+
+	public boolean isShoot_sec1() {
+		return shoot_sec1;
+	}
+
+	public void setShoot_sec1(boolean shoot_sec1) {
+		this.shoot_sec1 = shoot_sec1;
+	}
+
+	public boolean isShoot_sec2() {
+		return shoot_sec2;
+	}
+
+	public void setShoot_sec2(boolean shoot_sec2) {
+		this.shoot_sec2 = shoot_sec2;
+	}
 }

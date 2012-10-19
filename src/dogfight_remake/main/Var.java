@@ -79,9 +79,11 @@ public class Var {
 	public static boolean vSync = true;
 	public static int timePassed = 0;
 	public static int plane_id = 1;
+	public static boolean singlePlayer = false;
+	public static boolean vertical_split = false;
 	
 	public static PlaneTypes player1_type = PlaneTypes.NORMAL;
-	public static PlaneTypes player2_type = PlaneTypes.NORMAL;
+	public static PlaneTypes player2_type = PlaneTypes.FAST;
 	// Scores
 	public static int score_p1 = 0, score_p2 = 0;
 	// RespawnTimer
