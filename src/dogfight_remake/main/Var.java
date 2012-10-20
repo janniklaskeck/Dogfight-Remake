@@ -23,6 +23,7 @@ public class Var {
 	public static Image img_missile1;
 	public static Image img_bullet1;
 	public static Image img_bomb1;
+	public static Image img_bomb1_split;
 	public static Image img_bg;
 	public static Image img_pause_bg;
 	public static Image img_turret1;
@@ -89,9 +90,6 @@ public class Var {
 	// RespawnTimer
 	public static final long RESPAWNTIME_PLAYER = 3000L;
 	public static final long RESPAWNTIME_TURRET = 3000L;
-	public static long respawntimer_p1 = RESPAWNTIME_PLAYER;
-	public static long respawntimer_p2 = RESPAWNTIME_PLAYER;
-	public static long respawntimer_turret = RESPAWNTIME_TURRET;
 
 	public static float music_volume = 0.2f;
 	public static float sounds_volume = 0.05f;

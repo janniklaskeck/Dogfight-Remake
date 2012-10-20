@@ -9,10 +9,10 @@ public enum PlaneTypes {
 	// Name, Hitpoints, MaxSpeed, Acceleration, TurnAngle, Damage-Modifier,
 	// Wpn1, Wpn2, Wpn3, Image
 	NORMAL("Normal", 100, 1, 0.01f, 0.12f, 1, WeaponTypes.GUN, WeaponTypes.GUN,
-			WeaponTypes.GUIDED_AIR, WeaponTypes.BOMB, Var.img_plane1), FAST(
-			"Fast", 75, 1.25f, 0.01f, 0.12f, 0.75f, WeaponTypes.GUN,
-			WeaponTypes.GUN, WeaponTypes.UNGUIDED, WeaponTypes.UNGUIDED,
-			Var.img_plane2), SLOW("Slow", 150, 0.75f, 0.01f, 0.12f, 1.25f,
+			WeaponTypes.GUIDED_AIR, WeaponTypes.GUIDED_GROUND, Var.img_plane1), FAST(
+	"Fast", 75, 1.25f, 0.01f, 0.12f, 0.75f, WeaponTypes.GUN,
+			WeaponTypes.GUN, WeaponTypes.UNGUIDED, WeaponTypes.UNGUIDED, Var.img_plane2), 
+	SLOW("Slow", 150, 0.75f, 0.01f, 0.12f, 1.25f,
 			WeaponTypes.GUN, WeaponTypes.GUN, WeaponTypes.GUIDED_AIR,
 			WeaponTypes.BOMB_SPLIT, Var.img_plane1);
 

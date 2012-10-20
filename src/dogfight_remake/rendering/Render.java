@@ -13,85 +13,17 @@ import dogfight_remake.ui.GameUI;
 public class Render {
 	public Planes player1;
 	public Planes player2;
-	public Planes player1_respawn = null;
-	public Planes player2_respawn = null;
 	public TurretAi turret;
 
 	public void init() throws SlickException {
-		// Weapon 1 p1
-		if (Var.wpn1_p1 == WeaponTypes.GUN) {
-			Var.wpn1_p1.setImage(Var.img_bullet1);
-		} else if (Var.wpn1_p1 == WeaponTypes.MINIGUN) {
-			Var.wpn1_p1.setImage(Var.img_bullet1);
-		}
-		// Weapon 2 p1
-		if (Var.wpn2_p1 == WeaponTypes.GUIDED_AIR) {
-			Var.wpn2_p1.setImage(Var.img_missile1);
-		} else if (Var.wpn2_p1 == WeaponTypes.UNGUIDED) {
-			Var.wpn2_p1.setImage(Var.img_missile1);
-		} else if (Var.wpn2_p1 == WeaponTypes.GUIDED_GROUND) {
-			Var.wpn2_p1.setImage(Var.img_missile1);
-		} else if (Var.wpn2_p1 == WeaponTypes.BOMB) {
-			Var.wpn2_p1.setImage(Var.img_bomb1);
-		} else if (Var.wpn2_p1 == WeaponTypes.BOMB_SPLIT) {
-			Var.wpn2_p1.setImage(Var.img_bomb1);
-		}
-		// Weapon 3 p1
-		if (Var.wpn3_p1 == WeaponTypes.GUIDED_AIR) {
-			Var.wpn3_p1.setImage(Var.img_missile1);
-		} else if (Var.wpn3_p1 == WeaponTypes.UNGUIDED) {
-			Var.wpn3_p1.setImage(Var.img_missile1);
-		} else if (Var.wpn3_p1 == WeaponTypes.GUIDED_GROUND) {
-			Var.wpn3_p1.setImage(Var.img_missile1);
-		} else if (Var.wpn3_p1 == WeaponTypes.BOMB) {
-			Var.wpn3_p1.setImage(Var.img_bomb1);
-		} else if (Var.wpn3_p1 == WeaponTypes.BOMB_SPLIT) {
-			Var.wpn3_p1.setImage(Var.img_bomb1);
-		}
-		// Weapon 1 p2
-		if (Var.wpn1_p2 == WeaponTypes.GUN) {
-			Var.wpn1_p2.setImage(Var.img_bullet1);
-		} else if (Var.wpn1_p2 == WeaponTypes.MINIGUN) {
-			Var.wpn1_p2.setImage(Var.img_bullet1);
-		}
-		// Weapon 2 p2
-		if (Var.wpn2_p2 == WeaponTypes.GUIDED_AIR) {
-			Var.wpn2_p2.setImage(Var.img_missile1);
-		} else if (Var.wpn2_p2 == WeaponTypes.UNGUIDED) {
-			Var.wpn2_p2.setImage(Var.img_missile1);
-		} else if (Var.wpn2_p2 == WeaponTypes.GUIDED_GROUND) {
-			Var.wpn2_p2.setImage(Var.img_missile1);
-		} else if (Var.wpn2_p2 == WeaponTypes.BOMB) {
-			Var.wpn2_p2.setImage(Var.img_bomb1);
-		} else if (Var.wpn2_p2 == WeaponTypes.BOMB_SPLIT) {
-			Var.wpn2_p2.setImage(Var.img_bomb1);
-		}
-		// Weapon 3 p2
-		if (Var.wpn3_p2 == WeaponTypes.GUIDED_AIR) {
-			Var.wpn3_p2.setImage(Var.img_missile1);
-		} else if (Var.wpn3_p2 == WeaponTypes.UNGUIDED) {
-			Var.wpn3_p2.setImage(Var.img_missile1);
-		} else if (Var.wpn3_p2 == WeaponTypes.GUIDED_GROUND) {
-			Var.wpn3_p2.setImage(Var.img_missile1);
-		} else if (Var.wpn3_p2 == WeaponTypes.BOMB) {
-			Var.wpn3_p2.setImage(Var.img_bomb1);
-		} else if (Var.wpn3_p2 == WeaponTypes.BOMB_SPLIT) {
-			Var.wpn3_p2.setImage(Var.img_bomb1);
-		}
 		Var.img_turret_base = Var.img_turret1.getSubImage(0, 0, 25, 15);
 		Var.img_turret_barrel = Var.img_turret1.getSubImage(25, 0, 25, 15);
 		player1 = new Planes(1, 100, Var.dim_chosen.height / 2, 0,
 				Var.player1_type);
-		player2 = new Planes(2, Var.dim_chosen.width - 150,
-				Var.dim_chosen.height / 2, 180, Var.player2_type);
+		player2 = new Planes(2, Var.tmap.getWidth() * Var.tmap.getTileWidth()
+				- 150, Var.dim_chosen.height / 2, 180, Var.player2_type);
 		turret = new TurretAi(3, 815, 2520, 270, 100, player1,
 				WeaponTypes.TURRET_MIDDLE, Var.img_bullet1);
-		if (player1_respawn == null && player2_respawn == null) {
-			player1_respawn = new Planes(1, 100, Var.dim_chosen.height / 2, 0,
-					Var.player1_type);
-			player2_respawn = new Planes(2, Var.dim_chosen.width - 150,
-					Var.dim_chosen.height / 2, 180, Var.player2_type);
-		}
 	}
 
 	/**
@@ -124,7 +56,7 @@ public class Render {
 			}
 			if (GamePlayState.explosions != null) {
 				for (int i = 0; i < GamePlayState.explosions.size(); i++) {
-					if (!GamePlayState.explosions.get(i).isMaxRadius()) {
+					if (!GamePlayState.explosions.get(i).isBroken()) {
 						GamePlayState.explosions.get(i).render(gc, g, delta);
 					} else {
 						GamePlayState.explosions.remove(i);
@@ -160,7 +92,7 @@ public class Render {
 				}
 				if (GamePlayState.explosions != null) {
 					for (int i = 0; i < GamePlayState.explosions.size(); i++) {
-						if (!GamePlayState.explosions.get(i).isMaxRadius()) {
+						if (!GamePlayState.explosions.get(i).isBroken()) {
 							GamePlayState.explosions.get(i)
 									.render(gc, g, delta);
 						} else {
@@ -195,7 +127,7 @@ public class Render {
 				}
 				if (GamePlayState.explosions != null) {
 					for (int i = 0; i < GamePlayState.explosions.size(); i++) {
-						if (!GamePlayState.explosions.get(i).isMaxRadius()) {
+						if (!GamePlayState.explosions.get(i).isBroken()) {
 							GamePlayState.explosions.get(i)
 									.render(gc, g, delta);
 						} else {
@@ -232,12 +164,7 @@ public class Render {
 				}
 				if (GamePlayState.explosions != null) {
 					for (int i = 0; i < GamePlayState.explosions.size(); i++) {
-						if (!GamePlayState.explosions.get(i).isMaxRadius()) {
-							GamePlayState.explosions.get(i)
-									.render(gc, g, delta);
-						} else {
-							GamePlayState.explosions.remove(i);
-						}
+						GamePlayState.explosions.get(i).render(gc, g, delta);
 					}
 				}
 				GamePlayState.camera.untranslateGraphics();
@@ -267,12 +194,7 @@ public class Render {
 				}
 				if (GamePlayState.explosions != null) {
 					for (int i = 0; i < GamePlayState.explosions.size(); i++) {
-						if (!GamePlayState.explosions.get(i).isMaxRadius()) {
-							GamePlayState.explosions.get(i)
-									.render(gc, g, delta);
-						} else {
-							GamePlayState.explosions.remove(i);
-						}
+						GamePlayState.explosions.get(i).render(gc, g, delta);
 					}
 				}
 				GamePlayState.camera2.untranslateGraphics();
@@ -281,6 +203,5 @@ public class Render {
 
 			}
 		}
-
 	}
 }

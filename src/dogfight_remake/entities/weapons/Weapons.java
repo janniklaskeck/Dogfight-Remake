@@ -1,13 +1,17 @@
 package dogfight_remake.entities.weapons;
 
+import java.util.Random;
+
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Sound;
 
 import dogfight_remake.entities.Entity;
+import dogfight_remake.entities.Explosion;
 import dogfight_remake.entities.ai.TurretAi;
 import dogfight_remake.entities.planes.Planes;
+import dogfight_remake.main.GamePlayState;
 import dogfight_remake.main.Var;
 
 public class Weapons extends Entity {
@@ -27,6 +31,8 @@ public class Weapons extends Entity {
 	private float firstHeight;
 	private int time;
 	private Sound sound;
+	private Random rnd;
+	private boolean hitTarget = false;
 
 	public Weapons(float xpos, float ypos, float angle, WeaponTypes type,
 			int time, int id) {
@@ -103,9 +109,15 @@ public class Weapons extends Entity {
 	 */
 
 	public void update(float delta) {
+		if (hitTarget) {
+			GamePlayState.explosions.add(new Explosion(xpos, ypos, type
+					.getExploSize()));
+			Var.hit.play(1, Var.sounds_volume);
+			broken = true;
+		}
+		rnd = new Random();
 		if (type == WeaponTypes.GUN || type == WeaponTypes.MINIGUN
 				|| type == WeaponTypes.TURRET_MIDDLE) {
-
 			float hspeed = speed * (float) Math.cos(Math.toRadians(angle))
 					* delta / 17;
 			float vspeed = speed * (float) Math.sin(Math.toRadians(angle))
@@ -131,20 +143,23 @@ public class Weapons extends Entity {
 					* (float) Math.cos(Math.toRadians(angle)) * delta / 17;
 			float vspeed = (speed * speed_mod)
 					* (float) Math.sin(Math.toRadians(angle)) * delta / 17;
-
 			xpos += hspeed;
 			ypos += vspeed;
 		} else if (type == WeaponTypes.GUIDED_GROUND) {
-			if (speed_mod <= 1) {
-				speed_mod = speed_mod + 0.05f;
+			if (GamePlayState.r.turret.getHitpoints() > 0 && hasTarget()) {
+				update(GamePlayState.r.player1, GamePlayState.r.turret, delta);
+			} else {
+				setTarget(false);
+				if (speed_mod <= 1) {
+					speed_mod = speed_mod + 0.05f;
+				}
+				float hspeed = (speed * speed_mod)
+						* (float) Math.cos(Math.toRadians(angle)) * delta / 17;
+				float vspeed = (speed * speed_mod)
+						* (float) Math.sin(Math.toRadians(angle)) * delta / 17;
+				xpos += hspeed;
+				ypos += vspeed;
 			}
-			float hspeed = (speed * speed_mod)
-					* (float) Math.cos(Math.toRadians(angle)) * delta / 17;
-			float vspeed = (speed * speed_mod)
-					* (float) Math.sin(Math.toRadians(angle)) * delta / 17;
-
-			xpos += hspeed;
-			ypos += vspeed;
 		} else if (type == WeaponTypes.BOMB) {
 			angleCheck();
 			if (angle <= 90 && angle >= 0) {
@@ -165,8 +180,14 @@ public class Weapons extends Entity {
 			ypos += Var.GRAVITY * 4 * speed_mod_bomb;
 		} else if (type == WeaponTypes.BOMB_SPLIT) {
 			angleCheck();
-			if (ypos - firstHeight > 300 && !isSplit) {
-				split = true;
+			if (ypos - firstHeight > 700 && !isSplit) {
+				for (int i = 0; i < 20; i++) {
+					GamePlayState.weapons.add(new Weapons(xpos, ypos
+							- rnd.nextInt(50), rnd.nextFloat() * 180,
+							WeaponTypes.BOMB_SPLIT_SMALL, 0, id));
+				}
+				setSplit();
+				setHit();
 			} else {
 				split = false;
 			}
@@ -179,13 +200,13 @@ public class Weapons extends Entity {
 			} else if (angle > 90 && angle <= 180) {
 				angle += (90 - angle) / 75;
 			}
-			if (speed_mod_bomb >= 0.2) {
-				speed_mod_bomb = speed_mod_bomb - 0.01f;
+			if (speed_mod_bomb >= 1.5f) {
+				speed_mod_bomb = speed_mod_bomb - 0.02f;
 			}
 			float hspeed = (speed * speed_mod_bomb)
 					* (float) Math.cos(Math.toRadians(angle)) * delta / 17;
 			xpos += hspeed;
-			ypos += Var.GRAVITY * 4 * speed_mod_bomb;
+			ypos += Var.GRAVITY * 3 * speed_mod_bomb;
 		} else if (type == WeaponTypes.BOMB_SPLIT_SMALL) {
 			if (angle <= 90 && angle >= 0) {
 				angle += (90 - angle) / 75;
@@ -196,13 +217,13 @@ public class Weapons extends Entity {
 			} else if (angle > 90 && angle <= 180) {
 				angle += (90 - angle) / 75;
 			}
-			if (speed_mod_bomb >= 0.2) {
-				speed_mod_bomb = speed_mod_bomb - 0.01f;
+			if (speed_mod_bomb <= 1.5f) {
+				speed_mod_bomb = speed_mod_bomb + 0.05f;
 			}
-			float hspeed = (speed * speed_mod_bomb)
+			float hspeed = (speed / 5)
 					* (float) Math.cos(Math.toRadians(angle)) * delta / 17;
 			xpos += hspeed;
-			ypos += Var.GRAVITY * 4 * speed_mod_bomb;
+			ypos += Var.GRAVITY * speed_mod_bomb;
 		}
 	}
 
@@ -214,7 +235,6 @@ public class Weapons extends Entity {
 		float deltaY = plny - ypos;
 
 		double atan2 = Math.atan2(deltaY, deltaX);
-
 		// change atan2 to 0-360 degrees
 		if (atan2 < 0) {
 			atan2 = Math.abs(atan2);
@@ -495,5 +515,13 @@ public class Weapons extends Entity {
 
 	public void setSound(Sound sound) {
 		this.sound = sound;
+	}
+
+	public boolean isHitTarget() {
+		return hitTarget;
+	}
+
+	public void setHitTarget(boolean hitTarget) {
+		this.hitTarget = hitTarget;
 	}
 }

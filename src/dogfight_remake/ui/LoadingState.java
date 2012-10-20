@@ -59,6 +59,7 @@ public class LoadingState extends BasicGameState {
 		Var.img_bullet1 = new Image(
 				"dogfight_remake/images/weapons/bullet1.png");
 		Var.img_bomb1 = new Image("dogfight_remake/images/weapons/bomb1.png");
+		Var.img_bomb1_split = new Image("dogfight_remake/images/weapons/bomb1_split.png");
 		Var.img_turret1 = new Image("dogfight_remake/images/turret.png");
 		// Tiled Map
 		Var.tmap = new TiledMap("dogfight_remake/map/map_test/map1.tmx",

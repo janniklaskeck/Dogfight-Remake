@@ -9,6 +9,7 @@ import org.newdawn.slick.geom.Ellipse;
 import org.newdawn.slick.geom.Rectangle;
 
 import dogfight_remake.entities.Entity;
+import dogfight_remake.entities.Explosion;
 import dogfight_remake.entities.weapons.WeaponTypes;
 import dogfight_remake.entities.weapons.Weapons;
 import dogfight_remake.main.GamePlayState;
@@ -22,7 +23,8 @@ public class Planes extends Entity {
 	private int id;
 	private int hitpoints;
 	private float angle;
-	private long lastshot_prim_1, lastshot_prim_2,lastshot_sec_1, lastshot_sec_2;
+	private long lastshot_prim_1, lastshot_prim_2, lastshot_sec_1,
+			lastshot_sec_2;
 	private int ammo_prim_1;
 	private int ammo_prim_2;
 	private int ammo_sec_1;
@@ -44,6 +46,7 @@ public class Planes extends Entity {
 	private boolean shoot_sec1 = false;
 	private boolean shoot_sec2 = false;
 	private PlaneTypes type;
+	private long respawn_timer;
 
 	float xpos_reset;
 	float ypos_reset;
@@ -75,7 +78,8 @@ public class Planes extends Entity {
 		this.ammo_sec_1 = wpn3.getAmmoCount();
 		this.ammo_sec_2 = wpn4.getAmmoCount();
 		this.type = type;
-		speed = 2;
+		this.setRespawn_timer(Var.RESPAWNTIME_PLAYER);
+		speed = 1.5f;
 
 		xpos_reset = xpos;
 		ypos_reset = ypos;
@@ -94,6 +98,13 @@ public class Planes extends Entity {
 	 */
 
 	public void update(float delta) {
+		if (broken && respawn_timer >= Var.RESPAWNTIME_PLAYER) {
+			GamePlayState.explosions.add(new Explosion(xpos, ypos, 4));
+			Var.explode.play(1, Var.sounds_volume);
+		}
+		if (hitpoints <= 0) {
+			respawn_timer -= delta;
+		}
 		if (!broken) {
 			hspeed = Math.abs(speed * speed_mod)
 					* (float) Math.cos(Math.toRadians(angle) * delta / 17);
@@ -279,7 +290,6 @@ public class Planes extends Entity {
 		float y = (float) (plane.getCenterY() + Math.sin(Math.toRadians(angle)));
 		ammo_sec_2--;
 		wpn4.getSound().play(1, Var.sounds_volume);
-		System.out.println(1);
 		GamePlayState.weapons.add(new Weapons(x, y, angle, wpn4, 0, id));
 	}
 
@@ -341,8 +351,8 @@ public class Planes extends Entity {
 	 * @param speed
 	 */
 	public void incSpeed(float speed) {
-		if (this.speed + speed > Var.PLANES_MAX_SPEED) {
-			this.speed = Var.PLANES_MAX_SPEED;
+		if (this.speed + speed > Var.PLANES_MAX_SPEED * type.getSpeed()) {
+			this.speed = Var.PLANES_MAX_SPEED * type.getSpeed();
 		} else {
 			this.speed += speed;
 		}
@@ -610,5 +620,13 @@ public class Planes extends Entity {
 
 	public void setShoot_sec2(boolean shoot_sec2) {
 		this.shoot_sec2 = shoot_sec2;
+	}
+
+	public long getRespawn_timer() {
+		return respawn_timer;
+	}
+
+	public void setRespawn_timer(long respawn_timer) {
+		this.respawn_timer = respawn_timer;
 	}
 }

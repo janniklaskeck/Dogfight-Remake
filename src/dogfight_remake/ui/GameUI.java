@@ -36,9 +36,10 @@ public class GameUI {
 							+ r.player1.getAmmo(4), Var.dim_chosen.width / 20,
 					(Var.dim_chosen.height / 20) + (Var.dim_chosen.height / 30)
 							+ (Var.dim_chosen.height / 10));
-			if (Var.respawntimer_p1 < Var.RESPAWNTIME_PLAYER) {
-				g.drawString("Respawn Player1: " + Var.respawntimer_p1 / 100,
-						Var.dim_chosen.width / 5, Var.dim_chosen.height / 20);
+			if (r.player1.getRespawn_timer() < Var.RESPAWNTIME_PLAYER) {
+				g.drawString("Respawn Player1: " + r.player1.getRespawn_timer()
+						/ 100, Var.dim_chosen.width / 5,
+						Var.dim_chosen.height / 20);
 			}
 			// g.drawString(GamePlayState.weapons.size() + "", 400, 500);
 			// Player 2
@@ -67,9 +68,9 @@ public class GameUI {
 							- Var.dim_chosen.width / 7,
 					(Var.dim_chosen.height / 20) + (Var.dim_chosen.height / 30)
 							+ (Var.dim_chosen.height / 10));
-			if (Var.respawntimer_p2 < Var.RESPAWNTIME_PLAYER) {
-				g.drawString("Respawn Player2: " + Var.respawntimer_p2 / 100,
-						Var.dim_chosen.width - Var.dim_chosen.width / 3,
+			if (r.player2.getRespawn_timer() < Var.RESPAWNTIME_PLAYER) {
+				g.drawString("Respawn Player2: " + r.player2.getRespawn_timer()
+						/ 100, Var.dim_chosen.width - Var.dim_chosen.width / 3,
 						Var.dim_chosen.height / 20);
 			}
 			// FPS and score

@@ -22,6 +22,9 @@ public class Explosion extends Entity {
 	}
 
 	public void render(GameContainer container, Graphics g, float delta) {
+		if (broken) {
+			return;
+		}
 		explosion1 = new Ellipse(xpos - radius / 2, ypos - radius / 2, radius,
 				radius);
 		g.setColor(Color.red);
@@ -33,6 +36,7 @@ public class Explosion extends Entity {
 			g.setColor(Color.yellow);
 			g.fill(explosion2);
 		}
+		isMaxRadius();
 	}
 
 	public void update(float delta) {
@@ -40,11 +44,11 @@ public class Explosion extends Entity {
 			radius += 2;
 	}
 
-	public boolean isMaxRadius() {
+	public void isMaxRadius() {
 		if (radius >= MAX_RADIUS * size) {
-			return true;
+			broken = true;
 		} else {
-			return false;
+			broken = false;
 		}
 	}
 

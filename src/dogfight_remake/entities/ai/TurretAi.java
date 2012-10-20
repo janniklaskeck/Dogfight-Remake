@@ -9,6 +9,7 @@ import org.newdawn.slick.geom.Polygon;
 import org.newdawn.slick.geom.Rectangle;
 
 import dogfight_remake.entities.Entity;
+import dogfight_remake.entities.Explosion;
 import dogfight_remake.entities.planes.Planes;
 import dogfight_remake.entities.weapons.WeaponTypes;
 import dogfight_remake.entities.weapons.Weapons;
@@ -30,6 +31,7 @@ public class TurretAi extends Entity {
 	private int height, width;
 	private int hitpoints;
 	private Rectangle turret;
+	private long respawn_timer;
 
 	float xpos_reset;
 	float ypos_reset;
@@ -50,6 +52,7 @@ public class TurretAi extends Entity {
 		ypos_reset = ypos;
 		hitpoints_reset = hitpoints;
 		angle_reset = angle;
+		this.respawn_timer = Var.RESPAWNTIME_TURRET;
 	}
 
 	@Override
@@ -75,6 +78,13 @@ public class TurretAi extends Entity {
 
 	@Override
 	public void update(float delta) {
+		if (broken && respawn_timer >= Var.RESPAWNTIME_PLAYER) {
+			GamePlayState.explosions.add(new Explosion(xpos, ypos, 4));
+			Var.explode.play(1, Var.sounds_volume);
+		}
+		if (hitpoints <= 0) {
+			respawn_timer -= delta;
+		}
 		if (angle > -120 && angle < -60) {
 			inRange = true;
 		} else {
@@ -298,5 +308,13 @@ public class TurretAi extends Entity {
 		} else {
 			return false;
 		}
+	}
+
+	public long getRespawn_timer() {
+		return respawn_timer;
+	}
+
+	public void setRespawn_timer(long respawn_timer) {
+		this.respawn_timer = respawn_timer;
 	}
 }
