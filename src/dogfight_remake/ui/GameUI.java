@@ -63,7 +63,7 @@ public class GameUI {
 					(Var.dim_chosen.height / 20) + (Var.dim_chosen.height / 30)
 							+ (Var.dim_chosen.height / 15));
 			g.drawString(
-					r.player1.getWeapon(4).getName() + ": "
+					r.player2.getWeapon(4).getName() + ": "
 							+ r.player2.getAmmo(4), Var.dim_chosen.width
 							- Var.dim_chosen.width / 7,
 					(Var.dim_chosen.height / 20) + (Var.dim_chosen.height / 30)

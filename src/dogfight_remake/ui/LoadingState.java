@@ -62,9 +62,9 @@ public class LoadingState extends BasicGameState {
 		Var.img_bomb1_split = new Image("dogfight_remake/images/weapons/bomb1_split.png");
 		Var.img_turret1 = new Image("dogfight_remake/images/turret.png");
 		// Tiled Map
-		Var.tmap = new TiledMap("dogfight_remake/map/map_test/map1.tmx",
+		Var.tmap = new TiledMap("dogfight_remake/map/map_test/map2.tmx",
 				"dogfight_remake/map/map_test");
-		Var.map = new BlockMap("dogfight_remake/map/map_test/map1.tmx");
+		Var.map = new BlockMap("dogfight_remake/map/map_test/map2.tmx");
 		// Images Pause Menu
 		Var.pauseMenuText = new Image(
 				"dogfight_remake/images/menu/pauseMenuText.png");
@@ -131,7 +131,6 @@ public class LoadingState extends BasicGameState {
 		} else {
 			sbg.enterState(Dogfight_Remake.MAINMENUSTATE);
 		}
-
 	}
 
 	@Override

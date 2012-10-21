@@ -18,6 +18,7 @@ import dogfight_remake.main.Var;
 public class Planes extends Entity {
 	private Random random;
 	private Image image;
+	private Image image1;
 	private Rectangle plane;
 	private Ellipse aim;
 	private int id;
@@ -62,7 +63,11 @@ public class Planes extends Entity {
 		this.id = id;
 		this.hitpoints = type.getHitpoints();
 		this.speed_mod = type.getSpeed();
-		this.image = type.getImage();
+		if (id == 2) {
+			this.image = type.getImage().getFlippedCopy(false, true);
+		} else {
+			this.image = type.getImage();
+		}
 		this.angle = angle;
 		this.lastshot_prim_1 = 0;
 		this.lastshot_prim_2 = 0;
@@ -80,7 +85,7 @@ public class Planes extends Entity {
 		this.type = type;
 		this.setRespawn_timer(Var.RESPAWNTIME_PLAYER);
 		speed = 1.5f;
-
+		plane = new Rectangle(xpos, ypos, image.getWidth(), image.getHeight());
 		xpos_reset = xpos;
 		ypos_reset = ypos;
 		hitpoints_reset = hitpoints;
@@ -179,12 +184,24 @@ public class Planes extends Entity {
 	public void render(GameContainer container, Graphics g, float delta) {
 		if (broken)
 			return;
-		plane = new Rectangle(xpos, ypos, image.getWidth(), image.getHeight());
-		float x = (float) (plane.getCenterX() + Math.cos(Math.toRadians(angle)) * 100);
-		float y = (float) (plane.getCenterY() + Math.sin(Math.toRadians(angle)) * 100);
+		plane.setX(xpos);
+		plane.setY(ypos);
+		
+		float x = (float) (getCenterX() + Math.cos(Math.toRadians(angle)) * 100);
+		float y = (float) (getCenterY() + Math.sin(Math.toRadians(angle)) * 100);
 		aim = new Ellipse(x, y, 10, 10);
+		g.draw(aim);
 		image.setRotation(angle);
 		image.draw(xpos, ypos);
+
+	}
+
+	public Image getImage1() {
+		return image1;
+	}
+
+	public void setImage1(Image image1) {
+		this.image1 = image1;
 	}
 
 	/**
@@ -420,11 +437,9 @@ public class Planes extends Entity {
 	 * @return
 	 */
 	public float getCenterX() {
-		if (plane != null) {
-			return plane.getCenterX();
-		} else {
-			return xpos;
-		}
+		
+			return xpos + image.getWidth() / 2;
+		
 	}
 
 	/**
@@ -433,11 +448,7 @@ public class Planes extends Entity {
 	 * @return
 	 */
 	public float getCenterY() {
-		if (plane != null) {
-			return plane.getCenterY();
-		} else {
-			return ypos;
-		}
+		return ypos + image.getHeight() / 2;
 	}
 
 	/**

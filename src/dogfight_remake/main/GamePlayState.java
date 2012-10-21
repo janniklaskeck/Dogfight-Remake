@@ -8,7 +8,6 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.geom.Ellipse;
 import org.newdawn.slick.geom.Polygon;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Transform;
@@ -35,13 +34,11 @@ public class GamePlayState extends BasicGameState {
 	private static Rectangle p2;
 	private Rectangle turret;
 	private Rectangle wep;
-	private Ellipse wep_ellipse;
-	private Polygon p1A;
+	public static Polygon p1A;
 	private Polygon p2A;
-	private Polygon a;
-	private Polygon b;
 	public static Render r;
-
+	private float deltaX, deltaY;
+	
 	public static Camera camera;
 	public static Camera camera2;
 	public int time;
@@ -196,24 +193,16 @@ public class GamePlayState extends BasicGameState {
 		p2 = new Rectangle((int) r.player2.getXpos(),
 				(int) r.player2.getYpos(), Var.img_plane2.getWidth(),
 				Var.img_plane2.getHeight());
-		a = new Polygon(new float[] { p1.getX(), p1.getY(),
-				p1.getX() + p1.getWidth(), p1.getY(),
-				p1.getX() + p1.getWidth(), p1.getY() + p1.getHeight(),
-				p1.getX(), p1.getY() + p1.getHeight() }); // Player 1 Area
-		b = new Polygon(new float[] { p2.getX(), p2.getY(),
-				p2.getX() + p2.getWidth(), p2.getY(),
-				p2.getX() + p2.getWidth(), p2.getY() + p2.getHeight(),
-				p2.getX(), p2.getY() + p2.getHeight() }); // Player 2 Area
 		turret = new Rectangle((int) r.turret.getXpos(),
 				(int) r.turret.getYpos(), Var.img_turret_base.getWidth(),
 				Var.img_turret_base.getHeight());
 		if (r.player1.getHitpoints() > 0) {
 			if (r.player1.getAim() != null) {
-				float deltaX = r.player1.getCenterX()
+				deltaX = r.player1.getCenterX()
 						- r.player1.getAim().getCenterX();
-				float deltaY = r.player1.getCenterY()
+				deltaY = r.player1.getCenterY()
 						- r.player1.getAim().getCenterY();
-				p1A = (Polygon) a.transform(Transform.createRotateTransform(
+				p1A = (Polygon) p1.transform(Transform.createRotateTransform(
 						(float) Math.atan2(deltaY, deltaX),
 						r.player1.getCenterX(), r.player1.getCenterY()));
 			}
@@ -221,11 +210,11 @@ public class GamePlayState extends BasicGameState {
 
 		if (r.player2.getHitpoints() > 0) {
 			if (r.player2.getAim() != null) {
-				float deltaX = r.player2.getCenterX()
+				deltaX = r.player2.getCenterX()
 						- r.player2.getAim().getCenterX();
-				float deltaY = r.player2.getCenterY()
+				deltaY = r.player2.getCenterY()
 						- r.player2.getAim().getCenterY();
-				p2A = (Polygon) b.transform(Transform.createRotateTransform(
+				p2A = (Polygon) p2.transform(Transform.createRotateTransform(
 						(float) Math.atan2(deltaY, deltaX),
 						r.player2.getCenterX(), r.player2.getCenterY()));
 			}
@@ -233,60 +222,40 @@ public class GamePlayState extends BasicGameState {
 
 		for (int i = 0; i < weapons.size(); i++) {
 			Weapons tmp = weapons.get(i);
-
 			wep = new Rectangle((int) tmp.getXpos(), (int) tmp.getYpos(),
 					(int) tmp.getWidth(), (int) tmp.getHeight());
-			wep_ellipse = new Ellipse(wep.getCenterX(), wep.getCenterY(),
-					Explosion.MAX_RADIUS * tmp.getType().getExploSize(),
-					Explosion.MAX_RADIUS * tmp.getType().getExploSize());
 			if (weapons.size() > 0) {
 				for (int o = 0; o < BlockMap.entities.size(); o++) {
 					Block entity1 = (Block) BlockMap.entities.get(o);
 					if (wep.intersects(entity1.poly)) {
-						tmp.setHitTarget(true);
+						tmp.setHitTarget();
 					}
 				}
-
 				if (p2A != null) {
 					if (tmp.getID() == 1 || tmp.getID() == 3) {
 						if (p2A.intersects(wep) && r.player2.getHitpoints() > 0
-								&& !tmp.isHit()) {
-							tmp.setHitTarget(true);
+								&& !tmp.isHitTarget()) {
+							tmp.setHitTarget();
 							r.player2.decreaseHitpoints(tmp.getDamage());
-						}
-						if (p2A.intersects(wep_ellipse)
-								&& r.player2.getHitpoints() > 0 && tmp.isHit()) {
-							explosions.add(new Explosion(tmp.getXpos(), tmp
-									.getYpos(), tmp.getType().getExploSize()));
-							Var.hit.play(1, Var.sounds_volume);
-							r.player2.decreaseHitpoints(tmp.getDamage() / 3);
 						}
 					}
 				}
 				if (p1A != null) {
 					if (tmp.getID() == 2 || tmp.getID() == 3) {
 						if (p1A.intersects(wep) && r.player1.getHitpoints() > 0
-								&& !tmp.isHit()) {
-							tmp.setHitTarget(true);
+								&& !tmp.isHitTarget()) {
+							
+							tmp.setHitTarget();
 							r.player1.decreaseHitpoints(tmp.getDamage());
-						}
-						if (p1A.intersects(wep_ellipse)
-								&& r.player1.getHitpoints() > 0 && tmp.isHit()) {
-
-							r.player1.decreaseHitpoints(tmp.getDamage() / 3);
 						}
 					}
 				}
 				if (turret != null) {
 					if (tmp.getID() == 1 || tmp.getID() == 2) {
 						if (turret.intersects(wep)
-								&& r.turret.getHitpoints() > 0 && !tmp.isHit()) {
-							tmp.setHitTarget(true);
+								&& r.turret.getHitpoints() > 0 && !tmp.isHitTarget()) {
+							tmp.setHitTarget();
 							r.turret.decreaseHitpoints(tmp.getDamage());
-						}
-						if (turret.intersects(wep_ellipse)
-								&& r.turret.getHitpoints() > 0 && tmp.isHit()) {
-							r.turret.decreaseHitpoints(tmp.getDamage() / 3);
 						}
 					}
 				}

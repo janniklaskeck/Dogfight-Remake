@@ -3,6 +3,7 @@ package dogfight_remake.rendering;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
+
 import dogfight_remake.entities.ai.TurretAi;
 import dogfight_remake.entities.planes.Planes;
 import dogfight_remake.entities.weapons.WeaponTypes;
@@ -22,7 +23,7 @@ public class Render {
 				Var.player1_type);
 		player2 = new Planes(2, Var.tmap.getWidth() * Var.tmap.getTileWidth()
 				- 150, Var.dim_chosen.height / 2, 180, Var.player2_type);
-		turret = new TurretAi(3, 815, 2520, 270, 100, player1,
+		turret = new TurretAi(3, 815, 1000, 270, 100, player1,
 				WeaponTypes.TURRET_MIDDLE, Var.img_bullet1);
 	}
 
@@ -150,6 +151,8 @@ public class Render {
 
 				if (player1 != null) {
 					player1.render(gc, g, delta);
+					if (GamePlayState.p1A != null)
+						g.draw(GamePlayState.p1A);
 				}
 				if (player2 != null) {
 					player2.render(gc, g, delta);

@@ -97,7 +97,7 @@ public class Weapons extends Entity {
 			image.setRotation(angle);
 			image.draw(xpos, ypos);
 		} else {
-			broken = true;
+			//broken = true;
 		}
 
 	}
@@ -228,6 +228,12 @@ public class Weapons extends Entity {
 	}
 
 	public void update(Planes pln1, Planes pln2, float delta) {
+		if (hitTarget) {
+			GamePlayState.explosions.add(new Explosion(xpos, ypos, type
+					.getExploSize()));
+			Var.hit.play(1, Var.sounds_volume);
+			broken = true;
+		}
 		float speed = getType().getSpeed();
 		float plnx = pln2.getCenterX();
 		float plny = pln2.getCenterY();
@@ -276,6 +282,12 @@ public class Weapons extends Entity {
 	}
 
 	public void update(Planes pln1, TurretAi ta, float delta) {
+		if (hitTarget) {
+			GamePlayState.explosions.add(new Explosion(xpos, ypos, type
+					.getExploSize()));
+			Var.hit.play(1, Var.sounds_volume);
+			broken = true;
+		}
 		float speed = getType().getSpeed();
 		float plnx = ta.getCenterX();
 		float plny = ta.getCenterY();
@@ -283,7 +295,6 @@ public class Weapons extends Entity {
 		float deltaY = plny - ypos;
 
 		double atan2 = Math.atan2(deltaY, deltaX);
-
 		// change atan2 to 0-360 degrees
 		if (atan2 < 0) {
 			atan2 = Math.abs(atan2);
@@ -521,7 +532,8 @@ public class Weapons extends Entity {
 		return hitTarget;
 	}
 
-	public void setHitTarget(boolean hitTarget) {
-		this.hitTarget = hitTarget;
+	public void setHitTarget() {
+		this.hitTarget = true;
+
 	}
 }

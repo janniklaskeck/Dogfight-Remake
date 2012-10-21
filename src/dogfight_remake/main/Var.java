@@ -19,6 +19,7 @@ public class Var {
 	public static AppGameContainer app;
 	// Images Game
 	public static Image img_plane1;
+	public static Image img_plane1_neg;
 	public static Image img_plane2;
 	public static Image img_missile1;
 	public static Image img_bullet1;
@@ -84,7 +85,7 @@ public class Var {
 	public static boolean vertical_split = false;
 	
 	public static PlaneTypes player1_type = PlaneTypes.NORMAL;
-	public static PlaneTypes player2_type = PlaneTypes.FAST;
+	public static PlaneTypes player2_type = PlaneTypes.NORMAL;
 	// Scores
 	public static int score_p1 = 0, score_p2 = 0;
 	// RespawnTimer
