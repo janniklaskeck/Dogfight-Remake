@@ -22,14 +22,10 @@ public class BlockMap {
 		for (int x = 0; x < Var.tmap.getWidth(); x++) {
 			for (int y = 0; y < Var.tmap.getHeight(); y++) {
 				int tileID = Var.tmap.getTileId(x, y, 0);
-				if (tileID == 1) {
+				if (tileID != 0) {
 					entities.add(new Block(x * Var.tmap.getTileWidth(), y
 							* Var.tmap.getTileHeight(), square, "square",
 							tileID));
-				} else if (tileID == 2) {
-					entities.add(new Triangle(x * Var.tmap.getTileWidth(), y
-							* Var.tmap.getTileHeight(), triangle_left_up,
-							"triangle_left_up", tileID));
 				}
 			}
 		}

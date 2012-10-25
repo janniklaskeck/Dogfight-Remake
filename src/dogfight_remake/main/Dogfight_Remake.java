@@ -29,6 +29,7 @@ public class Dogfight_Remake extends StateBasedGame {
 				Var.dim_chosen.height, Var.fullscreen);
 		Var.app.start();
 		Var.app.setVSync(Var.vSync);
+		Var.app.setShowFPS(false);
 	}
 
 	@Override
