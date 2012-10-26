@@ -296,19 +296,22 @@ public class GamePlayState extends BasicGameState {
 		p2A = null;
 	    }
 	}
-	if (p1A != null && p2A != null) {
-	    for (int i = 0; i < BlockMap.entities.size(); i++) {
-		Block entity1 = (Block) BlockMap.entities.get(i);
-		if (p1A.intersects(entity1.poly)
-			&& r.player1.getRespawn_timer() >= Var.RESPAWNTIME_PLAYER) {
-		    r.player1.setHitpoints(0);
-		    p1A = null;
-		}
-		if (p2A.intersects(entity1.poly)
-			&& r.player2.getRespawn_timer() >= Var.RESPAWNTIME_PLAYER) {
-		    r.player2.setHitpoints(0);
-		    p2A = null;
-		}
+	if (p1A != null) {
+	    if (Var.tmap.getTileId(
+		    (int) p1A.getMaxX() / Var.tmap.getTileWidth(),
+		    (int) p1A.getMaxY() / Var.tmap.getTileHeight(), 0) == 2) {
+		
+		r.player1.setHitpoints(0);
+		p1A = null;
+	    }
+	}
+	if (p2A != null) {
+	    if (Var.tmap.getTileId(
+		    (int) p2A.getMaxX() / Var.tmap.getTileWidth(),
+		    (int) p2A.getMaxY() / Var.tmap.getTileHeight(), 0) == 2) {
+		
+		r.player2.setHitpoints(0);
+		p2A = null;
 	    }
 	}
 
