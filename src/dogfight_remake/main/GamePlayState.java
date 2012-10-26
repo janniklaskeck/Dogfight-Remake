@@ -20,7 +20,7 @@ import dogfight_remake.entities.weapons.Reload;
 import dogfight_remake.entities.weapons.WeaponTypes_Primary;
 import dogfight_remake.entities.weapons.WeaponTypes_Secondary;
 import dogfight_remake.entities.weapons.Weapons;
-import dogfight_remake.entities.planes.PlaneTypes;
+import dogfight_remake.entities.planes.PlaneTypes_Gen5;
 import dogfight_remake.map.Block;
 import dogfight_remake.map.BlockMap;
 import dogfight_remake.rendering.Render;
@@ -96,7 +96,7 @@ public class GamePlayState extends BasicGameState {
 	    throws SlickException {
 	WeaponTypes_Primary.MM30S.init();
 	WeaponTypes_Secondary.BOMB.init();
-	PlaneTypes.NORMAL.init();
+	PlaneTypes_Gen5.NORMAL.init();
     }
 
     @Override
@@ -208,7 +208,6 @@ public class GamePlayState extends BasicGameState {
 			r.player1.getCenterX(), r.player1.getCenterY()));
 	    }
 	}
-
 	if (r.player2.getHitpoints() > 0) {
 	    if (r.player2.getAim() != null) {
 		deltaX = r.player2.getCenterX()
@@ -296,14 +295,17 @@ public class GamePlayState extends BasicGameState {
 		p2A = null;
 	    }
 	}
-	if (p1A != null && p2A != null) {
-	    for (int i = 0; i < BlockMap.entities.size(); i++) {
-		Block entity1 = (Block) BlockMap.entities.get(i);
+
+	for (int i = 0; i < BlockMap.entities.size(); i++) {
+	    Block entity1 = (Block) BlockMap.entities.get(i);
+	    if (p1A != null) {
 		if (p1A.intersects(entity1.poly)
 			&& r.player1.getRespawn_timer() >= Var.RESPAWNTIME_PLAYER) {
 		    r.player1.setHitpoints(0);
 		    p1A = null;
 		}
+	    }
+	    if (p2A != null) {
 		if (p2A.intersects(entity1.poly)
 			&& r.player2.getRespawn_timer() >= Var.RESPAWNTIME_PLAYER) {
 		    r.player2.setHitpoints(0);
