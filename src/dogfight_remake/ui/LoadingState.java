@@ -46,7 +46,8 @@ public class LoadingState extends BasicGameState {
 	Var.arrow_left = Var.arrows.getSubImage(0, 0, 64, 64);
 	Var.arrow_right = Var.arrows.getSubImage(64, 0, 64, 64);
 	// Images Game
-	Var.img_player_ui = new Image("dogfight_remake/images/game/player_ui.png");
+	Var.img_player_ui = new Image(
+		"dogfight_remake/images/game/player_ui.png");
 	Var.img_plane1 = new Image("dogfight_remake/images/planes/gen5/F35.png")
 		.getScaledCopy(0.65f);
 	Var.img_plane2 = new Image("dogfight_remake/images/planes/plane1.png",
@@ -68,9 +69,9 @@ public class LoadingState extends BasicGameState {
 	// Images weapons primary
 	Var.mm30s = new Image("dogfight_remake/images/weapons/30mms.png");
 	// Tiled Map
-	Var.tmap = new TiledMap("dogfight_remake/map/map_test/map2.tmx",
+	Var.tmap = new TiledMap("dogfight_remake/map/map_test/map3.tmx",
 		"dogfight_remake/map/map_test");
-	Var.map = new BlockMap("dogfight_remake/map/map_test/map2.tmx");
+	Var.map = new BlockMap("dogfight_remake/map/map_test/map3.tmx");
 	// Images Pause Menu
 	Var.pauseMenuText = new Image(
 		"dogfight_remake/images/menu/pauseMenuText.png");

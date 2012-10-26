@@ -8,7 +8,7 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 import dogfight_remake.controls.KeyControls;
-import dogfight_remake.entities.planes.PlaneTypes;
+import dogfight_remake.entities.planes.PlaneTypes_Gen5;
 import dogfight_remake.main.Dogfight_Remake;
 import dogfight_remake.main.Var;
 
@@ -325,10 +325,10 @@ public class MainMenuState extends BasicGameState {
 	if (insideStartGame) {
 	    if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
 		if (Var.player1_type == null) {
-		    Var.player1_type = PlaneTypes.NORMAL;
+		    Var.player1_type = PlaneTypes_Gen5.NORMAL;
 		}
 		if (Var.player2_type == null) {
-		    Var.player2_type = PlaneTypes.NORMAL;
+		    Var.player2_type = PlaneTypes_Gen5.NORMAL;
 		}
 		sbg.enterState(Dogfight_Remake.GAMEPLAYSTATE);
 	    }

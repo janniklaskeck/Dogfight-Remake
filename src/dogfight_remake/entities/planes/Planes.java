@@ -43,7 +43,7 @@ public class Planes extends Entity {
     private boolean shoot_prim2 = false;
     private boolean shoot_sec1 = false;
     private boolean shoot_sec2 = false;
-    private PlaneTypes type;
+    private PlaneTypes_Interface type;
     private long respawn_timer;
 
     float xpos_reset;
@@ -54,7 +54,7 @@ public class Planes extends Entity {
     int ammo_sec_1_reset;
     int ammo_sec_2_reset;
 
-    public Planes(int id, float xpos, float ypos, float angle, PlaneTypes type) {
+    public Planes(int id, float xpos, float ypos, float angle, PlaneTypes_Interface type) {
 	super(xpos, ypos, angle);
 	this.id = id;
 	this.hitpoints = type.getHitpoints();
@@ -224,7 +224,7 @@ public class Planes extends Entity {
      */
     public void shoot_primary_2() {
 	float angle = this.angle;
-	if (broken || heat_prim > 100) {
+	if (broken || heat_prim >= 100) {
 	    return;
 	}
 	random = new Random();

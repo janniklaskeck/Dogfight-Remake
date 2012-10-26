@@ -11,8 +11,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
 import org.newdawn.slick.tiled.TiledMap;
 
-import dogfight_remake.entities.planes.PlaneTypes;
-import dogfight_remake.entities.weapons.WeaponTypes_Interface;
+import dogfight_remake.entities.planes.PlaneTypes_Interface;
 import dogfight_remake.entities.weapons.WeaponTypes_Primary;
 import dogfight_remake.entities.weapons.WeaponTypes_Secondary;
 import dogfight_remake.map.BlockMap;
@@ -91,8 +90,8 @@ public class Var {
     public static boolean singlePlayer = false;
     public static boolean vertical_split = false;
 
-    public static PlaneTypes player1_type;
-    public static PlaneTypes player2_type;
+    public static PlaneTypes_Interface player1_type;
+    public static PlaneTypes_Interface player2_type;
     // Scores
     public static int score_p1 = 0, score_p2 = 0;
     // RespawnTimer

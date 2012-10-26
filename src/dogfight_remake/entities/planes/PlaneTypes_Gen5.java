@@ -6,8 +6,8 @@ import dogfight_remake.entities.weapons.WeaponTypes_Primary;
 import dogfight_remake.entities.weapons.WeaponTypes_Secondary;
 import dogfight_remake.main.Var;
 
-public enum PlaneTypes {
-    // Name, Hitpoints, MaxSpeed, Acceleration, TurnAngle, Damage-Modifier,
+public enum PlaneTypes_Gen5 implements PlaneTypes_Interface {
+ // Name, Hitpoints, MaxSpeed, Acceleration, TurnAngle, Damage-Modifier,
     // Wpn1, Wpn2, Wpn3, Image
     NORMAL("Normal", 100, 1, 0.01f, 0.12f, 1, WeaponTypes_Primary.MM30S,
 	    WeaponTypes_Primary.MM30S, WeaponTypes_Secondary.GUIDED_AIR,
@@ -33,7 +33,7 @@ public enum PlaneTypes {
     private float accel;
     private float turnAngle;
 
-    PlaneTypes(String name, int hitpoins, float speed, float accel,
+    PlaneTypes_Gen5(String name, int hitpoins, float speed, float accel,
 	    float turnAngle, float damage, WeaponTypes_Primary wpn1,
 	    WeaponTypes_Primary wpn2, WeaponTypes_Secondary wpn3,
 	    WeaponTypes_Secondary wpn4, Image image) {

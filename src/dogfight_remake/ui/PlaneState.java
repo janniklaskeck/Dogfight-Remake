@@ -9,17 +9,18 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-import dogfight_remake.entities.planes.PlaneTypes;
+import dogfight_remake.entities.planes.PlaneTypes_Gen5;
+import dogfight_remake.entities.planes.PlaneTypes_Interface;
 import dogfight_remake.main.Dogfight_Remake;
 import dogfight_remake.main.Var;
 
 public class PlaneState extends BasicGameState {
 
     private int stateID = -1;
-    public static ArrayList<PlaneTypes> planeList;
+    public static ArrayList<PlaneTypes_Interface> planeList;
     private int index_plane1 = 0;
     private int index_plane2 = 0;
-    public static PlaneTypes chosen_plane;
+    public static PlaneTypes_Interface chosen_plane;
 
     private float exitX;
     private float exitY;
@@ -77,10 +78,10 @@ public class PlaneState extends BasicGameState {
     public void init(GameContainer gc, StateBasedGame sbg)
 	    throws SlickException {
 	gc.setVSync(Var.vSync);
-	planeList = new ArrayList<PlaneTypes>();
-	planeList.add(PlaneTypes.NORMAL);
-	planeList.add(PlaneTypes.F35);
-	planeList.add(PlaneTypes.MIG35);
+	planeList = new ArrayList<PlaneTypes_Interface>();
+	planeList.add(PlaneTypes_Gen5.NORMAL);
+	planeList.add(PlaneTypes_Gen5.F35);
+	planeList.add(PlaneTypes_Gen5.MIG35);
     }
 
     @Override

@@ -152,8 +152,9 @@ public class TurretAi extends Entity {
 	float ypos1 = ypos / Var.tmap.getTileHeight();
 
 	if (Var.tmap.getTileId((int) xpos1, (int) ypos1, 0) == 2) {
-	    ypos = ypos - Var.tmap.getTileHeight() * 1.5f;
+	    ypos = ypos - Var.tmap.getTileHeight() * 0.5f;
 	    cpos = true;
+	    ypos_reset = ypos;
 	} else {
 	    ypos += 4;
 	    cpos = false;
