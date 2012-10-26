@@ -8,6 +8,7 @@ Current Features:
 
 -Two Player Game
 -Windowed Fullscreen
+-Vertical or horizontal splitscreen
 -Only one plane type
 -Six different Weapons (two guns, two missiles, two bombs)
 -Simple Tiled Map
@@ -27,14 +28,13 @@ Mid Priority
   -Comment everything
 
 Low Priority
-  -A.I.
-  -Ground structures
+  -A.I. (turret ai exists)
+  -Ground structures(turrets atm available)
   -Many different planes
   -Many different weapons, depending on plane
     -Bombs (more types)
-    -GroundToAir missiles
-    -AirToGround missiles
     -Guns (more types)
+    -Radar Missiles
     
     
 Currently using Slick (http://slick.cokeandcode.com/) and LWJGL (http://www.lwjgl.org/)
