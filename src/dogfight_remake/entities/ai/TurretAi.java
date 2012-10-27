@@ -15,7 +15,6 @@ import dogfight_remake.entities.weapons.WeaponTypes_Primary;
 import dogfight_remake.entities.weapons.Weapons;
 import dogfight_remake.main.GamePlayState;
 import dogfight_remake.main.Var;
-import dogfight_remake.map.BlockMap;
 
 public class TurretAi extends Entity {
     private int lifetime = 0;
@@ -151,8 +150,8 @@ public class TurretAi extends Entity {
 	float xpos1 = xpos / Var.tmap.getTileWidth();
 	float ypos1 = ypos / Var.tmap.getTileHeight();
 
-	if (Var.tmap.getTileId((int) xpos1, (int) ypos1, 0) == 2) {
-	    ypos = ypos - Var.tmap.getTileHeight() * 0.5f;
+	if (Var.tmap.getTileId((int) xpos1, (int) ypos1, 0) != 0) {
+	    ypos = ypos - Var.tmap.getTileHeight();
 	    cpos = true;
 	    ypos_reset = ypos;
 	} else {

@@ -13,23 +13,23 @@ import dogfight_remake.main.Dogfight_Remake;
 import dogfight_remake.main.Var;
 
 public class MainMenuState extends BasicGameState {
-
     int stateID = -1;
 
     public MainMenuState(int stateID) {
 	this.stateID = stateID;
     }
-
-    private float dim;
     private float optionsX;
     private float optionsMenuX;
     private float optionsMenuY;
+    private float yDifLeft = 20;
     private float optionCollisionX;
     private float optionCollisionY;
     private float optionFullscreenX;
     private float optionFullscreenY;
     private float optionResolutionX;
     private float optionResolutionY;
+    private float optionVerticalX;
+    private float optionVerticalY;
     private float startGameX;
     private float startGameY;
     private float plane_p1X;
@@ -41,23 +41,24 @@ public class MainMenuState extends BasicGameState {
 
     @Override
     public void enter(GameContainer gc, StateBasedGame sbg) {
-	dim = Var.dim_chosen.width + Var.dim_chosen.height;
-
-	optionsMenuX = Var.dim_chosen.width / 2 + 30;
-	optionsMenuY = Var.dim_chosen.height / 5;
+	optionsMenuX = gc.getScreenWidth() / 2 + 30;
+	optionsMenuY = gc.getScreenHeight() / 5;
 	optionsX = optionsMenuX + 30;
 	optionCollisionY = optionsMenuY + 40;
 	optionCollisionX = optionsX;
-	optionFullscreenY = optionCollisionY + 20;
+	optionFullscreenY = optionCollisionY + yDifLeft;
 	optionFullscreenX = optionsX;
-	optionResolutionY = optionFullscreenY + 20;
+	optionResolutionY = optionFullscreenY + yDifLeft;
 	optionResolutionX = optionsX;
+	optionVerticalX = optionsX;
+	optionVerticalY = optionResolutionY + yDifLeft;
 
-	exitX = Var.dim_chosen.width - Var.dim_chosen.height / 50 - 16;
-	exitY = Var.dim_chosen.height / 50;
+	exitX = optionsMenuX + 404;
+	exitY = optionsMenuY + 10;
 	startGameX = 50;
-	startGameY = Var.dim_chosen.height - 50
+	startGameY = gc.getScreenHeight() - 50
 		- Var.startGameOption.getHeight();
+
 	plane_p1X = 50;
 	plane_p1Y = startGameY - 50 - Var.plane_p1.getHeight();
 	plane_p2X = 50;
@@ -68,20 +69,18 @@ public class MainMenuState extends BasicGameState {
     public void init(GameContainer gc, StateBasedGame sbg)
 	    throws SlickException {
 	gc.setVSync(Var.vSync);
-	dim = Var.dim_chosen.width + Var.dim_chosen.height;
-
-	optionsMenuX = Var.dim_chosen.width - 50 - (1024 * dim / 6000);
-	optionsMenuY = Var.dim_chosen.height / 20;
+	optionsMenuX = gc.getScreenWidth() - 50;
+	optionsMenuY = gc.getScreenHeight() / 20;
 	optionsX = optionsMenuX + 30;
 	optionCollisionY = optionsMenuY + Var.dim_chosen.height / 20;
 	optionCollisionX = optionsX;
-	optionFullscreenY = optionCollisionY + 20;
+	optionFullscreenY = optionCollisionY + yDifLeft;
 	optionFullscreenX = optionsX;
-	optionResolutionY = optionFullscreenY + 20;
+	optionResolutionY = optionFullscreenY + yDifLeft;
 	optionResolutionX = optionsX;
 
-	exitX = Var.dim_chosen.width - Var.dim_chosen.height / 50 - 16;
-	exitY = Var.dim_chosen.height / 50;
+	exitX = optionsMenuX + 398;
+	exitY = optionsMenuY;
 	startGameX = 50;
 	startGameY = Var.dim_chosen.height - 50
 		- Var.startGameOption.getHeight();
@@ -97,7 +96,7 @@ public class MainMenuState extends BasicGameState {
 	// render the background
 	Var.background.draw(0, 0, Var.dim_chosen.width, Var.dim_chosen.height);
 	// Game Options background
-	Var.gameOptionsMenu.draw(optionsMenuX, optionsMenuY, 430, 400);
+	Var.gameOptionsMenu.draw(optionsMenuX, optionsMenuY, 430, 430);
 	// Player Collision
 	if (Var.getPlayerCollision()) {
 	    Var.button2.draw(optionCollisionX, optionCollisionY, 16, 16);
@@ -112,6 +111,14 @@ public class MainMenuState extends BasicGameState {
 	    Var.button1.draw(optionFullscreenX, optionFullscreenY, 16, 16);
 	}
 	g.drawString("Fullscreen", optionFullscreenX + 20, optionFullscreenY);
+	// Vertical Splitscreen
+	if (Var.vertical_split) {
+	    Var.button2.draw(optionVerticalX, optionVerticalY, 16, 16);
+	} else {
+	    Var.button1.draw(optionVerticalX, optionVerticalY, 16, 16);
+	}
+	g.drawString("Vertical Splitscreen", optionVerticalX + 20,
+		optionVerticalY);
 	// Resolution
 	Var.button1.draw(optionResolutionX, optionResolutionY, 16, 16);
 	g.drawString("Resolution", optionResolutionX + 20, optionResolutionY);
@@ -279,10 +286,8 @@ public class MainMenuState extends BasicGameState {
 		&& mouseY >= optionFullscreenY
 		&& mouseY <= optionFullscreenY + 16) {
 	    dynamicSplitscreen = true;
-	} else if (mouseX >= optionFullscreenX
-		&& mouseX <= optionFullscreenX + 16
-		&& mouseY >= optionFullscreenY
-		&& mouseY <= optionFullscreenY + 16) {
+	} else if (mouseX >= optionVerticalX && mouseX <= optionVerticalX + 16
+		&& mouseY >= optionVerticalY && mouseY <= optionVerticalY + 16) {
 	    verticalSplitscreen = true;
 	} else if (mouseX >= optionFullscreenX
 		&& mouseX <= optionFullscreenX + 16
@@ -381,7 +386,12 @@ public class MainMenuState extends BasicGameState {
 	} else if (dynamicSplitscreen) {
 
 	} else if (verticalSplitscreen) {
-
+	    if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON))
+		if (!Var.vertical_split) {
+		    Var.vertical_split = true;
+		} else {
+		    Var.vertical_split = false;
+		}
 	} else if (showRadar) {
 
 	} else if (vsync) {

@@ -21,8 +21,6 @@ import dogfight_remake.entities.weapons.WeaponTypes_Primary;
 import dogfight_remake.entities.weapons.WeaponTypes_Secondary;
 import dogfight_remake.entities.weapons.Weapons;
 import dogfight_remake.entities.planes.PlaneTypes_Gen5;
-import dogfight_remake.map.Block;
-import dogfight_remake.map.BlockMap;
 import dogfight_remake.rendering.Render;
 
 public class GamePlayState extends BasicGameState {
@@ -46,6 +44,11 @@ public class GamePlayState extends BasicGameState {
 
     int stateID = -1;
     private int delta = 0;
+
+    int MaxMax;
+    int MinMin;
+    int MaxMin;
+    int MinMax;
 
     public GamePlayState(int stateID) {
 	this.stateID = stateID;
@@ -76,7 +79,8 @@ public class GamePlayState extends BasicGameState {
 	    Var.score_p1 = 0;
 	    Var.score_p2 = 0;
 	    Var.paused = false;
-	    Var.timePassed = 0;
+	    Var.timePassed_sec = 0;
+	    time = 0;
 	}
     }
 
@@ -106,7 +110,7 @@ public class GamePlayState extends BasicGameState {
 	KeyControls.update(gc, sbg, delta);
 	if (r.player1 != null && r.player2 != null && !Var.paused) {
 	    time += delta;
-	    Var.timePassed = time / 1000;
+	    Var.timePassed_sec = time / 1000;
 	    r.player1.update(delta);
 	    r.player2.update(delta);
 	    r.turret.update(delta);
@@ -151,9 +155,11 @@ public class GamePlayState extends BasicGameState {
 		respawn();
 	    }
 	    for (int i = 0; i < explosions.size(); i++) {
-		explosions.get(i).update(delta);
+
 		if (explosions.get(i).isBroken()) {
 		    explosions.remove(i);
+		} else {
+		    explosions.get(i).update(delta);
 		}
 	    }
 	}
@@ -188,6 +194,8 @@ public class GamePlayState extends BasicGameState {
      */
 
     private void checkCollision(GameContainer gc) {
+	int w = Var.tmap.getTileWidth() * Var.tmap.getWidth();
+	int h = Var.tmap.getTileHeight() * Var.tmap.getHeight();
 	p1 = new Rectangle((int) r.player1.getXpos(),
 		(int) r.player1.getYpos(), r.player1.getImage().getWidth(),
 		r.player1.getImage().getHeight());
@@ -225,11 +233,28 @@ public class GamePlayState extends BasicGameState {
 	    wep = new Rectangle((int) tmp.getXpos(), (int) tmp.getYpos(),
 		    (int) tmp.getWidth(), (int) tmp.getHeight());
 	    if (weapons.size() > 0) {
-		for (int o = 0; o < BlockMap.entities.size(); o++) {
-		    Block entity1 = (Block) BlockMap.entities.get(o);
-		    if (wep.intersects(entity1.poly)) {
+		if (wep.getMaxX() < w && wep.getMaxX() > 0 && wep.getMaxY() < h
+			&& wep.getMaxY() > 0 && wep.getMinX() < w
+			&& wep.getMinX() > 0 && wep.getMinY() < h
+			&& wep.getMinY() > 0) {
+		    MaxMax = Var.tmap.getTileId(
+			    (int) wep.getMaxX() / Var.tmap.getTileWidth(),
+			    (int) wep.getMaxY() / Var.tmap.getTileHeight(), 0);
+		    MinMin = Var.tmap.getTileId(
+			    (int) wep.getMinX() / Var.tmap.getTileWidth(),
+			    (int) wep.getMinY() / Var.tmap.getTileHeight(), 0);
+		    MaxMin = Var.tmap.getTileId(
+			    (int) wep.getMaxX() / Var.tmap.getTileWidth(),
+			    (int) wep.getMinY() / Var.tmap.getTileHeight(), 0);
+		    MinMax = Var.tmap.getTileId(
+			    (int) wep.getMinX() / Var.tmap.getTileWidth(),
+			    (int) wep.getMaxY() / Var.tmap.getTileHeight(), 0);
+		    if (MaxMax != 0 || MinMin != 0 || MaxMin != 0
+			    || MinMax != 0) {
 			tmp.setHitTarget();
 		    }
+		} else {
+		    tmp.setHitTarget();
 		}
 		if (p2A != null) {
 		    if (tmp.getID() == 1 || tmp.getID() == 3) {
@@ -244,7 +269,6 @@ public class GamePlayState extends BasicGameState {
 		    if (tmp.getID() == 2 || tmp.getID() == 3) {
 			if (p1A.intersects(wep) && r.player1.getHitpoints() > 0
 				&& !tmp.isHitTarget()) {
-
 			    tmp.setHitTarget();
 			    r.player1.decreaseHitpoints(tmp.getDamage());
 			}
@@ -297,42 +321,57 @@ public class GamePlayState extends BasicGameState {
 	}
 
 	if (p1A != null) {
-	    if (Var.tmap.getTileId(
-		    (int) p1A.getMaxX() / Var.tmap.getTileWidth(),
-		    (int) p1A.getMaxY() / Var.tmap.getTileHeight(), 0) == 2) {
-		
+	    if (p1A.getMaxX() < w && p1A.getMaxX() > 0 && p1A.getMaxY() < h
+		    && p1A.getMaxY() > 0 && p1A.getMinX() < w
+		    && p1A.getMinX() > 0 && p1A.getMinY() < h
+		    && p1A.getMinY() > 0) {
+
+		MaxMax = Var.tmap.getTileId(
+			(int) p1A.getMaxX() / Var.tmap.getTileWidth(),
+			(int) p1A.getMaxY() / Var.tmap.getTileHeight(), 0);
+		MinMin = Var.tmap.getTileId(
+			(int) p1A.getMinX() / Var.tmap.getTileWidth(),
+			(int) p1A.getMinY() / Var.tmap.getTileHeight(), 0);
+		MaxMin = Var.tmap.getTileId(
+			(int) p1A.getMaxX() / Var.tmap.getTileWidth(),
+			(int) p1A.getMinY() / Var.tmap.getTileHeight(), 0);
+		MinMax = Var.tmap.getTileId(
+			(int) p1A.getMinX() / Var.tmap.getTileWidth(),
+			(int) p1A.getMaxY() / Var.tmap.getTileHeight(), 0);
+		if (MaxMax != 0 || MinMin != 0 || MaxMin != 0 || MinMax != 0) {
+		    r.player1.setHitpoints(0);
+		    p1A = null;
+		}
+	    } else {
 		r.player1.setHitpoints(0);
 		p1A = null;
 	    }
 	}
 	if (p2A != null) {
-	    if (Var.tmap.getTileId(
-		    (int) p2A.getMaxX() / Var.tmap.getTileWidth(),
-		    (int) p2A.getMaxY() / Var.tmap.getTileHeight(), 0) == 2) {
-		
+	    if (p2A.getMaxX() < w && p2A.getMaxX() > 0 && p2A.getMaxY() < h
+		    && p2A.getMaxY() > 0 && p2A.getMinX() < w
+		    && p2A.getMinX() > 0 && p2A.getMinY() < h
+		    && p2A.getMinY() > 0) {
+		MaxMax = Var.tmap.getTileId(
+			(int) p2A.getMaxX() / Var.tmap.getTileWidth(),
+			(int) p2A.getMaxY() / Var.tmap.getTileHeight(), 0);
+		MinMin = Var.tmap.getTileId(
+			(int) p2A.getMinX() / Var.tmap.getTileWidth(),
+			(int) p2A.getMinY() / Var.tmap.getTileHeight(), 0);
+		MaxMin = Var.tmap.getTileId(
+			(int) p2A.getMaxX() / Var.tmap.getTileWidth(),
+			(int) p2A.getMinY() / Var.tmap.getTileHeight(), 0);
+		MinMax = Var.tmap.getTileId(
+			(int) p2A.getMinX() / Var.tmap.getTileWidth(),
+			(int) p2A.getMaxY() / Var.tmap.getTileHeight(), 0);
+		if (MaxMax != 0 || MinMin != 0 || MaxMin != 0 || MinMax != 0) {
+		    r.player2.setHitpoints(0);
+		    p2A = null;
+		}
+
+	    } else {
 		r.player2.setHitpoints(0);
 		p2A = null;
-	    }
-	}
-
-	Rectangle bounds_left = new Rectangle(0, 0, 1, Var.tmap.getHeight()
-		* Var.tmap.getTileHeight());
-	Rectangle bounds_right = new Rectangle(Var.tmap.getWidth()
-		* Var.tmap.getTileWidth() - 1, 0, 1, Var.tmap.getHeight()
-		* Var.tmap.getTileHeight());
-	Rectangle bounds_up = new Rectangle(0, 0, Var.tmap.getWidth()
-		* Var.tmap.getTileWidth(), 1);
-	// Collision of planes with frame bounds
-	if (r.player1.getHitpoints() > 0 && p1A != null) {
-	    if (p1A.intersects(bounds_left) || p1A.intersects(bounds_right)
-		    || p1A.intersects(bounds_up)) {
-		r.player1.setHitpoints(0);
-	    }
-	}
-	if (r.player2.getHitpoints() > 0 && p2A != null) {
-	    if (p2A.intersects(bounds_left) || p2A.intersects(bounds_right)
-		    || p2A.intersects(bounds_up)) {
-		r.player2.setHitpoints(0);
 	    }
 	}
     }

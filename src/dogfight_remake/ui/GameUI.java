@@ -88,8 +88,14 @@ public class GameUI {
 	    // FPS and score
 	    g.drawString(Var.score_p1 + " : " + Var.score_p2,
 		    Var.dim_chosen.width / 2, Var.dim_chosen.height / 10);
-	    g.drawString(Var.timePassed + "", Var.dim_chosen.width / 2,
-		    Var.dim_chosen.height / 13);
+	    Var.img_timer.draw(gc.getScreenWidth() / 2 - 30, 0);
+	    g.setColor(Color.white);
+	    if (Var.timePassed_sec % 60 == 0 && Var.timePassed_sec != 0) {
+		Var.timePassed_sec = 0;
+		Var.timePassed_min++;
+	    }
+	    g.drawString(Var.timePassed_min + ":" + Var.timePassed_sec,
+		    gc.getScreenWidth() / 2 - 12, 0);
 	}
 
     }

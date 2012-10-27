@@ -10,13 +10,12 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
-import org.newdawn.slick.tiled.TiledMap;
+import org.newdawn.slick.tiled.TiledMapPlus;
 import org.newdawn.slick.loading.DeferredResource;
 import org.newdawn.slick.loading.LoadingList;
 
 import dogfight_remake.main.Dogfight_Remake;
 import dogfight_remake.main.Var;
-import dogfight_remake.map.BlockMap;
 
 public class LoadingState extends BasicGameState {
 
@@ -48,6 +47,7 @@ public class LoadingState extends BasicGameState {
 	// Images Game
 	Var.img_player_ui = new Image(
 		"dogfight_remake/images/game/player_ui.png");
+	Var.img_timer = new Image("dogfight_remake/images/game/timer.png");
 	Var.img_plane1 = new Image("dogfight_remake/images/planes/gen5/F35.png")
 		.getScaledCopy(0.65f);
 	Var.img_plane2 = new Image("dogfight_remake/images/planes/plane1.png",
@@ -69,9 +69,9 @@ public class LoadingState extends BasicGameState {
 	// Images weapons primary
 	Var.mm30s = new Image("dogfight_remake/images/weapons/30mms.png");
 	// Tiled Map
-	Var.tmap = new TiledMap("dogfight_remake/map/map_test/map3.tmx",
+	Var.tmap = new TiledMapPlus("dogfight_remake/map/map_test/map1.tmx",
 		"dogfight_remake/map/map_test");
-	Var.map = new BlockMap("dogfight_remake/map/map_test/map3.tmx");
+
 	// Images Pause Menu
 	Var.pauseMenuText = new Image(
 		"dogfight_remake/images/menu/pauseMenuText.png");

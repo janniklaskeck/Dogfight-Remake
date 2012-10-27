@@ -9,12 +9,11 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
-import org.newdawn.slick.tiled.TiledMap;
+import org.newdawn.slick.tiled.TiledMapPlus;
 
 import dogfight_remake.entities.planes.PlaneTypes_Interface;
 import dogfight_remake.entities.weapons.WeaponTypes_Primary;
 import dogfight_remake.entities.weapons.WeaponTypes_Secondary;
-import dogfight_remake.map.BlockMap;
 
 public class Var {
     public static AppGameContainer app;
@@ -31,14 +30,14 @@ public class Var {
     public static Image img_turret_base;
     public static Image img_turret_barrel;
     public static Image img_player_ui;
+    public static Image img_timer;
     // Images planes gen 5
     public static Image f35;
     public static Image mig35;
     // Images weapons primary
     public static Image mm30s;
     // Tiled Map
-    public static BlockMap map;
-    public static TiledMap tmap;
+    public static TiledMapPlus tmap;
     // Images MainMenu
     public static Image background;
     public static Image startGameOption;
@@ -85,7 +84,8 @@ public class Var {
     public static boolean fullscreen = false;
     public static boolean paused = true;
     public static boolean vSync = true;
-    public static int timePassed = 0;
+    public static int timePassed_sec = 0;
+    public static int timePassed_min = 0;
     public static int plane_id = 1;
     public static boolean singlePlayer = false;
     public static boolean vertical_split = false;

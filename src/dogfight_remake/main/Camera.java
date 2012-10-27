@@ -2,12 +2,12 @@ package dogfight_remake.main;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.geom.Shape;
-import org.newdawn.slick.tiled.TiledMap;
+import org.newdawn.slick.tiled.TiledMapPlus;
 
 public class Camera {
 
     /** the map used for our scene */
-    public TiledMap map;
+    public TiledMapPlus map;
 
     /** the number of tiles in x-direction (width) */
     public int numTilesX;
@@ -43,7 +43,7 @@ public class Camera {
      * @param map
      *            the TiledMap used for the current scene
      */
-    public Camera(GameContainer gc, TiledMap map) {
+    public Camera(GameContainer gc, TiledMapPlus map) {
 	this.map = map;
 
 	this.numTilesX = map.getWidth();
@@ -195,7 +195,7 @@ public class Camera {
      *            the x-coordinate (in pixel) where the camera should start
      *            drawing the map at
      * @param offsetY
-     *            the y-coordinate (in pixel) where the camera should start
+     *            the y-coordinate (in pixel) where the camera should start,
      *            drawing the map at
      */
 
@@ -211,7 +211,7 @@ public class Camera {
 	// finally draw the section of the map on the screen
 	map.render(tileOffsetX + offsetX, tileOffsetY + offsetY, tileIndexX,
 		tileIndexY, (gc.getWidth() - tileOffsetX) / tileWidth + 1,
-		(gc.getHeight() - tileOffsetY) / tileHeight + 1);
+		(gc.getHeight() - tileOffsetY) / tileHeight + 1, 0, false);
     }
 
     /**

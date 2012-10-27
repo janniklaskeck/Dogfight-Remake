@@ -18,7 +18,7 @@ public abstract class Entity {
 	}
 
 	public Entity(float xpos, float ypos, float angle) {
-		this.setAngle(angle);
+		this.angle = angle;
 		this.xpos = xpos;
 		this.ypos = ypos;
 	}

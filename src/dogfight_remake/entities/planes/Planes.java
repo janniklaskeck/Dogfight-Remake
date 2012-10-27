@@ -55,7 +55,8 @@ public class Planes extends Entity {
     int ammo_sec_2_reset;
 
     public Planes(int id, float xpos, float ypos, float angle, PlaneTypes_Interface type) {
-	super(xpos, ypos, angle);
+	super(xpos, ypos);
+	this.angle = angle;
 	this.id = id;
 	this.hitpoints = type.getHitpoints();
 	this.speed_mod = type.getSpeed();
@@ -318,11 +319,11 @@ public class Planes extends Entity {
 	    angle += f;
 	}
 	if (angle + f < 0) {
-	    angle += f + 360f;
-	} else if (angle + f > 360f) {
-	    angle += f - 360f;
+	    angle += f + 360;
+	} else if (angle + f > 360) {
+	    angle += f - 360;
 	}
-	if (angle >= 360f || angle <= -360f) {
+	if (angle >= 360 || angle <= -360) {
 	    angle = 0;
 	}
     }

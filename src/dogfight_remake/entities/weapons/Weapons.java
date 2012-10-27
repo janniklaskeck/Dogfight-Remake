@@ -36,6 +36,7 @@ public class Weapons extends Entity {
     public Weapons(float xpos, float ypos, float angle, WeaponTypes_Interface type,
 	    int time, int id) {
 	super(xpos, ypos, angle);
+	this.angle = angle;
 	this.speed = type.getSpeed();
 	this.image = type.getImage();
 	this.broken = false;
