@@ -8,9 +8,7 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.geom.Polygon;
 import org.newdawn.slick.geom.Rectangle;
-import org.newdawn.slick.geom.Transform;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -28,15 +26,9 @@ public class GamePlayState extends BasicGameState {
 
     public static ArrayList<Weapons> weapons;
     public static ArrayList<Explosion> explosions;
-
-    private static Rectangle p1;
-    private static Rectangle p2;
     private Rectangle turret;
     private Rectangle wep;
-    public static Polygon p1A;
-    public static Polygon p2A;
     public static Render r;
-    private float deltaX, deltaY;
 
     public static Camera camera;
     public static Camera camera2;
@@ -196,37 +188,9 @@ public class GamePlayState extends BasicGameState {
     private void checkCollision(GameContainer gc) {
 	int w = Var.tmap.getTileWidth() * Var.tmap.getWidth();
 	int h = Var.tmap.getTileHeight() * Var.tmap.getHeight();
-	p1 = new Rectangle((int) r.player1.getXpos(),
-		(int) r.player1.getYpos(), r.player1.getImage().getWidth(),
-		r.player1.getImage().getHeight());
-	p2 = new Rectangle((int) r.player2.getXpos(),
-		(int) r.player2.getYpos(), r.player2.getImage().getWidth(),
-		r.player2.getImage().getHeight());
 	turret = new Rectangle((int) r.turret.getXpos(),
 		(int) r.turret.getYpos(), Var.img_turret_base.getWidth(),
 		Var.img_turret_base.getHeight());
-	if (r.player1.getHitpoints() > 0) {
-	    if (r.player1.getAim() != null) {
-		deltaX = r.player1.getCenterX()
-			- r.player1.getAim().getCenterX();
-		deltaY = r.player1.getCenterY()
-			- r.player1.getAim().getCenterY();
-		p1A = (Polygon) p1.transform(Transform.createRotateTransform(
-			(float) Math.atan2(deltaY, deltaX),
-			r.player1.getCenterX(), r.player1.getCenterY()));
-	    }
-	}
-	if (r.player2.getHitpoints() > 0) {
-	    if (r.player2.getAim() != null) {
-		deltaX = r.player2.getCenterX()
-			- r.player2.getAim().getCenterX();
-		deltaY = r.player2.getCenterY()
-			- r.player2.getAim().getCenterY();
-		p2A = (Polygon) p2.transform(Transform.createRotateTransform(
-			(float) Math.atan2(deltaY, deltaX),
-			r.player2.getCenterX(), r.player2.getCenterY()));
-	    }
-	}
 
 	for (int i = 0; i < weapons.size(); i++) {
 	    Weapons tmp = weapons.get(i);
@@ -256,18 +220,20 @@ public class GamePlayState extends BasicGameState {
 		} else {
 		    tmp.setHitTarget();
 		}
-		if (p2A != null) {
+		if (r.player2.getCollision() != null) {
 		    if (tmp.getID() == 1 || tmp.getID() == 3) {
-			if (p2A.intersects(wep) && r.player2.getHitpoints() > 0
+			if (r.player2.getCollision().intersects(wep)
+				&& r.player2.getHitpoints() > 0
 				&& !tmp.isHitTarget()) {
 			    tmp.setHitTarget();
 			    r.player2.decreaseHitpoints(tmp.getDamage());
 			}
 		    }
 		}
-		if (p1A != null) {
+		if (r.player1.getCollision() != null) {
 		    if (tmp.getID() == 2 || tmp.getID() == 3) {
-			if (p1A.intersects(wep) && r.player1.getHitpoints() > 0
+			if (r.player1.getCollision().intersects(wep)
+				&& r.player1.getHitpoints() > 0
 				&& !tmp.isHitTarget()) {
 			    tmp.setHitTarget();
 			    r.player1.decreaseHitpoints(tmp.getDamage());
@@ -287,19 +253,19 @@ public class GamePlayState extends BasicGameState {
 	    }
 	}
 
-	if (p1A != null) {
+	if (r.player1.getCollision() != null) {
 	    if (r.player1.getHitpoints() <= 0
 		    && r.player1.getRespawn_timer() >= Var.RESPAWNTIME_PLAYER) {
-		p1A = null;
+		r.player1.setCollision(null);
 		Var.score_p2++;
 	    }
 	}
-	if (p2A != null) {
+	if (r.player2.getCollision() != null) {
 	    if (r.player2.getHitpoints() <= 0
 		    && r.player2.getRespawn_timer() >= Var.RESPAWNTIME_PLAYER) {
 		explosions.add(new Explosion(r.player2.getXpos(), r.player2
 			.getYpos(), 4));
-		p2A = null;
+		r.player2.setCollision(null);
 		Var.score_p1++;
 	    }
 	}
@@ -309,69 +275,94 @@ public class GamePlayState extends BasicGameState {
 		turret = null;
 	    }
 	}
-	if (p1A != null && p2A != null && Var.getPlayerCollision()) {
-	    if (p1A.intersects(p2A)
+	if (r.player1.getCollision() != null
+		&& r.player2.getCollision() != null && Var.getPlayerCollision()) {
+	    if (r.player1.getCollision().intersects(r.player2.getCollision())
 		    && r.player1.getRespawn_timer() >= Var.RESPAWNTIME_PLAYER
 		    && r.player2.getRespawn_timer() >= Var.RESPAWNTIME_PLAYER) {
 		r.player1.setHitpoints(0);
 		r.player2.setHitpoints(0);
-		p1A = null;
-		p2A = null;
+		r.player1.setCollision(null);
+		r.player2.setCollision(null);
 	    }
 	}
 
-	if (p1A != null) {
-	    if (p1A.getMaxX() < w && p1A.getMaxX() > 0 && p1A.getMaxY() < h
-		    && p1A.getMaxY() > 0 && p1A.getMinX() < w
-		    && p1A.getMinX() > 0 && p1A.getMinY() < h
-		    && p1A.getMinY() > 0) {
+	if (r.player1.getCollision() != null) {
+	    if (r.player1.getCollision().getMaxX() < w
+		    && r.player1.getCollision().getMaxX() > 0
+		    && r.player1.getCollision().getMaxY() < h
+		    && r.player1.getCollision().getMaxY() > 0
+		    && r.player1.getCollision().getMinX() < w
+		    && r.player1.getCollision().getMinX() > 0
+		    && r.player1.getCollision().getMinY() < h
+		    && r.player1.getCollision().getMinY() > 0) {
 
-		MaxMax = Var.tmap.getTileId(
-			(int) p1A.getMaxX() / Var.tmap.getTileWidth(),
-			(int) p1A.getMaxY() / Var.tmap.getTileHeight(), 0);
-		MinMin = Var.tmap.getTileId(
-			(int) p1A.getMinX() / Var.tmap.getTileWidth(),
-			(int) p1A.getMinY() / Var.tmap.getTileHeight(), 0);
-		MaxMin = Var.tmap.getTileId(
-			(int) p1A.getMaxX() / Var.tmap.getTileWidth(),
-			(int) p1A.getMinY() / Var.tmap.getTileHeight(), 0);
-		MinMax = Var.tmap.getTileId(
-			(int) p1A.getMinX() / Var.tmap.getTileWidth(),
-			(int) p1A.getMaxY() / Var.tmap.getTileHeight(), 0);
+		MaxMax = Var.tmap
+			.getTileId((int) r.player1.getCollision().getMaxX()
+				/ Var.tmap.getTileWidth(),
+				(int) r.player1.getCollision().getMaxY()
+					/ Var.tmap.getTileHeight(), 0);
+		MinMin = Var.tmap
+			.getTileId((int) r.player1.getCollision().getMinX()
+				/ Var.tmap.getTileWidth(),
+				(int) r.player1.getCollision().getMinY()
+					/ Var.tmap.getTileHeight(), 0);
+		MaxMin = Var.tmap
+			.getTileId((int) r.player1.getCollision().getMaxX()
+				/ Var.tmap.getTileWidth(),
+				(int) r.player1.getCollision().getMinY()
+					/ Var.tmap.getTileHeight(), 0);
+		MinMax = Var.tmap
+			.getTileId((int) r.player1.getCollision().getMinX()
+				/ Var.tmap.getTileWidth(),
+				(int) r.player1.getCollision().getMaxY()
+					/ Var.tmap.getTileHeight(), 0);
 		if (MaxMax != 0 || MinMin != 0 || MaxMin != 0 || MinMax != 0) {
 		    r.player1.setHitpoints(0);
-		    p1A = null;
+		    r.player1.setCollision(null);
 		}
 	    } else {
 		r.player1.setHitpoints(0);
-		p1A = null;
+		r.player1.setCollision(null);
 	    }
 	}
-	if (p2A != null) {
-	    if (p2A.getMaxX() < w && p2A.getMaxX() > 0 && p2A.getMaxY() < h
-		    && p2A.getMaxY() > 0 && p2A.getMinX() < w
-		    && p2A.getMinX() > 0 && p2A.getMinY() < h
-		    && p2A.getMinY() > 0) {
-		MaxMax = Var.tmap.getTileId(
-			(int) p2A.getMaxX() / Var.tmap.getTileWidth(),
-			(int) p2A.getMaxY() / Var.tmap.getTileHeight(), 0);
-		MinMin = Var.tmap.getTileId(
-			(int) p2A.getMinX() / Var.tmap.getTileWidth(),
-			(int) p2A.getMinY() / Var.tmap.getTileHeight(), 0);
-		MaxMin = Var.tmap.getTileId(
-			(int) p2A.getMaxX() / Var.tmap.getTileWidth(),
-			(int) p2A.getMinY() / Var.tmap.getTileHeight(), 0);
-		MinMax = Var.tmap.getTileId(
-			(int) p2A.getMinX() / Var.tmap.getTileWidth(),
-			(int) p2A.getMaxY() / Var.tmap.getTileHeight(), 0);
+	if (r.player2.getCollision() != null) {
+	    if (r.player2.getCollision().getMaxX() < w
+		    && r.player2.getCollision().getMaxX() > 0
+		    && r.player2.getCollision().getMaxY() < h
+		    && r.player2.getCollision().getMaxY() > 0
+		    && r.player2.getCollision().getMinX() < w
+		    && r.player2.getCollision().getMinX() > 0
+		    && r.player2.getCollision().getMinY() < h
+		    && r.player2.getCollision().getMinY() > 0) {
+		MaxMax = Var.tmap
+			.getTileId((int) r.player2.getCollision().getMaxX()
+				/ Var.tmap.getTileWidth(),
+				(int) r.player2.getCollision().getMaxY()
+					/ Var.tmap.getTileHeight(), 0);
+		MinMin = Var.tmap
+			.getTileId((int) r.player2.getCollision().getMinX()
+				/ Var.tmap.getTileWidth(),
+				(int) r.player2.getCollision().getMinY()
+					/ Var.tmap.getTileHeight(), 0);
+		MaxMin = Var.tmap
+			.getTileId((int) r.player2.getCollision().getMaxX()
+				/ Var.tmap.getTileWidth(),
+				(int) r.player2.getCollision().getMinY()
+					/ Var.tmap.getTileHeight(), 0);
+		MinMax = Var.tmap
+			.getTileId((int) r.player2.getCollision().getMinX()
+				/ Var.tmap.getTileWidth(),
+				(int) r.player2.getCollision().getMaxY()
+					/ Var.tmap.getTileHeight(), 0);
 		if (MaxMax != 0 || MinMin != 0 || MaxMin != 0 || MinMax != 0) {
 		    r.player2.setHitpoints(0);
-		    p2A = null;
+		    r.player2.setCollision(null);
 		}
 
 	    } else {
 		r.player2.setHitpoints(0);
-		p2A = null;
+		r.player2.setCollision(null);
 	    }
 	}
     }

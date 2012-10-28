@@ -124,8 +124,9 @@ public class LoadingState extends BasicGameState {
 	    throws SlickException {
 	if (nextResource != null) {
 	    try {
+		Thread.sleep(1000);
 		nextResource.load();
-	    } catch (IOException e) {
+	    } catch (IOException | InterruptedException e) {
 		throw new SlickException("Failed to load: "
 			+ nextResource.getDescription(), e);
 	    }

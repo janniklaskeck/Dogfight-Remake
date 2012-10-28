@@ -6,6 +6,10 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.geom.Ellipse;
+import org.newdawn.slick.geom.Polygon;
+import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Transform;
+
 import dogfight_remake.entities.Entity;
 import dogfight_remake.entities.Explosion;
 import dogfight_remake.entities.weapons.WeaponTypes_Interface;
@@ -19,6 +23,8 @@ public class Planes extends Entity {
     private Random random;
     private Image image;
     private Ellipse aim;
+    private Polygon collision;
+    private Rectangle plane;
     private int id;
     private int hitpoints;
     private float angle;
@@ -54,7 +60,8 @@ public class Planes extends Entity {
     int ammo_sec_1_reset;
     int ammo_sec_2_reset;
 
-    public Planes(int id, float xpos, float ypos, float angle, PlaneTypes_Interface type) {
+    public Planes(int id, float xpos, float ypos, float angle,
+	    PlaneTypes_Interface type) {
 	super(xpos, ypos);
 	this.angle = angle;
 	this.id = id;
@@ -96,6 +103,9 @@ public class Planes extends Entity {
      */
 
     public void update(float delta) {
+	float deltaX, deltaY;
+
+
 	if (broken && respawn_timer >= Var.RESPAWNTIME_PLAYER) {
 	    GamePlayState.explosions.add(new Explosion(xpos, ypos, 4));
 	    Var.explode.play(1, Var.sounds_volume);
@@ -166,6 +176,19 @@ public class Planes extends Entity {
 	    }
 	    if (shoot_sec2) {
 		shoot_secondary_2();
+	    }
+	}
+
+	if (!broken) {
+	    if (getAim() != null) {
+		plane = new Rectangle((int) getXpos(), (int) getYpos(),
+			image.getWidth(), image.getHeight());
+		deltaX = getCenterX() - getAim().getCenterX();
+		deltaY = getCenterY() - getAim().getCenterY();
+		collision = (Polygon) plane.transform(Transform
+			.createRotateTransform(
+				(float) Math.atan2(deltaY, deltaX),
+				getCenterX(), getCenterY()));
 	    }
 	}
     }
@@ -615,5 +638,13 @@ public class Planes extends Entity {
 	    this.heat_prim += f;
 	}
 
+    }
+
+    public Polygon getCollision() {
+	return collision;
+    }
+
+    public void setCollision(Polygon collision) {
+	this.collision = collision;
     }
 }
