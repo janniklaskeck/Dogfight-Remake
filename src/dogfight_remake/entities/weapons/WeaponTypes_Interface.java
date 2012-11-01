@@ -37,4 +37,8 @@ public interface WeaponTypes_Interface {
     public int getHeat();
 
     public void setHeat(int heat);
+    
+    public float getTurnRate();
+    
+    public void setTurnRate(float turnRate);
 }

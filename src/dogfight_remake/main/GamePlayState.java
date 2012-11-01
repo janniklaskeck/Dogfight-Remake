@@ -1,7 +1,6 @@
 package dogfight_remake.main;
 
 import java.awt.Dimension;
-
 import java.util.ArrayList;
 
 import org.newdawn.slick.GameContainer;
@@ -9,6 +8,8 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.particles.ConfigurableEmitter;
+import org.newdawn.slick.particles.ParticleSystem;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -19,6 +20,7 @@ import dogfight_remake.entities.weapons.WeaponTypes_Primary;
 import dogfight_remake.entities.weapons.WeaponTypes_Secondary;
 import dogfight_remake.entities.weapons.Weapons;
 import dogfight_remake.entities.planes.PlaneTypes_Gen5;
+import dogfight_remake.rendering.Effects;
 import dogfight_remake.rendering.Render;
 
 public class GamePlayState extends BasicGameState {
@@ -33,6 +35,7 @@ public class GamePlayState extends BasicGameState {
     public static Camera camera;
     public static Camera camera2;
     public int time;
+    public static Effects ef;
 
     int stateID = -1;
     private int delta = 0;
@@ -51,6 +54,9 @@ public class GamePlayState extends BasicGameState {
 	return stateID;
     }
 
+    public static ParticleSystem ps;
+    public static ConfigurableEmitter pe;
+
     @Override
     public void enter(GameContainer gc, StateBasedGame sbg) {
 	gc.setVSync(true);
@@ -66,7 +72,12 @@ public class GamePlayState extends BasicGameState {
 	    explosions = new ArrayList<Explosion>();
 	    camera = new Camera(gc, Var.tmap);
 	    camera2 = new Camera(gc, Var.tmap);
-
+	    try {
+		ef = new Effects();
+	    } catch (SlickException e1) {
+		// TODO Auto-generated catch block
+		e1.printStackTrace();
+	    }
 	    // GlbVar.music1.loop(1, GlbVar.music_volume);
 	    Var.score_p1 = 0;
 	    Var.score_p2 = 0;
@@ -77,13 +88,14 @@ public class GamePlayState extends BasicGameState {
     }
 
     @Override
-    public void render(GameContainer gc, StateBasedGame game, Graphics g)
+    public void render(GameContainer gc, StateBasedGame sbg, Graphics g)
 	    throws SlickException {
 	r.render(gc, g, delta);
+
 	if (Var.paused) {
 	    Var.img_pause_bg = new Image(1680, 1050);
 	    g.copyArea(Var.img_pause_bg, 0, 0);
-	    game.enterState(Dogfight_Remake.PAUSEDSTATE);
+	    sbg.enterState(Dogfight_Remake.PAUSEDSTATE);
 	}
     }
 
@@ -98,6 +110,7 @@ public class GamePlayState extends BasicGameState {
     @Override
     public void update(GameContainer gc, StateBasedGame sbg, int delta)
 	    throws SlickException {
+	ef.update(delta);
 	this.delta = delta;
 	KeyControls.update(gc, sbg, delta);
 	if (r.player1 != null && r.player2 != null && !Var.paused) {
@@ -115,7 +128,8 @@ public class GamePlayState extends BasicGameState {
 	    checkCollision(gc);
 	    for (int i = 0; i < weapons.size(); i++) {
 		if (!weapons.get(i).isHit() && weapons.get(i).isAlive()) {
-		    if (weapons.get(i).getType() == WeaponTypes_Secondary.GUIDED_AIR) {
+		    if (weapons.get(i).getType() == WeaponTypes_Secondary.GUIDED_AIR
+			    || weapons.get(i).getType() == WeaponTypes_Secondary.AIM9L) {
 			if (weapons.get(i).getID() == 1) {
 			    if (r.player2.getHitpoints() > 0
 				    && weapons.get(i).hasTarget()) {
@@ -221,7 +235,7 @@ public class GamePlayState extends BasicGameState {
 		    tmp.setHitTarget();
 		}
 		if (r.player2.getCollision() != null) {
-		    if (tmp.getID() == 1 || tmp.getID() == 3) {
+		    if (tmp.getID() != 2) {
 			if (r.player2.getCollision().intersects(wep)
 				&& r.player2.getHitpoints() > 0
 				&& !tmp.isHitTarget()) {
@@ -231,7 +245,7 @@ public class GamePlayState extends BasicGameState {
 		    }
 		}
 		if (r.player1.getCollision() != null) {
-		    if (tmp.getID() == 2 || tmp.getID() == 3) {
+		    if (tmp.getID() != 1) {
 			if (r.player1.getCollision().intersects(wep)
 				&& r.player1.getHitpoints() > 0
 				&& !tmp.isHitTarget()) {

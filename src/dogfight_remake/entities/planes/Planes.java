@@ -2,6 +2,7 @@ package dogfight_remake.entities.planes;
 
 import java.util.Random;
 
+import org.newdawn.slick.Game;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -9,6 +10,7 @@ import org.newdawn.slick.geom.Ellipse;
 import org.newdawn.slick.geom.Polygon;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Transform;
+import org.newdawn.slick.particles.ConfigurableEmitter;
 
 import dogfight_remake.entities.Entity;
 import dogfight_remake.entities.Explosion;
@@ -51,6 +53,7 @@ public class Planes extends Entity {
     private boolean shoot_sec2 = false;
     private PlaneTypes_Interface type;
     private long respawn_timer;
+    private ConfigurableEmitter explosion;
 
     float xpos_reset;
     float ypos_reset;
@@ -105,10 +108,12 @@ public class Planes extends Entity {
     public void update(float delta) {
 	float deltaX, deltaY;
 
-
 	if (broken && respawn_timer >= Var.RESPAWNTIME_PLAYER) {
-	    GamePlayState.explosions.add(new Explosion(xpos, ypos, 4));
+	    explosion = GamePlayState.ef.getPlane_Explosion();
+	    explosion.setPosition(xpos, ypos);
 	    Var.explode.play(1, Var.sounds_volume);
+	    if (explosion.completed())
+		explosion.wrapUp();
 	}
 	if (hitpoints <= 0) {
 	    respawn_timer -= delta;
@@ -207,6 +212,8 @@ public class Planes extends Entity {
 	image.setRotation(angle);
 	image.draw(xpos, ypos);
 
+	g.fillRect(getCenterX(), getCenterY(), 2, 2);
+
     }
 
     /**
@@ -237,7 +244,7 @@ public class Planes extends Entity {
 	float y = getCenterY();
 	addHeat_prim(wpn1.getHeat());
 	wpn1.getSound().play(1, Var.sounds_volume);
-	GamePlayState.weapons.add(new Weapons(x, y, angle, wpn1, 0, id));
+	GamePlayState.weapons.add(new Weapons(x, y, angle, wpn1, 0, id, null));
     }
 
     /**
@@ -268,7 +275,7 @@ public class Planes extends Entity {
 	float y = getCenterY();
 	addHeat_prim(wpn2.getHeat());
 	wpn2.getSound().play(1, Var.sounds_volume);
-	GamePlayState.weapons.add(new Weapons(x, y, angle, wpn2, 0, id));
+	GamePlayState.weapons.add(new Weapons(x, y, angle, wpn2, 0, id, null));
     }
 
     /**
@@ -290,7 +297,8 @@ public class Planes extends Entity {
 	float y = getCenterY();
 	ammo_sec_1--;
 	wpn3.getSound().play(1, Var.sounds_volume);
-	GamePlayState.weapons.add(new Weapons(x, y, angle, wpn3, 0, id));
+	GamePlayState.weapons.add(new Weapons(x, y, angle, wpn3, 0, id,
+		GamePlayState.ef.getSmokeTrail()));
     }
 
     /**
@@ -312,7 +320,8 @@ public class Planes extends Entity {
 	float y = getCenterY();
 	ammo_sec_2--;
 	wpn4.getSound().play(1, Var.sounds_volume);
-	GamePlayState.weapons.add(new Weapons(x, y, angle, wpn4, 0, id));
+	GamePlayState.weapons.add(new Weapons(x, y, angle, wpn4, 0, id,
+		GamePlayState.ef.getSmokeTrail()));
     }
 
     /**

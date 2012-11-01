@@ -3,7 +3,6 @@ package dogfight_remake.rendering;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
-
 import dogfight_remake.entities.ai.TurretAi;
 import dogfight_remake.entities.planes.Planes;
 import dogfight_remake.entities.weapons.WeaponTypes_Primary;
@@ -25,6 +24,7 @@ public class Render {
 		- 150, Var.dim_chosen.height / 2, 180, Var.player2_type);
 	turret = new TurretAi(3, 600, 1000, 270, 100, player1,
 		WeaponTypes_Primary.TURRET_MIDDLE, Var.img_bullet1);
+
     }
 
     /**
@@ -40,7 +40,7 @@ public class Render {
 	    GamePlayState.camera.untranslateGraphics();
 	    GamePlayState.camera.drawMap();
 	    GamePlayState.camera.translateGraphics();
-
+	    GamePlayState.ef.render(delta);
 	    if (player1 != null) {
 		player1.render(gc, g, delta);
 	    }
@@ -79,7 +79,7 @@ public class Render {
 		g.drawRect((gc.getScreenWidth() / 2) - 1, 0, 1,
 			gc.getScreenHeight());
 		GamePlayState.camera.translateGraphics();
-
+		GamePlayState.ef.render(delta);
 		if (player1 != null) {
 		    player1.render(gc, g, delta);
 		}
@@ -115,6 +115,7 @@ public class Render {
 		GamePlayState.camera2.untranslateGraphics();
 		GamePlayState.camera2.drawMap();
 		GamePlayState.camera2.translateGraphics();
+		GamePlayState.ef.render(delta);
 		if (player1 != null) {
 		    player1.render(gc, g, delta);
 		}
@@ -154,9 +155,9 @@ public class Render {
 		g.drawRect(0, (gc.getScreenHeight() / 2) - 9,
 			gc.getScreenWidth(), 1);
 		GamePlayState.camera.translateGraphics();
-
+		GamePlayState.ef.render(delta);
 		if (player1 != null) {
-		    player1.render(gc, g, delta);
+		    player1.render(gc, g, delta);  
 		}
 		if (player2 != null) {
 		    player2.render(gc, g, delta);
@@ -185,8 +186,10 @@ public class Render {
 		GamePlayState.camera2.untranslateGraphics();
 		GamePlayState.camera2.drawMap();
 		GamePlayState.camera2.translateGraphics();
+		GamePlayState.ef.render(delta);
 		if (player1 != null) {
 		    player1.render(gc, g, delta);
+
 		}
 		if (player2 != null) {
 		    player2.render(gc, g, delta);
@@ -210,5 +213,6 @@ public class Render {
 
 	    }
 	}
+	
     }
 }

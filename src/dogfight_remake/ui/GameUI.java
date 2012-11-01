@@ -38,8 +38,8 @@ public class GameUI {
 		g.fillRect(83 + i * 1.2f, 67, 1.2f, 6);
 	    }
 	    g.setColor(Color.black);
-	    Var.img_missile1.setRotation(0);
-	    Var.img_bomb1.setRotation(0);
+	    r.player1.getWeapon(3).getImage().setRotation(0);
+	    r.player1.getWeapon(4).getImage().setRotation(0);
 
 	    r.player1.getWeapon(3).getImage().draw(86, 10);
 	    g.drawString("" + r.player1.getAmmo(3), 50 + 86, 6);
@@ -75,7 +75,8 @@ public class GameUI {
 	    }
 	    g.setColor(Color.black);
 
-	    Var.img_missile1.setRotation(0);
+	    r.player2.getWeapon(3).getImage().setRotation(0);
+	    r.player2.getWeapon(4).getImage().setRotation(0);
 	    r.player2.getWeapon(3).getImage().draw(xpos_p2 - 147, 10);
 	    g.drawString("" + r.player2.getAmmo(3), xpos_p2 - 147 + 50, 6);
 	    r.player2.getWeapon(4).getImage().draw(xpos_p2 - 217, 10);
@@ -97,6 +98,5 @@ public class GameUI {
 	    g.drawString(Var.timePassed_min + ":" + Var.timePassed_sec,
 		    gc.getScreenWidth() / 2 - 12, 0);
 	}
-
     }
 }

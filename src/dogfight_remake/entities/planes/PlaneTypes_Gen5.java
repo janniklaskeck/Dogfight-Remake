@@ -10,16 +10,16 @@ public enum PlaneTypes_Gen5 implements PlaneTypes_Interface {
  // Name, Hitpoints, MaxSpeed, Acceleration, TurnAngle, Damage-Modifier,
     // Wpn1, Wpn2, Wpn3, Image
     NORMAL("Normal", 100, 1, 0.01f, 0.12f, 1, WeaponTypes_Primary.MM30S,
-	    WeaponTypes_Primary.MM30S, WeaponTypes_Secondary.GUIDED_AIR,
-	    WeaponTypes_Secondary.GUIDED_GROUND, Var.img_plane1), 
+	    WeaponTypes_Primary.MM30S, WeaponTypes_Secondary.AIM9L,
+	    WeaponTypes_Secondary.AIM9L, Var.img_plane2), 
 	    F35("F-35 Joint Strike Fighter", 95, 1.35f, 0.015f, 0.13f, 1f,
 	    WeaponTypes_Primary.MM30S, WeaponTypes_Primary.MM30S,
 	    WeaponTypes_Secondary.BOMB_SPLIT, WeaponTypes_Secondary.BOMB_SPLIT,
-	    Var.img_plane2), 
+	    Var.f35), 
 	    MIG35("MiG-35/MFI", 100, 1.35f, 0.015f, 0.10f, 1f,
 	    WeaponTypes_Primary.MM30S, WeaponTypes_Primary.MM30S,
 	    WeaponTypes_Secondary.GUIDED_AIR, WeaponTypes_Secondary.BOMB_SPLIT,
-	    Var.img_plane1);
+	    Var.mig35);
 
     private int hitpoints;
     private float speed;
@@ -51,7 +51,7 @@ public enum PlaneTypes_Gen5 implements PlaneTypes_Interface {
     }
 
     public void init() {
-	NORMAL.setImage(Var.img_plane1);
+	NORMAL.setImage(Var.f35);
 	F35.setImage(Var.f35);
 	MIG35.setImage(Var.mig35);
     }

@@ -20,6 +20,7 @@ public class Var {
     // Images Game
     public static Image img_plane1;
     public static Image img_plane2;
+    public static Image aim9l;
     public static Image img_missile1;
     public static Image img_bullet1;
     public static Image img_bomb1;
@@ -96,7 +97,7 @@ public class Var {
     public static int score_p1 = 0, score_p2 = 0;
     // RespawnTimer
     public static final long RESPAWNTIME_PLAYER = 3000L;
-    public static final long RESPAWNTIME_TURRET = 3000L;
+    public static final long RESPAWNTIME_TURRET = 9000L;
 
     public static float music_volume = 0.2f;
     public static float sounds_volume = 0.05f;
@@ -127,8 +128,8 @@ public class Var {
 
     public static WeaponTypes_Primary wpn1_p1 = WeaponTypes_Primary.MM30S;
     public static WeaponTypes_Primary wpn2_p1 = WeaponTypes_Primary.MM30S;
-    public static WeaponTypes_Secondary wpn3_p1 = WeaponTypes_Secondary.GUIDED_AIR;
-    public static WeaponTypes_Secondary wpn4_p1 = WeaponTypes_Secondary.BOMB;
+    public static WeaponTypes_Secondary wpn3_p1 = WeaponTypes_Secondary.AIM9L;
+    public static WeaponTypes_Secondary wpn4_p1 = WeaponTypes_Secondary.AIM9L;
 
     public static int p2_key_left = Input.KEY_D;
     public static int p2_key_right = Input.KEY_G;

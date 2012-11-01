@@ -116,4 +116,14 @@ public enum WeaponTypes_Primary implements WeaponTypes_Interface {
     public void setHeat(int heat) {
 	this.heat = heat;
     }
+
+    @Override
+    public float getTurnRate() {
+	return -1;
+    }
+
+    @Override
+    public void setTurnRate(float turnRate) {
+	
+    }
 }

@@ -40,7 +40,6 @@ public class Dogfight_Remake extends StateBasedGame {
 		this.addState(new GamePlayState(GAMEPLAYSTATE));
 		this.addState(new PausedState(PAUSEDSTATE));
 		this.addState(new PlaneState(PLANESTATE));
-
 	}
 
 }

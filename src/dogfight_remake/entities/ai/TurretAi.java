@@ -15,6 +15,7 @@ import dogfight_remake.entities.weapons.WeaponTypes_Primary;
 import dogfight_remake.entities.weapons.Weapons;
 import dogfight_remake.main.GamePlayState;
 import dogfight_remake.main.Var;
+import dogfight_remake.rendering.Effects;
 
 public class TurretAi extends Entity {
     private int lifetime = 0;
@@ -82,7 +83,7 @@ public class TurretAi extends Entity {
 	if (!cpos) {
 	    down();
 	}
-	if (broken && respawn_timer >= Var.RESPAWNTIME_PLAYER) {
+	if (broken && respawn_timer >= Var.RESPAWNTIME_TURRET) {
 	    GamePlayState.explosions.add(new Explosion(xpos, ypos, 4));
 	    Var.explode.play(1, Var.sounds_volume);
 	}
@@ -131,7 +132,7 @@ public class TurretAi extends Entity {
 	float x = (float) (xpos + Math.cos(Math.toRadians(angle)));
 	float y = (float) (ypos + Math.sin(Math.toRadians(angle)) - 50);
 	wmp.getSound().play(1, Var.sounds_volume);
-	GamePlayState.weapons.add(new Weapons(x, y, angle, wmp, 0, id));
+	GamePlayState.weapons.add(new Weapons(x, y, angle, wmp, 0, id, null));
     }
 
     /**

@@ -33,28 +33,24 @@ public class LoadingState extends BasicGameState {
 	Var.gameOptionsMenu = new Image(
 		"dogfight_remake/images/menu/GameOptionsMenu.png");
 	Var.buttons = new Image("dogfight_remake/images/menu/buttons.png");
-	Var.button1 = Var.buttons.getSubImage(0, 0, 32, 32);
-	Var.button2 = Var.buttons.getSubImage(32, 0, 32, 32);
-	Var.exitCorner = Var.buttons.getSubImage(64, 0, 32, 32);
 	Var.startGameOption = new Image(
 		"dogfight_remake/images/menu/menu_start.png");
 	Var.plane_p1 = new Image("dogfight_remake/images/menu/menu_player1.png");
 	Var.plane_p2 = new Image("dogfight_remake/images/menu/menu_player2.png");
 	// Images Plane Menu
 	Var.arrows = new Image("dogfight_remake/images/menu/buttons2.png");
-	Var.arrow_left = Var.arrows.getSubImage(0, 0, 64, 64);
-	Var.arrow_right = Var.arrows.getSubImage(64, 0, 64, 64);
+
 	// Images Game
 	Var.img_player_ui = new Image(
 		"dogfight_remake/images/game/player_ui.png");
 	Var.img_timer = new Image("dogfight_remake/images/game/timer.png");
-	Var.img_plane1 = new Image("dogfight_remake/images/planes/gen5/F35.png")
-		.getScaledCopy(0.65f);
 	Var.img_plane2 = new Image("dogfight_remake/images/planes/plane1.png",
 		true);
 	Var.img_bg = new Image("dogfight_remake/images/img_bg.jpg");
 	Var.img_missile1 = new Image(
 		"dogfight_remake/images/weapons/missile1.png");
+	Var.aim9l = new Image(
+		"dogfight_remake/images/weapons/aim9l.png");
 	Var.img_bullet1 = new Image(
 		"dogfight_remake/images/weapons/bullet1.png");
 	Var.img_bomb1 = new Image("dogfight_remake/images/weapons/bomb1.png");
@@ -62,10 +58,8 @@ public class LoadingState extends BasicGameState {
 		"dogfight_remake/images/weapons/bomb1_split.png");
 	Var.img_turret1 = new Image("dogfight_remake/images/turret.png");
 	// Images planes gen 5
-	Var.f35 = new Image("dogfight_remake/images/planes/gen5/F35.png")
-		.getScaledCopy(0.65f);
-	Var.mig35 = new Image("dogfight_remake/images/planes/gen5/mig-35.png")
-		.getScaledCopy(0.65f);
+	Var.f35 = new Image("dogfight_remake/images/planes/gen5/F35.png");
+	Var.mig35 = new Image("dogfight_remake/images/planes/gen5/mig-35.png");
 	// Images weapons primary
 	Var.mm30s = new Image("dogfight_remake/images/weapons/30mms.png");
 	// Tiled Map
@@ -110,9 +104,9 @@ public class LoadingState extends BasicGameState {
 	int total = LoadingList.get().getTotalResources();
 	int loaded = LoadingList.get().getTotalResources()
 		- LoadingList.get().getRemainingResources();
-	g.fillRect((float) Var.dim_chosen.getWidth() / 3,
+	g.fillRect((float) Var.dim_chosen.getWidth() * 0.25f,
 		(float) Var.dim_chosen.getHeight() / 4, loaded * 40, 20);
-	g.drawRect((float) Var.dim_chosen.getWidth() / 3,
+	g.drawRect((float) Var.dim_chosen.getWidth() * 0.25f,
 		(float) Var.dim_chosen.getHeight() / 4, total * 40, 20);
 	if (started) {
 	    g.drawString("LOADING COMPLETE", 100, 500);
@@ -124,9 +118,8 @@ public class LoadingState extends BasicGameState {
 	    throws SlickException {
 	if (nextResource != null) {
 	    try {
-		Thread.sleep(1000);
 		nextResource.load();
-	    } catch (IOException | InterruptedException e) {
+	    } catch (IOException e) {
 		throw new SlickException("Failed to load: "
 			+ nextResource.getDescription(), e);
 	    }

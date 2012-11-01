@@ -88,6 +88,12 @@ public class MainMenuState extends BasicGameState {
 	plane_p1Y = startGameY - 50 - Var.plane_p1.getHeight();
 	plane_p2X = 50;
 	plane_p2Y = plane_p1Y - 50 - Var.plane_p2.getHeight();
+	
+	Var.button1 = Var.buttons.getSubImage(0, 0, 32, 32);
+	Var.button2 = Var.buttons.getSubImage(32, 0, 32, 32);
+	Var.exitCorner = Var.buttons.getSubImage(64, 0, 32, 32);
+	Var.arrow_left = Var.arrows.getSubImage(0, 0, 64, 64);
+	Var.arrow_right = Var.arrows.getSubImage(64, 0, 64, 64);
     }
 
     @Override

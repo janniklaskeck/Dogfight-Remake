@@ -6,6 +6,7 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Sound;
+import org.newdawn.slick.particles.ConfigurableEmitter;
 
 import dogfight_remake.entities.Entity;
 import dogfight_remake.entities.Explosion;
@@ -32,9 +33,12 @@ public class Weapons extends Entity {
     private Sound sound;
     private Random rnd;
     private boolean hitTarget = false;
+    private float turnRate;
+    private ConfigurableEmitter em;
+    private ConfigurableEmitter explosion;
 
-    public Weapons(float xpos, float ypos, float angle, WeaponTypes_Interface type,
-	    int time, int id) {
+    public Weapons(float xpos, float ypos, float angle,
+	    WeaponTypes_Interface type, int time, int id, ConfigurableEmitter em) {
 	super(xpos, ypos, angle);
 	this.angle = angle;
 	this.speed = type.getSpeed();
@@ -48,51 +52,28 @@ public class Weapons extends Entity {
 	this.width = image.getWidth();
 	this.time = time;
 	this.sound = type.getSound();
+	this.turnRate = type.getTurnRate();
+	if (em != null) {
+	    this.em = em;
+	    em.setPosition(xpos, ypos);
+	}
     }
 
     /**
      * Paints weapons
      */
+    
 
     public void render(GameContainer container, Graphics g, float delta) {
 	time += delta;
 	if (broken) {
+	    if (em != null)
+		em.wrapUp();
+
 	    return;
 	}
-	if (type == WeaponTypes_Primary.MM30S && time <= type.getLife_time()) {
-	    image.setRotation(angle);
-	    image.draw(xpos, ypos);
-	} else if (type == WeaponTypes_Primary.MINIGUN && time <= type.getLife_time()) {
-	    image.setRotation(angle);
-	    image.draw(xpos, ypos);
-	} else if (type == WeaponTypes_Secondary.UNGUIDED && time <= type.getLife_time()) {
-	    image.setRotation(angle);
-	    image.draw(xpos, ypos);
-	} else if (type == WeaponTypes_Secondary.GUIDED_GROUND
-		&& time <= type.getLife_time()) {
-	    image.setRotation(angle);
-	    image.draw(xpos, ypos);
-	} else if (type == WeaponTypes_Secondary.GUIDED_AIR
-		&& time <= type.getLife_time()) {
-	    image.setRotation(angle);
-	    image.draw(xpos, ypos);
-	} else if (type == WeaponTypes_Secondary.RADAR_AIR) {
-	    image.setRotation(angle);
-	    image.draw(xpos, ypos);
-	} else if (type == WeaponTypes_Secondary.RADAR_GROUND) {
-	    image.setRotation(angle);
-	    image.draw(xpos, ypos);
-	} else if (type == WeaponTypes_Secondary.BOMB) {
-	    image.setRotation(angle);
-	    image.draw(xpos, ypos);
-	} else if (type == WeaponTypes_Secondary.BOMB_SPLIT) {
-	    image.setRotation(angle);
-	    image.draw(xpos, ypos);
-	} else if (type == WeaponTypes_Secondary.BOMB_SPLIT_SMALL) {
-	    image.setRotation(angle);
-	    image.draw(xpos, ypos);
-	} else if (type == WeaponTypes_Primary.TURRET_MIDDLE
-		&& time <= type.getLife_time()) {
+	image.setCenterOfRotation(Image.TOP_LEFT, Image.TOP_LEFT);
+	if (time <= type.getLife_time()) {
 	    image.setRotation(angle);
 	    image.draw(xpos, ypos);
 	}
@@ -106,18 +87,23 @@ public class Weapons extends Entity {
 
     public void update(float delta) {
 	if (hitTarget) {
-	    GamePlayState.explosions.add(new Explosion(xpos, ypos, type
-		    .getExploSize()));
+	    explosion = GamePlayState.ef.getHit_ground_small();
+	    explosion.setPosition(xpos, ypos);
 	    Var.hit.play(1, Var.sounds_volume);
 	    broken = true;
+	    if (em != null) {
+		em.wrapUp();
+	    }
+	    if (explosion.completed())
+		explosion.wrapUp();
 	}
+	if (em != null)
+	    em.setPosition(xpos, ypos, false);
 	rnd = new Random();
-	if (type == WeaponTypes_Primary.MM30S || type == WeaponTypes_Primary.MINIGUN
-		|| type == WeaponTypes_Primary.TURRET_MIDDLE) {
-	    float hspeed = speed * (float) Math.cos(Math.toRadians(angle))
-		    * delta / 17;
-	    float vspeed = speed * (float) Math.sin(Math.toRadians(angle))
-		    * delta / 17;
+	if (type.getClass() == WeaponTypes_Primary.class) {
+
+	    float hspeed = speed * (float) Math.cos(Math.toRadians(angle));
+	    float vspeed = speed * (float) Math.sin(Math.toRadians(angle));
 	    xpos += hspeed;
 	    ypos += vspeed;
 	} else if (type == WeaponTypes_Secondary.UNGUIDED) {
@@ -130,7 +116,8 @@ public class Weapons extends Entity {
 		    * (float) Math.sin(Math.toRadians(angle)) * delta / 17;
 	    xpos += hspeed;
 	    ypos += vspeed;
-	} else if (type == WeaponTypes_Secondary.GUIDED_AIR) {
+	} else if (type == WeaponTypes_Secondary.GUIDED_AIR
+		|| type == WeaponTypes_Secondary.AIM9L) {
 	    if (speed_mod <= 1) {
 		speed_mod = speed_mod + 0.05f;
 	    }
@@ -179,7 +166,7 @@ public class Weapons extends Entity {
 		for (int i = 0; i < 20; i++) {
 		    GamePlayState.weapons.add(new Weapons(xpos, ypos
 			    - rnd.nextInt(50), rnd.nextFloat() * 180,
-			    WeaponTypes_Secondary.BOMB_SPLIT_SMALL, 0, id));
+			    WeaponTypes_Secondary.BOMB_SPLIT_SMALL, 0, id, em));
 		}
 		setSplit();
 		setHit();
@@ -223,6 +210,8 @@ public class Weapons extends Entity {
     }
 
     public void update(Planes pln1, Planes pln2, float delta) {
+	if (em != null)
+	    em.setPosition(xpos, ypos, false);
 	if (hitTarget) {
 	    GamePlayState.explosions.add(new Explosion(xpos, ypos, type
 		    .getExploSize()));
@@ -261,11 +250,11 @@ public class Weapons extends Entity {
 	// Turn the actual direction towards the target direction.
 	if (((angleDifference < 180) && (angleDifference > 0))
 		|| ((angleDifference < -180))) {
-	    increaseAngle(1.5f);
+	    increaseAngle(turnRate);
 	} else if (angleDifference == 0) {
 	    increaseAngle(0);
 	} else {
-	    increaseAngle(-1.5f);
+	    increaseAngle(-turnRate);
 	}
 	// speed calculation
 	float hspeed = (float) (speed * Math.cos(Math.toRadians(getAngle()))
@@ -277,6 +266,8 @@ public class Weapons extends Entity {
     }
 
     public void update(Planes pln1, TurretAi ta, float delta) {
+	if (em != null)
+	    em.setPosition(xpos, ypos, false);
 	if (hitTarget) {
 	    GamePlayState.explosions.add(new Explosion(xpos, ypos, type
 		    .getExploSize()));
@@ -315,11 +306,11 @@ public class Weapons extends Entity {
 	// Turn the actual direction towards the target direction.
 	if (((angleDifference < 180) && (angleDifference > 0))
 		|| ((angleDifference < -180))) {
-	    increaseAngle(1.5f);
+	    increaseAngle(turnRate);
 	} else if (angleDifference == 0) {
 	    increaseAngle(0);
 	} else {
-	    increaseAngle(-1.5f);
+	    increaseAngle(-turnRate);
 	}
 	// speed calculation
 	float hspeed = (float) (speed * Math.cos(Math.toRadians(getAngle()))
@@ -488,6 +479,8 @@ public class Weapons extends Entity {
      */
     public boolean isAlive() {
 	if (time > type.getLife_time()) {
+	    if (em != null)
+		em.wrapUp();
 	    return false;
 	}
 	return true;
@@ -507,6 +500,13 @@ public class Weapons extends Entity {
 
     public void setHitTarget() {
 	this.hitTarget = true;
+    }
 
+    public ConfigurableEmitter getEm() {
+	return em;
+    }
+
+    public void setEm(ConfigurableEmitter em) {
+	this.em = em;
     }
 }
