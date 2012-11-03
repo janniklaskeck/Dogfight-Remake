@@ -5,7 +5,6 @@ import java.io.IOException;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
-import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
 import org.newdawn.slick.state.BasicGameState;
@@ -58,12 +57,13 @@ public class LoadingState extends BasicGameState {
 		"dogfight_remake/images/weapons/bomb1_split.png");
 	Var.img_turret1 = new Image("dogfight_remake/images/turret.png");
 	// Images planes gen 5
-	Var.f35 = new Image("dogfight_remake/images/planes/gen5/F35.png");
+	Var.f35 = new Image("dogfight_remake/images/planes/gen5/f35.png");
+	Var.plane_collis_generic = new Image("dogfight_remake/images/planes/gen5/f35_col.png");
 	Var.mig35 = new Image("dogfight_remake/images/planes/gen5/mig-35.png");
 	// Images weapons primary
 	Var.mm30s = new Image("dogfight_remake/images/weapons/30mms.png");
 	// Tiled Map
-	Var.tmap = new TiledMapPlus("dogfight_remake/map/map_test/map1.tmx",
+	Var.tmap = new TiledMapPlus("dogfight_remake/map/map_test/map2.tmx",
 		"dogfight_remake/map/map_test");
 
 	// Images Pause Menu

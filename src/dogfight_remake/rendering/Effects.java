@@ -12,6 +12,7 @@ public class Effects {
     private ConfigurableEmitter smokeTrail;
     private ConfigurableEmitter hit_ground_small;
     private ConfigurableEmitter plane_Explosion;
+    private ConfigurableEmitter plane_Explosion1;
 
     public Effects() throws SlickException {
 	try {
@@ -23,7 +24,8 @@ public class Effects {
 		    .loadEmitter("dogfight_remake/images/hit_ground_small.xml");
 	    plane_Explosion = ParticleIO
 		    .loadEmitter("dogfight_remake/images/plane_explosion.xml");
-
+	    plane_Explosion1 = ParticleIO
+		    .loadEmitter("dogfight_remake/images/plane_explosion1.xml");
 	    ps.setRemoveCompletedEmitters(true);
 	} catch (IOException e) {
 	    e.printStackTrace();
@@ -52,6 +54,12 @@ public class Effects {
 
     public ConfigurableEmitter getPlane_Explosion() {
 	ConfigurableEmitter em = plane_Explosion.duplicate();
+	ps.addEmitter(em);
+	return em;
+    }
+    
+    public ConfigurableEmitter getPlane_Explosion1() {
+	ConfigurableEmitter em = plane_Explosion1.duplicate();
 	ps.addEmitter(em);
 	return em;
     }

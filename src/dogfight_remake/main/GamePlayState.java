@@ -3,6 +3,7 @@ package dogfight_remake.main;
 import java.awt.Dimension;
 import java.util.ArrayList;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -14,7 +15,6 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 import dogfight_remake.controls.KeyControls;
-import dogfight_remake.entities.Explosion;
 import dogfight_remake.entities.weapons.Reload;
 import dogfight_remake.entities.weapons.WeaponTypes_Primary;
 import dogfight_remake.entities.weapons.WeaponTypes_Secondary;
@@ -27,14 +27,13 @@ public class GamePlayState extends BasicGameState {
     public static Dimension dim = Var.dim_chosen;
 
     public static ArrayList<Weapons> weapons;
-    public static ArrayList<Explosion> explosions;
     private Rectangle turret;
     private Rectangle wep;
     public static Render r;
 
     public static Camera camera;
     public static Camera camera2;
-    public int time;
+    private int time;
     public static Effects ef;
 
     int stateID = -1;
@@ -61,6 +60,8 @@ public class GamePlayState extends BasicGameState {
     public void enter(GameContainer gc, StateBasedGame sbg) {
 	gc.setVSync(true);
 	gc.setShowFPS(false);
+	gc.setSmoothDeltas(true);
+	gc.setTargetFrameRate(60);
 	if (Var.paused) {
 	    r = new Render();
 	    try {
@@ -69,14 +70,13 @@ public class GamePlayState extends BasicGameState {
 		e.printStackTrace();
 	    }
 	    weapons = new ArrayList<Weapons>();
-	    explosions = new ArrayList<Explosion>();
 	    camera = new Camera(gc, Var.tmap);
 	    camera2 = new Camera(gc, Var.tmap);
 	    try {
 		ef = new Effects();
-	    } catch (SlickException e1) {
-		// TODO Auto-generated catch block
-		e1.printStackTrace();
+	    } catch (SlickException e) {
+		System.out.println("ERROR WHILE CREATING EFFECTS INSTANCE");
+		e.printStackTrace();
 	    }
 	    // GlbVar.music1.loop(1, GlbVar.music_volume);
 	    Var.score_p1 = 0;
@@ -85,13 +85,13 @@ public class GamePlayState extends BasicGameState {
 	    Var.timePassed_sec = 0;
 	    time = 0;
 	}
+
     }
 
     @Override
     public void render(GameContainer gc, StateBasedGame sbg, Graphics g)
 	    throws SlickException {
 	r.render(gc, g, delta);
-
 	if (Var.paused) {
 	    Var.img_pause_bg = new Image(1680, 1050);
 	    g.copyArea(Var.img_pause_bg, 0, 0);
@@ -116,6 +116,11 @@ public class GamePlayState extends BasicGameState {
 	if (r.player1 != null && r.player2 != null && !Var.paused) {
 	    time += delta;
 	    Var.timePassed_sec = time / 1000;
+	    if (Var.timePassed_sec == 60) {
+		Var.timePassed_sec = 0;
+		time = 0;
+		Var.timePassed_min += 1;
+	    }
 	    r.player1.update(delta);
 	    r.player2.update(delta);
 	    r.turret.update(delta);
@@ -159,14 +164,6 @@ public class GamePlayState extends BasicGameState {
 	    if (r.player1.getHitpoints() <= 0 || r.player2.getHitpoints() <= 0
 		    || r.turret.getHitpoints() <= 0) {
 		respawn();
-	    }
-	    for (int i = 0; i < explosions.size(); i++) {
-
-		if (explosions.get(i).isBroken()) {
-		    explosions.remove(i);
-		} else {
-		    explosions.get(i).update(delta);
-		}
 	    }
 	}
 	if (Var.singlePlayer) {
@@ -251,6 +248,18 @@ public class GamePlayState extends BasicGameState {
 				&& !tmp.isHitTarget()) {
 			    tmp.setHitTarget();
 			    r.player1.decreaseHitpoints(tmp.getDamage());
+			    /*
+			     * int x = (int) Math.abs(r.player1.getXpos() -
+			     * tmp.getXpos()); int y = (int)
+			     * Math.abs(r.player1.getYpos() - tmp.getYpos());
+			     * 
+			     * Color c = new Color(255, 255, 255, 255); if (x <
+			     * Var.plane_collis_generic.getWidth() - 1 && y <
+			     * Var.plane_collis_generic.getHeight() - 1) { if
+			     * (Var.plane_collis_generic.getColor(x, y)
+			     * .equals(c)) { tmp.setHitTarget(); r.player1
+			     * .decreaseHitpoints(tmp.getDamage()); } }
+			     */
 			}
 		    }
 		}
@@ -277,8 +286,6 @@ public class GamePlayState extends BasicGameState {
 	if (r.player2.getCollision() != null) {
 	    if (r.player2.getHitpoints() <= 0
 		    && r.player2.getRespawn_timer() >= Var.RESPAWNTIME_PLAYER) {
-		explosions.add(new Explosion(r.player2.getXpos(), r.player2
-			.getYpos(), 4));
 		r.player2.setCollision(null);
 		Var.score_p1++;
 	    }

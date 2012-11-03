@@ -7,15 +7,14 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.geom.Polygon;
 import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.particles.ConfigurableEmitter;
 
 import dogfight_remake.entities.Entity;
-import dogfight_remake.entities.Explosion;
 import dogfight_remake.entities.planes.Planes;
 import dogfight_remake.entities.weapons.WeaponTypes_Primary;
 import dogfight_remake.entities.weapons.Weapons;
 import dogfight_remake.main.GamePlayState;
 import dogfight_remake.main.Var;
-import dogfight_remake.rendering.Effects;
 
 public class TurretAi extends Entity {
     private int lifetime = 0;
@@ -34,6 +33,7 @@ public class TurretAi extends Entity {
     private Rectangle turret;
     private long respawn_timer;
     boolean cpos = false;
+    private ConfigurableEmitter explosion;
 
     float xpos_reset;
     float ypos_reset;
@@ -84,8 +84,11 @@ public class TurretAi extends Entity {
 	    down();
 	}
 	if (broken && respawn_timer >= Var.RESPAWNTIME_TURRET) {
-	    GamePlayState.explosions.add(new Explosion(xpos, ypos, 4));
+	    explosion = GamePlayState.ef.getPlane_Explosion();
+	    explosion.setPosition(xpos, ypos);
 	    Var.explode.play(1, Var.sounds_volume);
+	    if (explosion.completed())
+		explosion.wrapUp();
 	}
 	if (hitpoints <= 0) {
 	    respawn_timer -= delta;

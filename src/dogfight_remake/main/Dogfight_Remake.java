@@ -30,6 +30,7 @@ public class Dogfight_Remake extends StateBasedGame {
 		Var.app.start();
 		Var.app.setVSync(Var.vSync);
 		Var.app.setShowFPS(false);
+		Var.app.setSmoothDeltas(true);
 	}
 
 	@Override

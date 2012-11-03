@@ -12,7 +12,7 @@ public enum WeaponTypes_Primary implements WeaponTypes_Interface {
     // creation, Lifetime(ms), Explosion size, Image)
     MINIGUN("MiniGun", 2, 100, 25, 2500, 50, 2, 1000, 1, Var.img_bullet1, Var.prim_gun_light), 
 	    MM30S("Gun", 5, 25, 25, 3000, 150, 3, 1500, 1, Var.mm30s, Var.prim_gun_middle), 
-	    TURRET_MIDDLE("Turret middle", 15, -1, 15, -1, 400, -1, 1300, 1, Var.img_bullet1, Var.prim_gun_heavy);
+	    TURRET_MIDDLE("Turret middle", 1, -1, 15, -1, 400, -1, 1300, 1, Var.img_bullet1, Var.prim_gun_heavy);
 
     private int damage;
     private int ammoCount;

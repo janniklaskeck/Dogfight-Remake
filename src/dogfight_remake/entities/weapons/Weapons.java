@@ -9,7 +9,6 @@ import org.newdawn.slick.Sound;
 import org.newdawn.slick.particles.ConfigurableEmitter;
 
 import dogfight_remake.entities.Entity;
-import dogfight_remake.entities.Explosion;
 import dogfight_remake.entities.ai.TurretAi;
 import dogfight_remake.entities.planes.Planes;
 import dogfight_remake.main.GamePlayState;
@@ -213,8 +212,6 @@ public class Weapons extends Entity {
 	if (em != null)
 	    em.setPosition(xpos, ypos, false);
 	if (hitTarget) {
-	    GamePlayState.explosions.add(new Explosion(xpos, ypos, type
-		    .getExploSize()));
 	    Var.hit.play(1, Var.sounds_volume);
 	    broken = true;
 	}
@@ -269,8 +266,6 @@ public class Weapons extends Entity {
 	if (em != null)
 	    em.setPosition(xpos, ypos, false);
 	if (hitTarget) {
-	    GamePlayState.explosions.add(new Explosion(xpos, ypos, type
-		    .getExploSize()));
 	    Var.hit.play(1, Var.sounds_volume);
 	    broken = true;
 	}

@@ -211,7 +211,7 @@ public class Camera {
 	// finally draw the section of the map on the screen
 	map.render(tileOffsetX + offsetX, tileOffsetY + offsetY, tileIndexX,
 		tileIndexY, (gc.getWidth() - tileOffsetX) / tileWidth + 1,
-		(gc.getHeight() - tileOffsetY) / tileHeight + 1, 0, false);
+		(gc.getHeight() - tileOffsetY) / tileHeight + 1, 1, false);
     }
 
     /**

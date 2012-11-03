@@ -2,7 +2,6 @@ package dogfight_remake.entities.planes;
 
 import java.util.Random;
 
-import org.newdawn.slick.Game;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -13,7 +12,6 @@ import org.newdawn.slick.geom.Transform;
 import org.newdawn.slick.particles.ConfigurableEmitter;
 
 import dogfight_remake.entities.Entity;
-import dogfight_remake.entities.Explosion;
 import dogfight_remake.entities.weapons.WeaponTypes_Interface;
 import dogfight_remake.entities.weapons.WeaponTypes_Primary;
 import dogfight_remake.entities.weapons.WeaponTypes_Secondary;
@@ -54,6 +52,7 @@ public class Planes extends Entity {
     private PlaneTypes_Interface type;
     private long respawn_timer;
     private ConfigurableEmitter explosion;
+    private ConfigurableEmitter explosion1;
 
     float xpos_reset;
     float ypos_reset;
@@ -111,18 +110,24 @@ public class Planes extends Entity {
 	if (broken && respawn_timer >= Var.RESPAWNTIME_PLAYER) {
 	    explosion = GamePlayState.ef.getPlane_Explosion();
 	    explosion.setPosition(xpos, ypos);
+	    explosion1 = GamePlayState.ef.getPlane_Explosion1();
+	    explosion1.setPosition(xpos, ypos);
 	    Var.explode.play(1, Var.sounds_volume);
 	    if (explosion.completed())
 		explosion.wrapUp();
+	    if (explosion1.completed())
+		explosion1.wrapUp();
 	}
 	if (hitpoints <= 0) {
 	    respawn_timer -= delta;
 	}
 	if (!broken) {
 	    hspeed = Math.abs(speed * speed_mod)
-		    * (float) Math.cos(Math.toRadians(angle) * delta / 17);
+		    * (float) Math.cos(Math.toRadians(angle) * delta
+			    / (1000 / 60));
 	    vspeed = Math.abs(speed * speed_mod)
-		    * (float) Math.sin(Math.toRadians(angle) * delta / 17);
+		    * (float) Math.sin(Math.toRadians(angle) * delta
+			    / (1000 / 60));
 	    if (Math.abs(hspeed) + Math.abs(vspeed) < 1.3f || stall) {
 		stall = true;
 		xpos += hspeed;
@@ -212,8 +217,11 @@ public class Planes extends Entity {
 	image.setRotation(angle);
 	image.draw(xpos, ypos);
 
-	g.fillRect(getCenterX(), getCenterY(), 2, 2);
+	Var.plane_collis_generic.draw(xpos, ypos);
 
+	g.drawLine(getCenterX(), getCenterY(),
+		GamePlayState.r.player2.getCenterX(),
+		GamePlayState.r.player2.getCenterY());
     }
 
     /**

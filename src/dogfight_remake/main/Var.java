@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 
 import org.newdawn.slick.AppGameContainer;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.Music;
@@ -34,6 +35,7 @@ public class Var {
     public static Image img_timer;
     // Images planes gen 5
     public static Image f35;
+    public static Image plane_collis_generic;
     public static Image mig35;
     // Images weapons primary
     public static Image mm30s;
@@ -101,6 +103,7 @@ public class Var {
 
     public static float music_volume = 0.2f;
     public static float sounds_volume = 0.05f;
+    public final static Color COLLISION_COLOR = new Color(0, 0, 0, 0);
 
     public static Toolkit toolkit = Toolkit.getDefaultToolkit();
     public static Dimension dim_fullscreen = toolkit.getScreenSize();

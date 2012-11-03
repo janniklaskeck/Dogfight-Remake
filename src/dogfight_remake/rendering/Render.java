@@ -24,7 +24,6 @@ public class Render {
 		- 150, Var.dim_chosen.height / 2, 180, Var.player2_type);
 	turret = new TurretAi(3, 600, 1000, 270, 100, player1,
 		WeaponTypes_Primary.TURRET_MIDDLE, Var.img_bullet1);
-
     }
 
     /**
@@ -53,15 +52,6 @@ public class Render {
 	    if (GamePlayState.weapons != null) {
 		for (int i = 0; i < GamePlayState.weapons.size(); i++) {
 		    GamePlayState.weapons.get(i).render(gc, g, delta);
-		}
-	    }
-	    if (GamePlayState.explosions != null) {
-		for (int i = 0; i < GamePlayState.explosions.size(); i++) {
-		    if (!GamePlayState.explosions.get(i).isBroken()) {
-			GamePlayState.explosions.get(i).render(gc, g, delta);
-		    } else {
-			GamePlayState.explosions.remove(i);
-		    }
 		}
 	    }
 	    GamePlayState.camera.untranslateGraphics();
@@ -94,16 +84,6 @@ public class Render {
 			GamePlayState.weapons.get(i).render(gc, g, delta);
 		    }
 		}
-		if (GamePlayState.explosions != null) {
-		    for (int i = 0; i < GamePlayState.explosions.size(); i++) {
-			if (!GamePlayState.explosions.get(i).isBroken()) {
-			    GamePlayState.explosions.get(i)
-				    .render(gc, g, delta);
-			} else {
-			    GamePlayState.explosions.remove(i);
-			}
-		    }
-		}
 		GamePlayState.camera.untranslateGraphics();
 		g.setWorldClip(gc.getWidth() / 2, 0, gc.getWidth() / 2,
 			gc.getHeight());
@@ -128,16 +108,6 @@ public class Render {
 		if (GamePlayState.weapons != null) {
 		    for (int i = 0; i < GamePlayState.weapons.size(); i++) {
 			GamePlayState.weapons.get(i).render(gc, g, delta);
-		    }
-		}
-		if (GamePlayState.explosions != null) {
-		    for (int i = 0; i < GamePlayState.explosions.size(); i++) {
-			if (!GamePlayState.explosions.get(i).isBroken()) {
-			    GamePlayState.explosions.get(i)
-				    .render(gc, g, delta);
-			} else {
-			    GamePlayState.explosions.remove(i);
-			}
 		    }
 		}
 		GamePlayState.camera2.untranslateGraphics();
@@ -170,11 +140,6 @@ public class Render {
 			GamePlayState.weapons.get(i).render(gc, g, delta);
 		    }
 		}
-		if (GamePlayState.explosions != null) {
-		    for (int i = 0; i < GamePlayState.explosions.size(); i++) {
-			GamePlayState.explosions.get(i).render(gc, g, delta);
-		    }
-		}
 		GamePlayState.camera.untranslateGraphics();
 		g.setWorldClip(0, gc.getHeight() / 2, gc.getWidth(),
 			gc.getHeight() / 2);
@@ -200,11 +165,6 @@ public class Render {
 		if (GamePlayState.weapons != null) {
 		    for (int i = 0; i < GamePlayState.weapons.size(); i++) {
 			GamePlayState.weapons.get(i).render(gc, g, delta);
-		    }
-		}
-		if (GamePlayState.explosions != null) {
-		    for (int i = 0; i < GamePlayState.explosions.size(); i++) {
-			GamePlayState.explosions.get(i).render(gc, g, delta);
 		    }
 		}
 		GamePlayState.camera2.untranslateGraphics();
