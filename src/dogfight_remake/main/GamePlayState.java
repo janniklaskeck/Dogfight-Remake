@@ -3,7 +3,6 @@ package dogfight_remake.main;
 import java.awt.Dimension;
 import java.util.ArrayList;
 
-import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -85,7 +84,6 @@ public class GamePlayState extends BasicGameState {
 	    Var.timePassed_sec = 0;
 	    time = 0;
 	}
-
     }
 
     @Override

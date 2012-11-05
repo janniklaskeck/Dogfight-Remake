@@ -18,6 +18,7 @@ public class MainMenuState extends BasicGameState {
     public MainMenuState(int stateID) {
 	this.stateID = stateID;
     }
+
     private float optionsX;
     private float optionsMenuX;
     private float optionsMenuY;
@@ -39,10 +40,47 @@ public class MainMenuState extends BasicGameState {
     private float exitX;
     private float exitY;
 
+    private MenuContainer mc;
+
     @Override
     public void enter(GameContainer gc, StateBasedGame sbg) {
-	optionsMenuX = gc.getScreenWidth() / 2 + 30;
-	optionsMenuY = gc.getScreenHeight() / 5;
+	gc.setVSync(Var.vSync);
+	optionsMenuX = Var.dim_chosen.width / 2 + 30;
+	optionsMenuY = Var.dim_chosen.height / 5;
+	optionsX = optionsMenuX + 30;
+	optionCollisionY = optionsMenuY + yDifLeft * 2;
+	optionCollisionX = optionsX;
+	optionFullscreenY = optionCollisionY + yDifLeft;
+	optionFullscreenX = optionsX;
+	optionResolutionY = optionFullscreenY + yDifLeft;
+	optionResolutionX = optionsX;
+	optionVerticalX = optionsX;
+	optionVerticalY = optionResolutionY + yDifLeft;
+
+	exitX = optionsMenuX + 404;
+	exitY = optionsMenuY + 10;
+	startGameX = 50;
+	startGameY = Var.dim_chosen.height - 50
+		- Var.startGameOption.getHeight();
+
+	plane_p1X = 50;
+	plane_p1Y = startGameY - 50 - Var.plane_p1.getHeight();
+	plane_p2X = 50;
+	plane_p2Y = plane_p1Y - 50 - Var.plane_p2.getHeight();
+
+	Var.button1 = Var.buttons.getSubImage(0, 0, 32, 32);
+	Var.button2 = Var.buttons.getSubImage(32, 0, 32, 32);
+	Var.exitCorner = Var.buttons.getSubImage(64, 0, 32, 32);
+	Var.arrow_left = Var.arrows.getSubImage(0, 0, 64, 64);
+	Var.arrow_right = Var.arrows.getSubImage(64, 0, 64, 64);
+    }
+
+    @Override
+    public void init(GameContainer gc, StateBasedGame sbg)
+	    throws SlickException {
+	gc.setVSync(Var.vSync);
+	optionsMenuX = Var.dim_chosen.width / 2 + 30;
+	optionsMenuY = Var.dim_chosen.height / 5;
 	optionsX = optionsMenuX + 30;
 	optionCollisionY = optionsMenuY + 40;
 	optionCollisionX = optionsX;
@@ -56,93 +94,44 @@ public class MainMenuState extends BasicGameState {
 	exitX = optionsMenuX + 404;
 	exitY = optionsMenuY + 10;
 	startGameX = 50;
-	startGameY = gc.getScreenHeight() - 50
-		- Var.startGameOption.getHeight();
-
-	plane_p1X = 50;
-	plane_p1Y = startGameY - 50 - Var.plane_p1.getHeight();
-	plane_p2X = 50;
-	plane_p2Y = plane_p1Y - 50 - Var.plane_p2.getHeight();
-    }
-
-    @Override
-    public void init(GameContainer gc, StateBasedGame sbg)
-	    throws SlickException {
-	gc.setVSync(Var.vSync);
-	optionsMenuX = gc.getScreenWidth() - 50;
-	optionsMenuY = gc.getScreenHeight() / 20;
-	optionsX = optionsMenuX + 30;
-	optionCollisionY = optionsMenuY + Var.dim_chosen.height / 20;
-	optionCollisionX = optionsX;
-	optionFullscreenY = optionCollisionY + yDifLeft;
-	optionFullscreenX = optionsX;
-	optionResolutionY = optionFullscreenY + yDifLeft;
-	optionResolutionX = optionsX;
-
-	exitX = optionsMenuX + 398;
-	exitY = optionsMenuY;
-	startGameX = 50;
 	startGameY = Var.dim_chosen.height - 50
 		- Var.startGameOption.getHeight();
+
 	plane_p1X = 50;
 	plane_p1Y = startGameY - 50 - Var.plane_p1.getHeight();
 	plane_p2X = 50;
 	plane_p2Y = plane_p1Y - 50 - Var.plane_p2.getHeight();
-	
+
 	Var.button1 = Var.buttons.getSubImage(0, 0, 32, 32);
 	Var.button2 = Var.buttons.getSubImage(32, 0, 32, 32);
 	Var.exitCorner = Var.buttons.getSubImage(64, 0, 32, 32);
 	Var.arrow_left = Var.arrows.getSubImage(0, 0, 64, 64);
 	Var.arrow_right = Var.arrows.getSubImage(64, 0, 64, 64);
+
+	mc = new MenuContainer(optionsMenuX, optionsMenuY, Var.gameOptionsMenu, "", 430, 430);
     }
 
     @Override
     public void render(GameContainer gc, StateBasedGame sbg, Graphics g)
 	    throws SlickException {
+	
 	// render the background
 	Var.background.draw(0, 0, Var.dim_chosen.width, Var.dim_chosen.height);
 	// Game Options background
-	Var.gameOptionsMenu.draw(optionsMenuX, optionsMenuY, 430, 430);
-	// Player Collision
-	if (Var.getPlayerCollision()) {
-	    Var.button2.draw(optionCollisionX, optionCollisionY, 16, 16);
-	} else {
-	    Var.button1.draw(optionCollisionX, optionCollisionY, 16, 16);
-	}
-	g.drawString("Air Collisions", optionCollisionX + 20, optionCollisionY);
-	// Fullscreen
-	if (Var.fullscreen) {
-	    Var.button2.draw(optionFullscreenX, optionFullscreenY, 16, 16);
-	} else {
-	    Var.button1.draw(optionFullscreenX, optionFullscreenY, 16, 16);
-	}
-	g.drawString("Fullscreen", optionFullscreenX + 20, optionFullscreenY);
-	// Vertical Splitscreen
-	if (Var.vertical_split) {
-	    Var.button2.draw(optionVerticalX, optionVerticalY, 16, 16);
-	} else {
-	    Var.button1.draw(optionVerticalX, optionVerticalY, 16, 16);
-	}
-	g.drawString("Vertical Splitscreen", optionVerticalX + 20,
-		optionVerticalY);
-	// Resolution
-	Var.button1.draw(optionResolutionX, optionResolutionY, 16, 16);
-	g.drawString("Resolution", optionResolutionX + 20, optionResolutionY);
-
-	// Exit button
-	Var.exitCorner.draw(exitX, exitY, 16, 16);
-
+	mc.render(g);
 	// Start game
 	Var.startGameOption.draw(startGameX, startGameY);
-
 	// Plane Menus
 	Var.plane_p1.draw(plane_p1X, plane_p1Y);
 	Var.plane_p2.draw(plane_p2X, plane_p2Y);
+
     }
 
     @Override
     public void update(GameContainer gc, StateBasedGame sbg, int delta)
 	    throws SlickException {
+	mc.update(delta);
+	
 	Input input = gc.getInput();
 	KeyControls.update(gc, sbg, delta);
 	int mouseX = input.getMouseX();

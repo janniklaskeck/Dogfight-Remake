@@ -3,8 +3,10 @@ package dogfight_remake.main;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 
+import org.newdawn.slick.AngelCodeFont;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.Color;
+import org.newdawn.slick.Font;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.Music;
@@ -32,6 +34,7 @@ public class Var {
     public static Image img_turret_base;
     public static Image img_turret_barrel;
     public static Image img_player_ui;
+    public static Image img_player_ui_text;
     public static Image img_timer;
     // Images planes gen 5
     public static Image f35;
@@ -104,7 +107,7 @@ public class Var {
     public static float music_volume = 0.2f;
     public static float sounds_volume = 0.05f;
     public final static Color COLLISION_COLOR = new Color(0, 0, 0, 0);
-
+    
     public static Toolkit toolkit = Toolkit.getDefaultToolkit();
     public static Dimension dim_fullscreen = toolkit.getScreenSize();
     public static Dimension dim_1080p = new Dimension(1920, 1080);

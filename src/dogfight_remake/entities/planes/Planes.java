@@ -2,6 +2,7 @@ package dogfight_remake.entities.planes;
 
 import java.util.Random;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -33,6 +34,15 @@ public class Planes extends Entity {
     private float heat_prim;
     private int ammo_sec_1;
     private int ammo_sec_2;
+    private int engineStatus;
+    private int afterBurnerStatus;
+    private int tankStatus;
+    private int fuelStatus;
+    private int prim1Status;
+    private int prim2Status;
+    private int sec1Status;
+    private int sec2Status;
+
     private boolean broken;
     private float hspeed, vspeed;
     private WeaponTypes_Primary wpn1;
@@ -96,6 +106,15 @@ public class Planes extends Entity {
 	heat_prim_reset = 0;
 	ammo_sec_1_reset = ammo_sec_1;
 	ammo_sec_2_reset = ammo_sec_2;
+
+	engineStatus = 2;
+	afterBurnerStatus = 2;
+	tankStatus = 2;
+	fuelStatus = 2;
+	prim1Status = 2;
+	prim2Status = 2;
+	sec1Status = 2;
+	sec2Status = 2;
     }
 
     /**
@@ -216,9 +235,6 @@ public class Planes extends Entity {
 	g.draw(aim);
 	image.setRotation(angle);
 	image.draw(xpos, ypos);
-
-	Var.plane_collis_generic.draw(xpos, ypos);
-
 	g.drawLine(getCenterX(), getCenterY(),
 		GamePlayState.r.player2.getCenterX(),
 		GamePlayState.r.player2.getCenterY());
@@ -345,6 +361,14 @@ public class Planes extends Entity {
 	ammo_sec_2 = ammo_sec_2_reset;
 	broken = false;
 	stall = false;
+	engineStatus = 2;
+	afterBurnerStatus = 2;
+	tankStatus = 2;
+	fuelStatus = 2;
+	prim1Status = 2;
+	prim2Status = 2;
+	sec1Status = 2;
+	sec2Status = 2;
     }
 
     /**
@@ -436,6 +460,7 @@ public class Planes extends Entity {
      */
     public void decreaseHitpoints(int damage) {
 	hitpoints -= damage;
+	setEngineStatus(1);
 	if (hitpoints <= 0)
 	    broken = true;
     }
@@ -654,7 +679,6 @@ public class Planes extends Entity {
 	} else {
 	    this.heat_prim += f;
 	}
-
     }
 
     public Polygon getCollision() {
@@ -663,5 +687,117 @@ public class Planes extends Entity {
 
     public void setCollision(Polygon collision) {
 	this.collision = collision;
+    }
+
+    public Color getEngineStatus() {
+	if (engineStatus == 2) {
+	    return Color.green;
+	} else if (engineStatus == 1) {
+	    return Color.yellow;
+	} else {
+	    return Color.red;
+	}
+    }
+
+    public void setEngineStatus(int engineStatus) {
+	this.engineStatus = engineStatus;
+    }
+
+    public Color getAfterBurnerStatus() {
+	if (afterBurnerStatus == 2) {
+	    return Color.green;
+	} else if (afterBurnerStatus == 1) {
+	    return Color.yellow;
+	} else {
+	    return Color.red;
+	}
+    }
+
+    public void setAfterBurnerStatus(int afterBurnerStatus) {
+	this.afterBurnerStatus = afterBurnerStatus;
+    }
+
+    public Color getTankStatus() {
+	if (tankStatus == 2) {
+	    return Color.green;
+	} else if (tankStatus == 1) {
+	    return Color.yellow;
+	} else {
+	    return Color.red;
+	}
+    }
+
+    public void setTankStatus(int tankStatus) {
+	this.tankStatus = tankStatus;
+    }
+
+    public Color getFuelStatus() {
+	if (fuelStatus == 2) {
+	    return Color.green;
+	} else if (fuelStatus == 1) {
+	    return Color.yellow;
+	} else {
+	    return Color.red;
+	}
+    }
+
+    public void setFuelStatus(int fuelStatus) {
+	this.fuelStatus = fuelStatus;
+    }
+
+    public Color getPrim1Status() {
+	if (prim1Status == 2) {
+	    return Color.green;
+	} else if (prim1Status == 1) {
+	    return Color.yellow;
+	} else {
+	    return Color.red;
+	}
+    }
+
+    public void setPrim1Status(int prim1Status) {
+	this.prim1Status = prim1Status;
+    }
+
+    public Color getPrim2Status() {
+	if (prim2Status == 2) {
+	    return Color.green;
+	} else if (prim2Status == 1) {
+	    return Color.yellow;
+	} else {
+	    return Color.red;
+	}
+    }
+
+    public void setPrim2Status(int prim2Status) {
+	this.prim2Status = prim2Status;
+    }
+
+    public Color getSec1Status() {
+	if (sec1Status == 2) {
+	    return Color.green;
+	} else if (sec1Status == 1) {
+	    return Color.yellow;
+	} else {
+	    return Color.red;
+	}
+    }
+
+    public void setSec1Status(int sec1Status) {
+	this.sec1Status = sec1Status;
+    }
+
+    public Color getSec2Status() {
+	if (sec2Status == 2) {
+	    return Color.green;
+	} else if (sec2Status == 1) {
+	    return Color.yellow;
+	} else {
+	    return Color.red;
+	}
+    }
+
+    public void setSec2Status(int sec2Status) {
+	this.sec2Status = sec2Status;
     }
 }

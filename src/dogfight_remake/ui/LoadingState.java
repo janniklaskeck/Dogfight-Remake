@@ -42,6 +42,8 @@ public class LoadingState extends BasicGameState {
 	// Images Game
 	Var.img_player_ui = new Image(
 		"dogfight_remake/images/game/player_ui.png");
+	Var.img_player_ui_text = new Image(
+		"dogfight_remake/images/game/player_ui_text.png");
 	Var.img_timer = new Image("dogfight_remake/images/game/timer.png");
 	Var.img_plane2 = new Image("dogfight_remake/images/planes/plane1.png",
 		true);
