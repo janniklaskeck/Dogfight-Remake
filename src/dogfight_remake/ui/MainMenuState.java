@@ -108,13 +108,14 @@ public class MainMenuState extends BasicGameState {
 	Var.arrow_left = Var.arrows.getSubImage(0, 0, 64, 64);
 	Var.arrow_right = Var.arrows.getSubImage(64, 0, 64, 64);
 
-	mc = new MenuContainer(optionsMenuX, optionsMenuY, Var.gameOptionsMenu, "", 430, 430);
+	mc = new MenuContainer(optionsMenuX, optionsMenuY, Var.gameOptionsMenu,
+		"", 430, 430);
     }
 
     @Override
     public void render(GameContainer gc, StateBasedGame sbg, Graphics g)
 	    throws SlickException {
-	
+
 	// render the background
 	Var.background.draw(0, 0, Var.dim_chosen.width, Var.dim_chosen.height);
 	// Game Options background
@@ -131,7 +132,7 @@ public class MainMenuState extends BasicGameState {
     public void update(GameContainer gc, StateBasedGame sbg, int delta)
 	    throws SlickException {
 	mc.update(delta);
-	
+
 	Input input = gc.getInput();
 	KeyControls.update(gc, sbg, delta);
 	int mouseX = input.getMouseX();
@@ -181,10 +182,10 @@ public class MainMenuState extends BasicGameState {
 	} else if (mouseX >= exitX && mouseX <= exitX + 16 && mouseY >= exitY
 		&& mouseY <= exitY + 16) {
 	    insideExitCorner = true;
-	} else if (mouseX >= optionCollisionX
-		&& mouseX <= optionCollisionX + 16
-		&& mouseY >= optionCollisionY
-		&& mouseY <= optionCollisionY + 16) {
+	} else if (mouseX >= mc.getAirCollision().getXpos()
+		&& mouseX <= mc.getAirCollision().getXpos() + 16
+		&& mouseY >= mc.getAirCollision().getYpos()
+		&& mouseY <= mc.getAirCollision().getYpos() + 16) {
 	    insidePlCol = true;
 	} else if (mouseX >= optionCollisionX
 		&& mouseX <= optionCollisionX + 16
@@ -261,10 +262,10 @@ public class MainMenuState extends BasicGameState {
 		&& mouseY >= optionCollisionY
 		&& mouseY <= optionCollisionY + 16) {
 	    level = true;
-	} else if (mouseX >= optionFullscreenX
-		&& mouseX <= optionFullscreenX + 16
-		&& mouseY >= optionFullscreenY
-		&& mouseY <= optionFullscreenY + 16) {
+	} else if (mouseX >= mc.getFullscreen().getXpos()
+		&& mouseX <= mc.getFullscreen().getXpos() + 16
+		&& mouseY >= mc.getFullscreen().getYpos()
+		&& mouseY <= mc.getFullscreen().getYpos() + 16) {
 	    windowedMode = true;
 	} else if (mouseX >= optionFullscreenX
 		&& mouseX <= optionFullscreenX + 16
@@ -281,8 +282,8 @@ public class MainMenuState extends BasicGameState {
 		&& mouseY >= optionFullscreenY
 		&& mouseY <= optionFullscreenY + 16) {
 	    dynamicSplitscreen = true;
-	} else if (mouseX >= optionVerticalX && mouseX <= optionVerticalX + 16
-		&& mouseY >= optionVerticalY && mouseY <= optionVerticalY + 16) {
+	} else if (mouseX >= mc.getVerticalSplit().getXpos() && mouseX <= mc.getVerticalSplit().getXpos() + 16
+		&& mouseY >= mc.getVerticalSplit().getYpos() && mouseY <= mc.getVerticalSplit().getYpos() + 16) {
 	    verticalSplitscreen = true;
 	} else if (mouseX >= optionFullscreenX
 		&& mouseX <= optionFullscreenX + 16
@@ -309,10 +310,10 @@ public class MainMenuState extends BasicGameState {
 		&& mouseY >= optionFullscreenY
 		&& mouseY <= optionFullscreenY + 16) {
 	    music = true;
-	} else if (mouseX >= optionResolutionX
-		&& mouseX <= optionResolutionX + 16
-		&& mouseY >= optionResolutionY
-		&& mouseY <= optionResolutionY + 16) {
+	} else if (mouseX >= mc.getResolution().getXpos()
+		&& mouseX <= mc.getResolution().getXpos() + 16
+		&& mouseY >= mc.getResolution().getYpos()
+		&& mouseY <= mc.getResolution().getYpos() + 16) {
 	    resolution = true;
 	} else if (mouseX >= plane_p1X && mouseX <= plane_p1X + 161
 		&& mouseY >= plane_p1Y && mouseY <= plane_p1Y + 20) {
