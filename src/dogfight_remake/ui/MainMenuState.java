@@ -27,8 +27,6 @@ public class MainMenuState extends BasicGameState {
     private float plane_p1Y;
     private float plane_p2X;
     private float plane_p2Y;
-    private float exitX;
-    private float exitY;
 
     private MenuContainer mc;
 
@@ -38,8 +36,6 @@ public class MainMenuState extends BasicGameState {
 	optionsMenuX = Var.dim_chosen.width / 2 + 30;
 	optionsMenuY = Var.dim_chosen.height / 5;
 
-	exitX = optionsMenuX + 404;
-	exitY = optionsMenuY + 10;
 	startGameX = 50;
 	startGameY = Var.dim_chosen.height - 50
 		- Var.startGameOption.getHeight();
@@ -63,8 +59,6 @@ public class MainMenuState extends BasicGameState {
 	optionsMenuX = Var.dim_chosen.width / 2 + 30;
 	optionsMenuY = Var.dim_chosen.height / 5;
 
-	exitX = optionsMenuX + 404;
-	exitY = optionsMenuY + 10;
 	startGameX = 50;
 	startGameY = Var.dim_chosen.height - 50
 		- Var.startGameOption.getHeight();
@@ -151,8 +145,10 @@ public class MainMenuState extends BasicGameState {
 		&& mouseY >= startGameY
 		&& mouseY <= startGameY + Var.startGameOption.getHeight()) {
 	    insideStartGame = true;
-	} else if (mouseX >= exitX && mouseX <= exitX + 16 && mouseY >= exitY
-		&& mouseY <= exitY + 16) {
+	} else if (mouseX >= mc.getExit().getXpos()
+		&& mouseX <= mc.getExit().getXpos() + 16
+		&& mouseY >= mc.getExit().getYpos()
+		&& mouseY <= mc.getExit().getYpos() + 16) {
 	    insideExitCorner = true;
 	} else if (mouseX >= mc.getAirCollision().getXpos()
 		&& mouseX <= mc.getAirCollision().getXpos() + 16
