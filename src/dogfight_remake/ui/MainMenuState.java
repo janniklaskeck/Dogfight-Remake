@@ -19,18 +19,8 @@ public class MainMenuState extends BasicGameState {
 	this.stateID = stateID;
     }
 
-    private float optionsX;
     private float optionsMenuX;
     private float optionsMenuY;
-    private float yDifLeft = 20;
-    private float optionCollisionX;
-    private float optionCollisionY;
-    private float optionFullscreenX;
-    private float optionFullscreenY;
-    private float optionResolutionX;
-    private float optionResolutionY;
-    private float optionVerticalX;
-    private float optionVerticalY;
     private float startGameX;
     private float startGameY;
     private float plane_p1X;
@@ -47,15 +37,6 @@ public class MainMenuState extends BasicGameState {
 	gc.setVSync(Var.vSync);
 	optionsMenuX = Var.dim_chosen.width / 2 + 30;
 	optionsMenuY = Var.dim_chosen.height / 5;
-	optionsX = optionsMenuX + 30;
-	optionCollisionY = optionsMenuY + yDifLeft * 2;
-	optionCollisionX = optionsX;
-	optionFullscreenY = optionCollisionY + yDifLeft;
-	optionFullscreenX = optionsX;
-	optionResolutionY = optionFullscreenY + yDifLeft;
-	optionResolutionX = optionsX;
-	optionVerticalX = optionsX;
-	optionVerticalY = optionResolutionY + yDifLeft;
 
 	exitX = optionsMenuX + 404;
 	exitY = optionsMenuY + 10;
@@ -81,15 +62,6 @@ public class MainMenuState extends BasicGameState {
 	gc.setVSync(Var.vSync);
 	optionsMenuX = Var.dim_chosen.width / 2 + 30;
 	optionsMenuY = Var.dim_chosen.height / 5;
-	optionsX = optionsMenuX + 30;
-	optionCollisionY = optionsMenuY + 40;
-	optionCollisionX = optionsX;
-	optionFullscreenY = optionCollisionY + yDifLeft;
-	optionFullscreenX = optionsX;
-	optionResolutionY = optionFullscreenY + yDifLeft;
-	optionResolutionX = optionsX;
-	optionVerticalX = optionsX;
-	optionVerticalY = optionResolutionY + yDifLeft;
 
 	exitX = optionsMenuX + 404;
 	exitY = optionsMenuY + 10;
@@ -187,128 +159,84 @@ public class MainMenuState extends BasicGameState {
 		&& mouseY >= mc.getAirCollision().getYpos()
 		&& mouseY <= mc.getAirCollision().getYpos() + 16) {
 	    insidePlCol = true;
-	} else if (mouseX >= optionCollisionX
-		&& mouseX <= optionCollisionX + 16
-		&& mouseY >= optionCollisionY
-		&& mouseY <= optionCollisionY + 16) {
+	} else if (mouseX >= 0 && mouseX <= 0 + 16 && mouseY >= 0
+		&& mouseY <= 0 + 16) {
 	    slowGame = true;
-	} else if (mouseX >= optionCollisionX
-		&& mouseX <= optionCollisionX + 16
-		&& mouseY >= optionCollisionY
-		&& mouseY <= optionCollisionY + 16) {
+	} else if (mouseX >= 0 && mouseX <= 0 + 16 && mouseY >= 0
+		&& mouseY <= 0 + 16) {
 	    systemDamage = true;
-	} else if (mouseX >= optionCollisionX
-		&& mouseX <= optionCollisionX + 16
-		&& mouseY >= optionCollisionY
-		&& mouseY <= optionCollisionY + 16) {
+	} else if (mouseX >= 0 && mouseX <= 0 + 16 && mouseY >= 0
+		&& mouseY <= 0 + 16) {
 	    fuelUsage = true;
-	} else if (mouseX >= optionCollisionX
-		&& mouseX <= optionCollisionX + 16
-		&& mouseY >= optionCollisionY
-		&& mouseY <= optionCollisionY + 16) {
+	} else if (mouseX >= 0 && mouseX <= 0 + 16 && mouseY >= 0
+		&& mouseY <= 0 + 16) {
 	    drawShots = true;
-	} else if (mouseX >= optionCollisionX
-		&& mouseX <= optionCollisionX + 16
-		&& mouseY >= optionCollisionY
-		&& mouseY <= optionCollisionY + 16) {
+	} else if (mouseX >= 0 && mouseX <= 0 + 16 && mouseY >= 0
+		&& mouseY <= 0 + 16) {
 	    noSecondary = true;
-	} else if (mouseX >= optionCollisionX
-		&& mouseX <= optionCollisionX + 16
-		&& mouseY >= optionCollisionY
-		&& mouseY <= optionCollisionY + 16) {
+	} else if (mouseX >= 0 && mouseX <= 0 + 16 && mouseY >= 0
+		&& mouseY <= 0 + 16) {
 	    friendlyFire = true;
-	} else if (mouseX >= optionCollisionX
-		&& mouseX <= optionCollisionX + 16
-		&& mouseY >= optionCollisionY
-		&& mouseY <= optionCollisionY + 16) {
+	} else if (mouseX >= 0 && mouseX <= 0 + 16 && mouseY >= 0
+		&& mouseY <= 0 + 16) {
 	    duds = true;
-	} else if (mouseX >= optionCollisionX
-		&& mouseX <= optionCollisionX + 16
-		&& mouseY >= optionCollisionY
-		&& mouseY <= optionCollisionY + 16) {
+	} else if (mouseX >= 0 && mouseX <= 0 + 16 && mouseY >= 0
+		&& mouseY <= 0 + 16) {
 	    oneShot = true;
-	} else if (mouseX >= optionCollisionX
-		&& mouseX <= optionCollisionX + 16
-		&& mouseY >= optionCollisionY
-		&& mouseY <= optionCollisionY + 16) {
+	} else if (mouseX >= 0 && mouseX <= 0 + 16 && mouseY >= 0
+		&& mouseY <= 0 + 16) {
 	    baseRebuild = true;
-	} else if (mouseX >= optionCollisionX
-		&& mouseX <= optionCollisionX + 16
-		&& mouseY >= optionCollisionY
-		&& mouseY <= optionCollisionY + 16) {
+	} else if (mouseX >= 0 && mouseX <= 0 + 16 && mouseY >= 0
+		&& mouseY <= 0 + 16) {
 	    objectsMenu = true;
-	} else if (mouseX >= optionCollisionX
-		&& mouseX <= optionCollisionX + 16
-		&& mouseY >= optionCollisionY
-		&& mouseY <= optionCollisionY + 16) {
+	} else if (mouseX >= 0 && mouseX <= 0 + 16 && mouseY >= 0
+		&& mouseY <= 0 + 16) {
 	    respawnTime = true;
-	} else if (mouseX >= optionCollisionX
-		&& mouseX <= optionCollisionX + 16
-		&& mouseY >= optionCollisionY
-		&& mouseY <= optionCollisionY + 16) {
+	} else if (mouseX >= 0 && mouseX <= 0 + 16 && mouseY >= 0
+		&& mouseY <= 0 + 16) {
 	    timeLimit = true;
-	} else if (mouseX >= optionCollisionX
-		&& mouseX <= optionCollisionX + 16
-		&& mouseY >= optionCollisionY
-		&& mouseY <= optionCollisionY + 16) {
+	} else if (mouseX >= 0 && mouseX <= 0 + 16 && mouseY >= 0
+		&& mouseY <= 0 + 16) {
 	    maxTries = true;
-	} else if (mouseX >= optionCollisionX
-		&& mouseX <= optionCollisionX + 16
-		&& mouseY >= optionCollisionY
-		&& mouseY <= optionCollisionY + 16) {
+	} else if (mouseX >= 0 && mouseX <= 0 + 16 && mouseY >= 0
+		&& mouseY <= 0 + 16) {
 	    goal = true;
-	} else if (mouseX >= optionCollisionX
-		&& mouseX <= optionCollisionX + 16
-		&& mouseY >= optionCollisionY
-		&& mouseY <= optionCollisionY + 16) {
+	} else if (mouseX >= 0 && mouseX <= 0 + 16 && mouseY >= 0
+		&& mouseY <= 0 + 16) {
 	    level = true;
 	} else if (mouseX >= mc.getFullscreen().getXpos()
 		&& mouseX <= mc.getFullscreen().getXpos() + 16
 		&& mouseY >= mc.getFullscreen().getYpos()
 		&& mouseY <= mc.getFullscreen().getYpos() + 16) {
 	    windowedMode = true;
-	} else if (mouseX >= optionFullscreenX
-		&& mouseX <= optionFullscreenX + 16
-		&& mouseY >= optionFullscreenY
-		&& mouseY <= optionFullscreenY + 16) {
+	} else if (mouseX >= 0 && mouseX <= 0 + 16 && mouseY >= 0
+		&& mouseY <= 0 + 16) {
 	    clouds = true;
-	} else if (mouseX >= optionFullscreenX
-		&& mouseX <= optionFullscreenX + 16
-		&& mouseY >= optionFullscreenY
-		&& mouseY <= optionFullscreenY + 16) {
+	} else if (mouseX >= 0 && mouseX <= 0 + 16 && mouseY >= 0
+		&& mouseY <= 0 + 16) {
 	    thunder = true;
-	} else if (mouseX >= optionFullscreenX
-		&& mouseX <= optionFullscreenX + 16
-		&& mouseY >= optionFullscreenY
-		&& mouseY <= optionFullscreenY + 16) {
+	} else if (mouseX >= 0 && mouseX <= 0 + 16 && mouseY >= 0
+		&& mouseY <= 0 + 16) {
 	    dynamicSplitscreen = true;
-	} else if (mouseX >= mc.getVerticalSplit().getXpos() && mouseX <= mc.getVerticalSplit().getXpos() + 16
-		&& mouseY >= mc.getVerticalSplit().getYpos() && mouseY <= mc.getVerticalSplit().getYpos() + 16) {
+	} else if (mouseX >= mc.getVerticalSplit().getXpos()
+		&& mouseX <= mc.getVerticalSplit().getXpos() + 16
+		&& mouseY >= mc.getVerticalSplit().getYpos()
+		&& mouseY <= mc.getVerticalSplit().getYpos() + 16) {
 	    verticalSplitscreen = true;
-	} else if (mouseX >= optionFullscreenX
-		&& mouseX <= optionFullscreenX + 16
-		&& mouseY >= optionFullscreenY
-		&& mouseY <= optionFullscreenY + 16) {
+	} else if (mouseX >= 0 && mouseX <= 0 + 16 && mouseY >= 0
+		&& mouseY <= 0 + 16) {
 	    showRadar = true;
-	} else if (mouseX >= optionFullscreenX
-		&& mouseX <= optionFullscreenX + 16
-		&& mouseY >= optionFullscreenY
-		&& mouseY <= optionFullscreenY + 16) {
+	} else if (mouseX >= 0 && mouseX <= 0 + 16 && mouseY >= 0
+		&& mouseY <= 0 + 16) {
 	    vsync = true;
-	} else if (mouseX >= optionFullscreenX
-		&& mouseX <= optionFullscreenX + 16
-		&& mouseY >= optionFullscreenY
-		&& mouseY <= optionFullscreenY + 16) {
+	} else if (mouseX >= 0 && mouseX <= 0 + 16 && mouseY >= 0
+		&& mouseY <= 0 + 16) {
 	    showCrosshair = true;
-	} else if (mouseX >= optionFullscreenX
-		&& mouseX <= optionFullscreenX + 16
-		&& mouseY >= optionFullscreenY
-		&& mouseY <= optionFullscreenY + 16) {
+	} else if (mouseX >= 0 && mouseX <= 0 + 16 && mouseY >= 0
+		&& mouseY <= 0 + 16) {
 	    language = true;
-	} else if (mouseX >= optionFullscreenX
-		&& mouseX <= optionFullscreenX + 16
-		&& mouseY >= optionFullscreenY
-		&& mouseY <= optionFullscreenY + 16) {
+	} else if (mouseX >= 0 && mouseX <= 0 + 16 && mouseY >= 0
+		&& mouseY <= 0 + 16) {
 	    music = true;
 	} else if (mouseX >= mc.getResolution().getXpos()
 		&& mouseX <= mc.getResolution().getXpos() + 16
