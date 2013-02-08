@@ -119,9 +119,9 @@ public class GamePlayState extends BasicGameState {
 		time = 0;
 		Var.timePassed_min += 1;
 	    }
-	    r.player1.update(delta);
-	    r.player2.update(delta);
-	    r.turret.update(delta);
+	    r.player1.update(delta, gc);
+	    r.player2.update(delta, gc);
+	    r.turret.update(delta, gc);
 	    Reload.reload_primary(r.player1, delta);
 	    Reload.reload_primary(r.player2, delta);
 	    Reload.reload_secondary_1(r.player1, delta);
@@ -140,7 +140,7 @@ public class GamePlayState extends BasicGameState {
 					delta);
 			    } else {
 				weapons.get(i).setTarget(false);
-				weapons.get(i).update(delta);
+				weapons.get(i).update(delta, gc);
 			    }
 			} else {
 			    if (r.player1.getHitpoints() > 0
@@ -149,11 +149,11 @@ public class GamePlayState extends BasicGameState {
 					delta);
 			    } else {
 				weapons.get(i).setTarget(false);
-				weapons.get(i).update(delta);
+				weapons.get(i).update(delta, gc);
 			    }
 			}
 		    } else {
-			weapons.get(i).update(delta);
+			weapons.get(i).update(delta, gc);
 		    }
 		} else {
 		    weapons.remove(i);
@@ -306,83 +306,7 @@ public class GamePlayState extends BasicGameState {
 	    }
 	}
 
-	if (r.player1.getCollision() != null) {
-	    if (r.player1.getCollision().getMaxX() < w
-		    && r.player1.getCollision().getMaxX() > 0
-		    && r.player1.getCollision().getMaxY() < h
-		    && r.player1.getCollision().getMaxY() > 0
-		    && r.player1.getCollision().getMinX() < w
-		    && r.player1.getCollision().getMinX() > 0
-		    && r.player1.getCollision().getMinY() < h
-		    && r.player1.getCollision().getMinY() > 0) {
-
-		MaxMax = Var.tmap
-			.getTileId((int) r.player1.getCollision().getMaxX()
-				/ Var.tmap.getTileWidth(),
-				(int) r.player1.getCollision().getMaxY()
-					/ Var.tmap.getTileHeight(), 0);
-		MinMin = Var.tmap
-			.getTileId((int) r.player1.getCollision().getMinX()
-				/ Var.tmap.getTileWidth(),
-				(int) r.player1.getCollision().getMinY()
-					/ Var.tmap.getTileHeight(), 0);
-		MaxMin = Var.tmap
-			.getTileId((int) r.player1.getCollision().getMaxX()
-				/ Var.tmap.getTileWidth(),
-				(int) r.player1.getCollision().getMinY()
-					/ Var.tmap.getTileHeight(), 0);
-		MinMax = Var.tmap
-			.getTileId((int) r.player1.getCollision().getMinX()
-				/ Var.tmap.getTileWidth(),
-				(int) r.player1.getCollision().getMaxY()
-					/ Var.tmap.getTileHeight(), 0);
-		if (MaxMax != 0 || MinMin != 0 || MaxMin != 0 || MinMax != 0) {
-		    r.player1.setHitpoints(0);
-		    r.player1.setCollision(null);
-		}
-	    } else {
-		r.player1.setHitpoints(0);
-		r.player1.setCollision(null);
-	    }
-	}
-	if (r.player2.getCollision() != null) {
-	    if (r.player2.getCollision().getMaxX() < w
-		    && r.player2.getCollision().getMaxX() > 0
-		    && r.player2.getCollision().getMaxY() < h
-		    && r.player2.getCollision().getMaxY() > 0
-		    && r.player2.getCollision().getMinX() < w
-		    && r.player2.getCollision().getMinX() > 0
-		    && r.player2.getCollision().getMinY() < h
-		    && r.player2.getCollision().getMinY() > 0) {
-		MaxMax = Var.tmap
-			.getTileId((int) r.player2.getCollision().getMaxX()
-				/ Var.tmap.getTileWidth(),
-				(int) r.player2.getCollision().getMaxY()
-					/ Var.tmap.getTileHeight(), 0);
-		MinMin = Var.tmap
-			.getTileId((int) r.player2.getCollision().getMinX()
-				/ Var.tmap.getTileWidth(),
-				(int) r.player2.getCollision().getMinY()
-					/ Var.tmap.getTileHeight(), 0);
-		MaxMin = Var.tmap
-			.getTileId((int) r.player2.getCollision().getMaxX()
-				/ Var.tmap.getTileWidth(),
-				(int) r.player2.getCollision().getMinY()
-					/ Var.tmap.getTileHeight(), 0);
-		MinMax = Var.tmap
-			.getTileId((int) r.player2.getCollision().getMinX()
-				/ Var.tmap.getTileWidth(),
-				(int) r.player2.getCollision().getMaxY()
-					/ Var.tmap.getTileHeight(), 0);
-		if (MaxMax != 0 || MinMin != 0 || MaxMin != 0 || MinMax != 0) {
-		    r.player2.setHitpoints(0);
-		    r.player2.setCollision(null);
-		}
-
-	    } else {
-		r.player2.setHitpoints(0);
-		r.player2.setCollision(null);
-	    }
-	}
+	r.player1.checkCollision();
+	r.player2.checkCollision();
     }
 }
