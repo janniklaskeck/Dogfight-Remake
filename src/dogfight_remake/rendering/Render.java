@@ -66,8 +66,7 @@ public class Render {
 			Var.tmap.getHeight() * Var.tmap.getTileHeight());
 		GamePlayState.camera.untranslateGraphics();
 		GamePlayState.camera.drawMap();
-		g.drawRect((gc.getScreenWidth() / 2) - 1, 0, 1,
-			gc.getScreenHeight());
+		g.drawRect((gc.getHeight() / 2) - 1, 0, 1, gc.getScreenHeight());
 		GamePlayState.camera.translateGraphics();
 		GamePlayState.ef.render(delta);
 		if (player1 != null) {
@@ -122,12 +121,11 @@ public class Render {
 			Var.tmap.getHeight() * Var.tmap.getTileHeight());
 		GamePlayState.camera.untranslateGraphics();
 		GamePlayState.camera.drawMap();
-		g.drawRect(0, (gc.getScreenHeight() / 2) - 9,
-			gc.getScreenWidth(), 1);
+		g.drawRect(0, (gc.getHeight() / 2) - 2, gc.getScreenWidth(), 1);
 		GamePlayState.camera.translateGraphics();
 		GamePlayState.ef.render(delta);
 		if (player1 != null) {
-		    player1.render(gc, g, delta);  
+		    player1.render(gc, g, delta);
 		}
 		if (player2 != null) {
 		    player2.render(gc, g, delta);
@@ -154,7 +152,6 @@ public class Render {
 		GamePlayState.ef.render(delta);
 		if (player1 != null) {
 		    player1.render(gc, g, delta);
-
 		}
 		if (player2 != null) {
 		    player2.render(gc, g, delta);
@@ -173,6 +170,6 @@ public class Render {
 
 	    }
 	}
-	
+
     }
 }
