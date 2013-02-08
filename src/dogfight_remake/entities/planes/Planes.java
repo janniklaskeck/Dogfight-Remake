@@ -72,6 +72,11 @@ public class Planes extends Entity {
     int ammo_sec_1_reset;
     int ammo_sec_2_reset;
 
+    int MaxMax;
+    int MinMin;
+    int MaxMin;
+    int MinMax;
+
     public Planes(int id, float xpos, float ypos, float angle,
 	    PlaneTypes_Interface type) {
 	super(xpos, ypos);
@@ -123,9 +128,9 @@ public class Planes extends Entity {
      * @param delta
      */
 
-    public void update(float delta) {
+    public void update(float delta, GameContainer gc) {
 	float deltaX, deltaY;
-
+	float d = delta / 1000f * gc.getFPS();
 	if (broken && respawn_timer >= Var.RESPAWNTIME_PLAYER) {
 	    explosion = GamePlayState.ef.getPlane_Explosion();
 	    explosion.setPosition(xpos, ypos);
@@ -142,11 +147,9 @@ public class Planes extends Entity {
 	}
 	if (!broken) {
 	    hspeed = Math.abs(speed * speed_mod)
-		    * (float) Math.cos(Math.toRadians(angle) * delta
-			    / (1000 / 60));
+		    * (float) Math.cos(Math.toRadians(angle) * d);
 	    vspeed = Math.abs(speed * speed_mod)
-		    * (float) Math.sin(Math.toRadians(angle) * delta
-			    / (1000 / 60));
+		    * (float) Math.sin(Math.toRadians(angle) * d);
 	    if (Math.abs(hspeed) + Math.abs(vspeed) < 1.3f || stall) {
 		stall = true;
 		xpos += hspeed;
@@ -171,20 +174,20 @@ public class Planes extends Entity {
 		}
 	    }
 	    if (moveLeft) {
-		increaseAngle(-type.getTurnAngle() * delta);
+		increaseAngle(-type.getTurnAngle() * d);
 	    }
 	    if (moveRight) {
-		increaseAngle(type.getTurnAngle() * delta);
+		increaseAngle(type.getTurnAngle() * d);
 	    }
 	    if (accel) {
 		if (vspeed < 0 && !stall) {
-		    incSpeed(type.getAccel() / 2 * delta);
+		    incSpeed(type.getAccel() / 2 * d);
 		} else if (vspeed >= 0 && !stall) {
-		    incSpeed(type.getAccel() * delta);
+		    incSpeed(type.getAccel() * d);
 		} else if (vspeed >= 0 && stall) {
-		    incSpeed(type.getAccel() / 2 * delta);
+		    incSpeed(type.getAccel() / 2 * d);
 		} else {
-		    incSpeed(type.getAccel() / 20 * delta);
+		    incSpeed(type.getAccel() / 20 * d);
 		}
 	    }
 	    if (brake) {
@@ -799,5 +802,40 @@ public class Planes extends Entity {
 
     public void setSec2Status(int sec2Status) {
 	this.sec2Status = sec2Status;
+    }
+
+    public void checkCollision() {
+	if (getCollision() != null) {
+	    int w = Var.tmap.getTileWidth() * Var.tmap.getWidth();
+	    int h = Var.tmap.getTileHeight() * Var.tmap.getHeight();
+	    if (getCollision().getMaxX() < w && getCollision().getMaxX() > 0
+		    && getCollision().getMaxY() < h
+		    && getCollision().getMaxY() > 0
+		    && getCollision().getMinX() < w
+		    && getCollision().getMinX() > 0
+		    && getCollision().getMinY() < h
+		    && getCollision().getMinY() > 0) {
+		MaxMax = Var.tmap.getTileId((int) getCollision().getMaxX()
+			/ Var.tmap.getTileWidth(), (int) getCollision()
+			.getMaxY() / Var.tmap.getTileHeight(), 0);
+		MinMin = Var.tmap.getTileId((int) getCollision().getMinX()
+			/ Var.tmap.getTileWidth(), (int) getCollision()
+			.getMinY() / Var.tmap.getTileHeight(), 0);
+		MaxMin = Var.tmap.getTileId((int) getCollision().getMaxX()
+			/ Var.tmap.getTileWidth(), (int) getCollision()
+			.getMinY() / Var.tmap.getTileHeight(), 0);
+		MinMax = Var.tmap.getTileId((int) getCollision().getMinX()
+			/ Var.tmap.getTileWidth(), (int) getCollision()
+			.getMaxY() / Var.tmap.getTileHeight(), 0);
+		if (MaxMax != 0 || MinMin != 0 || MaxMin != 0 || MinMax != 0) {
+		    setHitpoints(0);
+		    setCollision(null);
+		}
+
+	    } else {
+		setHitpoints(0);
+		setCollision(null);
+	    }
+	}
     }
 }
