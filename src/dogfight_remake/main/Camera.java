@@ -134,8 +134,8 @@ public class Camera {
 		// black bar
 		if (cameraY < 0 && id == 1) {
 		    cameraY = 0;
-		} else if (cameraY < -gc.getScreenHeight() / 2 && id == 2) {
-		    cameraY = -gc.getScreenHeight() / 2 + 10;
+		} else if (cameraY < -gc.getHeight() / 2 && id == 2) {
+		    cameraY = -gc.getHeight() / 2 + 10;
 		}
 		if (cameraY + gc.getHeight() / 2 > mapHeight && id == 1) {
 		    cameraY = mapHeight - gc.getHeight() / 2;
