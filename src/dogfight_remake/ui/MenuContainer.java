@@ -112,4 +112,24 @@ public class MenuContainer {
 	this.imageHeight = imageHeight;
     }
 
+    public TwoStateButton getExit() {
+	return exit;
+    }
+
+    public TwoStateButton getAirCollision() {
+	return airCollision;
+    }
+
+    public TwoStateButton getFullscreen() {
+	return fullscreen;
+    }
+
+    public TwoStateButton getVerticalSplit() {
+	return verticalSplit;
+    }
+
+    public TwoStateButton getResolution() {
+	return resolution;
+    }
+
 }
