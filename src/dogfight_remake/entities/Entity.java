@@ -23,7 +23,7 @@ public abstract class Entity {
 		this.ypos = ypos;
 	}
 
-	public abstract void update(float delta);
+	public abstract void update(float delta, GameContainer gc);
 
 	public abstract void render(GameContainer container, Graphics g, float delta);
 
