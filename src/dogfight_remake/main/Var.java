@@ -3,10 +3,8 @@ package dogfight_remake.main;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 
-import org.newdawn.slick.AngelCodeFont;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.Color;
-import org.newdawn.slick.Font;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.Music;
@@ -112,7 +110,7 @@ public class Var {
     public static Dimension dim_fullscreen = toolkit.getScreenSize();
     public static Dimension dim_1080p = new Dimension(1920, 1080);
     public static Dimension dim_720p = new Dimension(1280, 720);
-    public static Dimension dim_chosen = dim_fullscreen;
+    public static Dimension dim_chosen = dim_720p;
 
     public static int p1_key_left = Input.KEY_LEFT;
     public static int p1_key_right = Input.KEY_RIGHT;
