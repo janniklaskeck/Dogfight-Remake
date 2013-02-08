@@ -9,14 +9,14 @@ import dogfight_remake.main.Var;
 public enum PlaneTypes_Gen5 implements PlaneTypes_Interface {
  // Name, Hitpoints, MaxSpeed, Acceleration, TurnAngle, Damage-Modifier,
     // Wpn1, Wpn2, Wpn3, Image
-    NORMAL("Normal", 100, 1, 0.01f, 0.12f, 1, WeaponTypes_Primary.MM30S,
+    NORMAL("Normal", 100, 1, 0.16f, 2f, 1, WeaponTypes_Primary.MM30S,
 	    WeaponTypes_Primary.MM30S, WeaponTypes_Secondary.AIM9L,
 	    WeaponTypes_Secondary.AIM9L, Var.img_plane2), 
-	    F35("F-35 Joint Strike Fighter", 95, 1.35f, 0.015f, 0.13f, 1f,
+	    F35("F-35 Joint Strike Fighter", 95, 1.35f, 0.24f, 2.1f, 1f,
 	    WeaponTypes_Primary.MM30S, WeaponTypes_Primary.MM30S,
 	    WeaponTypes_Secondary.BOMB_SPLIT, WeaponTypes_Secondary.BOMB_SPLIT,
 	    Var.f35), 
-	    MIG35("MiG-35/MFI", 100, 1.35f, 0.015f, 0.10f, 1f,
+	    MIG35("MiG-35/MFI", 100, 1.35f, 0.18f, 1.8f, 1f,
 	    WeaponTypes_Primary.MM30S, WeaponTypes_Primary.MM30S,
 	    WeaponTypes_Secondary.GUIDED_AIR, WeaponTypes_Secondary.BOMB_SPLIT,
 	    Var.mig35);
